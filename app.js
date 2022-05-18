@@ -17,8 +17,7 @@ const users = require("./routes/Users");
 const port = process.env.PORT || 3000;
 const URI = process.env.MONGODB_URL;
 
-mongoose
-    .connect(URI, {
+mongoose.connect(URI, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     })
