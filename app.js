@@ -2,6 +2,7 @@ const express = require("express");
 require("dotenv").config();
 const mongoose = require("mongoose");
 const cors = require("cors");
+const route = require('./routes');
 
 const app = express();
 app.use(express.urlencoded({ extended: false }));
@@ -12,7 +13,7 @@ app.use(
     })
 );
 
-const users = require("./routes/Users");
+route(app);
 
 const port = process.env.PORT || 3000;
 const URI = process.env.MONGODB_URL;
