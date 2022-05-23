@@ -19,18 +19,70 @@
 </head>
 
 <body id="body-pd" style="background-color: #eee;">
+  <header class="header mb-5" id="header">
+    <div class="header_toggle"> <i class='bx bx-menu' id="header-toggle"></i> </div>
+    <div class="">
+      <a class="text-decoration-none" href="">Đăng nhập</a>
+      <a class="text-decoration-none ml-4" href="">Đăng xuất</a>
+    </div>
+  </header>
+
+  <div class="l-navbar" id="nav-bar">
+    <nav class="nav">
+      <div>
+        <a href="#" class="nav_logo">
+          <i class="bi bi-wallet2 h3 nav_logo-icon"></i>
+          <span class="nav_logo-name">E-Wallet</span>
+        </a>
+        <div class="nav_list">
+          <a href="#" class="nav_link active">
+            <i class='bx bx-grid-alt nav_icon'></i>
+            <span class="nav_name">Trang chủ</span>
+          </a>
+          <a href="profile.html" class="nav_link">
+            <i class='bx bx-user nav_icon'></i>
+            <span class="nav_name">Tài khoản</span>
+          </a>
+          <a href="#" class="nav_link">
+            <i class="bi bi-cash-coin nav_icon bx"></i>
+            <span class="nav_name">Nạp tiền</span>
+          </a>
+          <a href="#" class="nav_link">
+            <i class="bi bi-cash-stack nav_icon bx"></i>
+            <span class="nav_name">Rút tiền</span>
+          </a>
+          <a href="#" class="nav_link">
+            <i class="bi bi-arrow-right-square nav_icon bx"></i>
+            <span class="nav_name">Chuyến tiền</span>
+          </a>
+          <a href="buy-phone-card.html" class="nav_link">
+            <i class="bi bi-telephone-plus nav_icon bx"></i>
+            <span class="nav_name">Mua thẻ điện thoại</span>
+          </a>
+          <a href="buy-phone-card.html" class="nav_link">
+            <i class="bi bi-receipt-cutoff"></i>
+            <span class="nav_name">Lịch sử giao dịch</span>
+          </a>
+        </div>
+      </div>
+      <a href="#" class="nav_link">
+        <i class='bx bx-log-out nav_icon'></i>
+        <span class="nav_name">Đăng xuất</span>
+      </a>
+    </nav>
+  </div>
   <section style="background-color: #eee;">
     <div class="container py-5 mt-5">
       <div class="row">
         <div class="col-lg-4">
           <div class="card mb-4">
             <div class="card-body text-center">
-              <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
+              <img src="https://images.cults3d.com/8OWKFqd-Qk3M1E2ImZp_O2Y6x4I=/516x516/https://files.cults3d.com/uploaders/22153232/illustration-file/56a6b33b-5fb5-4ba9-8408-2ab5c826e4db/st%2Csmall%2C507x507-pad%2C600x600%2Cf8f8f8.jpg" alt="avatar"
                 class="rounded-circle img-fluid" style="width: 150px;">
               <h5 class="my-3">Đăng Khoa</h5>
               <p class="text-primary font-weight-bold text-warning mb-4">1.000.000 VNĐ</p>
               <div class="d-flex justify-content-center mb-2">
-                <button type="button" class="btn btn-primary mr-2">Nạp tiền</button>
+                <button type="button" class="btn btn-outline-primary mr-2">Nạp tiền</button>
                 <button type="button" class="btn btn-outline-primary">Rút tiền</button>
               </div>
               <div class="d-flex justify-content-center mb-2">
@@ -143,7 +195,7 @@
     </div>
   </section>
   <!--/container-->
-  <script>
+  <!-- <script>
     document.addEventListener("DOMContentLoaded", function (event) {
 
       const showNavbar = (toggleId, navId, bodyId, headerId) => {
@@ -181,9 +233,9 @@
 
       // Your code to run since DOM is loaded and ready
     });
-  </script>
+  </script> -->
   <script src="https://kit.fontawesome.com/2e41ebfdb4.js" crossorigin="anonymous"></script>
-  <script src="./main.js"></script>
+  <script src="main.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
     integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
     crossorigin="anonymous"></script>
