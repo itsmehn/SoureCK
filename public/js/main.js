@@ -172,7 +172,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 // Place any jQuery/helper plugins in here.
 
-
 (function($) {
     "use strict";
 
@@ -376,8 +375,17 @@ function opentchucnang(chucnang) {
     }
     document.getElementById(chucnang).style.display = "block";
 }
+function openCity(cityName) {
+    var i;
+    var x = document.getElementsByClassName("city");
+    for (i = 0; i < x.length; i++) {
+        x[i].style.display = "none";
+    }
+    document.getElementById(cityName).style.display = "block";
+  }
+  
 //--------------
-
+// Trang navbar
 document.addEventListener("DOMContentLoaded", function(event) {
 
     const showNavbar = (toggleId, navId, bodyId, headerId) => {
@@ -425,9 +433,9 @@ $(document).ready(function() {
 // End Home pgae
 // Mỹ ANh
 
-//Updaload file của cmnd
+//Upload file của cmnd
 // Add the following code if you want the name of the file appear on select
 $(".custom-file-input").on("change", function() {
     var fileName = $(this).val().split("\\").pop();
     $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
-  });
+});
