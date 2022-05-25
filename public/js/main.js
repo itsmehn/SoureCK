@@ -366,15 +366,17 @@ var Tabs = function($) {
 }(jQuery);
 
 Tabs.init();
-
-function openCity(cityName) {
+//----------
+//thay đổi trang danh sách
+function opentchucnang(chucnang) {
     var i;
-    var x = document.getElementsByClassName("city");
+    var x = document.getElementsByClassName("cn");
     for (i = 0; i < x.length; i++) {
         x[i].style.display = "none";
     }
-    document.getElementById(cityName).style.display = "block";
+    document.getElementById(chucnang).style.display = "block";
 }
+//--------------
 
 document.addEventListener("DOMContentLoaded", function(event) {
 
@@ -422,3 +424,10 @@ $(document).ready(function() {
 });
 // End Home pgae
 // Mỹ ANh
+
+//Updaload file của cmnd
+// Add the following code if you want the name of the file appear on select
+$(".custom-file-input").on("change", function() {
+    var fileName = $(this).val().split("\\").pop();
+    $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+  });
