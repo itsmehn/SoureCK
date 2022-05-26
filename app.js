@@ -9,6 +9,7 @@ const path = require('path')
 const app = express();
 const users = require('./routes/Users')
 const me = require('./routes/me')
+const wallet = require('./routes/wallet')
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -23,6 +24,7 @@ app.use(
 
 app.use('/users', users)
 app.use('/', me)
+app.use('/wallet',wallet)
 
 const port = process.env.PORT || 3000;
 const URI = process.env.MONGODB_URL;
