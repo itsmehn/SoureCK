@@ -105,18 +105,6 @@ ul {
     text-decoration: none;
 }
 
-/* Phần CSS của Mỹ Anh */
-/*----------------------------------------*/
-/*  1. Common
-/*----------------------------------------*/
-
-html,body {
-    height: 100%;
-    font-family: 'Roboto', sans-serif;
-    font-weight: 400;
-    background: #F6F8FA;
-}
-
 .floatleft {
     float: left
 }
@@ -148,20 +136,6 @@ a:focus {
 
 .fix {
     overflow: hidden
-}
-
-p {
-    margin: 0 0 15px;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    margin: 0 0 10px;
-    font-weight: 700;
 }
 
 a {
@@ -213,7 +187,10 @@ ul {
     text-decoration: none;
 }
 
+/* ---------------------------------------------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------------------------------------------- */
 /* Phần CSS của Mỹ Anh */
+
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
 * {
     margin: 0;
@@ -264,8 +241,6 @@ ul {
         font-size: 12px
     }
 }
-
-
 /* end Profile */
 
 
@@ -436,36 +411,10 @@ a {
         padding-left: calc(var(--nav-width) + 188px)
     }
 }
-
-
 /* End Menu */
 
 
 /* Home page */
-
-h2 {
-    color: #000;
-    font-size: 26px;
-    font-weight: 300;
-    text-align: center;
-    text-transform: uppercase;
-    position: relative;
-    margin: 30px 0 60px;
-}
-
-h2::after {
-    content: "";
-    width: 100px;
-    position: absolute;
-    margin: 0 auto;
-    height: 4px;
-    border-radius: 1px;
-    background: #4723D9;
-    left: 0;
-    right: 0;
-    bottom: -20px;
-}
-
 .carousel {
     margin: 50px auto;
     padding: 0 50px;
@@ -621,6 +570,5 @@ h2::after {
 .carousel .wish-icon .fa-heart {
     color: #ff6161;
 }
-
 /* end home page */
 /* Kết thúc CSS của Mỹ ANh */
