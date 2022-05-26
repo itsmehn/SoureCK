@@ -1,8 +1,11 @@
 /*----------------------------------------*/
+
+
 /*  1. Common
 /*----------------------------------------*/
 
-html,body {
+html,
+body {
     height: 100%;
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
@@ -65,6 +68,7 @@ a:hover {
     color: #ec4445;
     text-decoration: none;
 }
+
 ul {
     list-style: outside none none;
     margin: 0;
@@ -82,15 +86,16 @@ ul {
     font-style: normal;
 }
 
-
-
 .footer-copyright-area {
     background: #006DF0;
     padding: 20px 0px;
     text-align: center;
 }
 
+
 /*----------------------------------------*/
+
+
 /*  23. footer
 /*----------------------------------------*/
 
@@ -104,6 +109,7 @@ ul {
     color: #fff;
     text-decoration: none;
 }
+
 
 /* Phần CSS của Mỹ Anh */
 
@@ -527,5 +533,8 @@ h2::after {
     color: #ff6161;
 }
 
+
 /* end home page */
+
+
 /* Kết thúc CSS của Mỹ ANh */

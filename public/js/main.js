@@ -1,14 +1,9 @@
-// JS REGISTRATION
-$(function() {
-    $('input, select').on('focus', function() {
-        $(this).parent().find('.input-group-text').css('border-color', '#80bdff');
-    });
-    $('input, select').on('blur', function() {
-        $(this).parent().find('.input-group-text').css('border-color', '#ced4da');
-    });
-});
-// Mỹ Anh
-// menu
+//REGISTER
+$("input").click(e => {
+        $("#alert").hide().css("visibility", "hidden");
+    })
+    // Mỹ Anh
+    // menu
 document.addEventListener("DOMContentLoaded", function(event) {
 
     const showNavbar = (toggleId, navId, bodyId, headerId) => {
@@ -375,6 +370,7 @@ function opentchucnang(chucnang) {
     }
     document.getElementById(chucnang).style.display = "block";
 }
+
 function openCity(cityName) {
     var i;
     var x = document.getElementsByClassName("city");
@@ -382,8 +378,8 @@ function openCity(cityName) {
         x[i].style.display = "none";
     }
     document.getElementById(cityName).style.display = "block";
-  }
-  
+}
+
 //--------------
 // Trang navbar
 document.addEventListener("DOMContentLoaded", function(event) {

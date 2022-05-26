@@ -1,44 +1,31 @@
-const multer = require('multer')
+const mongoose = require('mongoose')
 const { validationResult } = require('express-validator')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const fs = require('fs')
 const url = require('url')
-var generator = require('generate-password');
-var randomUsername = require('random-mobile');
-
-
+const generator = require('generate-password');
+const randomUsername = require('random-mobile');
+const transporter = require("../middlewares/sendMail")
+const takeID = require('../middlewares/takeID')
 const registerValidator = require('../middlewares/registerValidator')
 
 const dataUser = require('../models/users')
 const { Router } = require('express')
+const { match } = require('assert')
+const session = require('express-session')
 
-var storage = multer.diskStorage({
-    destination: function(req, file, callback) {
-        callback(null, './uploads');
-    },
-    filename: function(req, file, callback) {
-        callback(null, crypto.createHash('md5').update(Math.random().toString()).digest('hex') + path.extname(file.originalname));
-    }
-});
-
-var upload = multer({ storage: storage });
-
-const getProfilePage = async(req, res, next) => {
-    res.render('profile.ejs')
+const getRegister = (req, res) => {
+    res.render('register', { phoneNumber: '', email: '', fullName: '', dateOfbirth: '', address: '', message: '' })
 }
 
-var getRegister = (req, res) => {
-    res.render('register')
-}
-
-var postRegister = async(req, res) => {
+const postRegister = async(req, res) => {
     let result = validationResult(req)
     let { phoneNumber, email, fullName, dateOfbirth, address } = req.body
 
     if (result.errors.length === 0) {
 
-        dataUser.findOne({ phoneNumber: phoneNumber, email: email })
+        dataUser.findOne({ $or: [{ phoneNumber: phoneNumber }, { email: email }] })
             .then(account => {
                 if (account) {
                     throw new Error('Tài khoản đã tồn tại')
@@ -50,7 +37,7 @@ var postRegister = async(req, res) => {
                     numbers: true
                 });
                 let username
-                if (phoneNumber == 10) {
+                if (phoneNumber.length == 10) {
                     username = phoneNumber
                 } else { username = randomUsername(); }
 
@@ -66,22 +53,120 @@ var postRegister = async(req, res) => {
                     password: password,
                     username: username,
                     imageFront: imageFront[0].filename,
-                    imageBack: imageBack[0].filename
+                    imageBack: imageBack[0].filename,
+                    check: 0
                 })
 
                 user.save().then(() => {
-                    return res.status(200).json({
-                        code: 0,
-                        message: 'Đăng ký thành công',
-                        data: user
-                    })
+
+                    let messageOptions = {
+                        from: 'sinhvien@phongdaotao.com',
+                        to: email,
+                        subject: "GỬI THÔNG TIN TÀI KHOẢN EWALLET",
+                        text: ` Hi ${fullName},
+                                Lời đầu tiên chúng tôi cảm ơn bạn đã tin tưởng sử dụng website. Chúng tôi gửi bạn thông tin đăng nhập website.
+                                Username: ${username}
+                                Password: ${password}
+                                Mọi thông tin thắc mắc liên hệ gmail, số điện thoại của chúng tôi.
+                                Trân trọng,
+                                Đội ngũ Ewallet`
+                    };
+
+
+                    transporter.sendMail(messageOptions, (error, info) => {
+                        if (error) {
+                            console.log(error)
+                        }
+                        res.redirect('/login')
+                    });
                 })
 
             })
             .catch(e => {
+                return res.render('register', { phoneNumber: '', email: '', fullName: '', dateOfbirth: '', address: '', message: e.message })
+            })
+
+    } else {
+        let messages = result.mapped()
+        let message = ''
+
+        for (fiels in messages) {
+            message = messages[fiels]
+            break
+        }
+
+        return res.render('register', { phoneNumber: phoneNumber, email: email, fullName: fullName, dateOfbirth: dateOfbirth, address: address, message: message.msg })
+    }
+
+
+}
+
+const getLogin = (req, res) => {
+    res.render('login', { username: '', password: '', message: '' })
+}
+
+const postLogin = (req, res) => {
+    let { username, password } = req.body
+    let result = validationResult(req)
+    if (result.errors.length === 0) {
+
+        dataUser.findOne({ username: username })
+            .then(acc => {
+                if (!acc) {
+                    throw new Error('Tài khoản không tồn tại')
+                } else {
+                    account = acc
+                    m = 0
+                    if (acc.password === password) {
+                        m = 1
+                    }
+
+                }
+
+            })
+            .then(() => {
+                if (m == 1) {
+                    const { JWT_SECRET } = process.env
+                    jwt.sign({
+                        id: account.id,
+                        username: account.username
+
+                    }, JWT_SECRET, {
+                        expiresIn: '24h'
+                    }, (err, token) => {
+                        if (err) throw err
+                        if (account.check == 0) {
+                            return res.status(200).json({
+                                code: 1,
+                                message: 'Đăng nhập thành công đổi mật khẩu',
+                                token: token,
+                                data: account
+
+                            })
+                        } else {
+                            return res.status(200).json({
+                                code: 1,
+                                message: 'Đăng nhập thành công',
+                                token: token,
+                                data: account
+
+                            })
+                        }
+
+                    })
+
+                } else {
+                    return res.status(400).json({
+                        code: 2,
+                        message: 'Sai thông tin đăng nhập'
+
+                    })
+                }
+            })
+            .catch(e => {
                 return res.status(400).json({
                     code: 2,
-                    message: 'Đăng ký thất bại ' + e.message
+                    message: e.message
 
                 })
             })
@@ -96,12 +181,52 @@ var postRegister = async(req, res) => {
         }
         return res.status(400).json({ code: 1, message: message })
     }
+}
+
+const getFirstChangePass = (req, res) => {
+    res.render('change-password-first')
+}
 
 
+const postFirstChangePass = (req, res, next) => {
+    let { password, repassword } = req.body
+    let id = mongoose.Types.ObjectId(takeID(req.headers.authorization).id)
+    if (!password || !repassword || password != repassword) {
+        return res.status(400).json({
+            code: 2,
+            message: 'Mật khẩu chưa khớp'
+
+        })
+    } else {
+        dataUser.findByIdAndUpdate(id, { password: password, check: 1 }, {
+                new: true
+            })
+            .then((account) => {
+                if (account) {
+                    return res.status(200).json({
+                        code: 0,
+                        message: 'Thành công',
+                        data: account
+                    })
+                } else return res.json({ code: 2, message: "Không tìm được tài khoản" });
+            })
+            .catch((e) => {
+                return res.json({ code: 3, message: "Đây không phải id hợp lệ" });
+            });
+
+    }
+}
+
+const getProfilePage = (req, res) => {
+    res.render('profile')
 }
 
 module.exports = {
     getProfilePage,
     getRegister,
-    postRegister
+    postRegister,
+    getLogin,
+    postLogin,
+    getFirstChangePass,
+    postFirstChangePass
 }

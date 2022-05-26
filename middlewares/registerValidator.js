@@ -24,5 +24,4 @@ module.exports = [
     .exists().withMessage('Vui lòng cung cấp địa chỉ')
     .notEmpty().withMessage('Vui lòng cung cấp địa chỉ'),
 
-
 ]

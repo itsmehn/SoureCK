@@ -3,8 +3,8 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 const cors = require("cors");
 const path = require('path')
-
-
+const cookieParser = require("cookie-parser");
+const jwt = require('jsonwebtoken')
 
 const app = express();
 const users = require('./routes/Users')
@@ -20,6 +20,9 @@ app.use(
         origin: "*",
     })
 );
+app.use(cookieParser())
+
+
 
 app.use('/users', users)
 app.use('/', me)
