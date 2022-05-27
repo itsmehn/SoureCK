@@ -100,12 +100,12 @@
                         <%}%>
 
                             <div class="d-flex justify-content-center mx-4 mb-2 mb-lg-4">
-                                <button type="submit" class="btn btn-lg" style="background-color: #583bce; color: #fff">Đăng ký</button>
+                                <button type="submit" class="btn btn-lg" data-bs-toggle="modal" data-bs-target="#modalAccount" style="background-color: #583bce; color: #fff">Đăng ký</button>
 
                             </div>
 
                             <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                                <a href="/login">Bạn đã có tài khoản?</a>
+                                <a href="/users/login">Bạn đã có tài khoản?</a>
 
                             </div>
 
@@ -118,7 +118,24 @@
             </div>
         </div>
     </div>
-
+    <!-- Modal -->
+    <div class="modal fade" id="modalAccount" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Thông tin tài khoản của bạn</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Quay về đăng nhập</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </body>
 <script src="../public/js/main.js"></script>

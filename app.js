@@ -37,6 +37,13 @@ app.use(cookieSession({
 app.use('/users', users)
 app.use('/', me)
 app.use('/wallet', wallet)
+app.use((req, res) => {
+    if (!req.session.account) {
+        res.redirect('/users/login')
+    }
+
+
+})
 
 const port = process.env.PORT || 3000;
 const URI = process.env.MONGODB_URL;
