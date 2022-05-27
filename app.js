@@ -4,7 +4,10 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const path = require('path')
 const cookieParser = require("cookie-parser");
-const jwt = require('jsonwebtoken')
+const expressSession = require('express-session')
+const cookieSession = require('cookie-session')
+const MemoryStore = require('session-memory-store')(expressSession)
+
 
 const app = express();
 const users = require('./routes/Users')
@@ -22,12 +25,18 @@ app.use(
     })
 );
 app.use(cookieParser())
-
+app.use(cookieSession({
+    secret: 'secret',
+    store: new MemoryStore(60 * 60 * 12),
+    cookie: { maxAge: 60 * 60 * 1000 },
+    resave: false,
+    saveUninitialized: true
+}))
 
 
 app.use('/users', users)
 app.use('/', me)
-app.use('/wallet',wallet)
+app.use('/wallet', wallet)
 
 const port = process.env.PORT || 3000;
 const URI = process.env.MONGODB_URL;

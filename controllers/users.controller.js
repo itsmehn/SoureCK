@@ -54,7 +54,8 @@ const postRegister = async(req, res) => {
                     username: username,
                     imageFront: imageFront[0].filename,
                     imageBack: imageBack[0].filename,
-                    check: 0
+                    check: 0,
+                    checkLoginFail: 0
                 })
 
                 user.save().then(() => {
@@ -106,8 +107,9 @@ const getLogin = (req, res) => {
 }
 
 const postLogin = (req, res) => {
-    let { username, password } = req.body
     let result = validationResult(req)
+    let { username, password } = req.body
+
     if (result.errors.length === 0) {
 
         dataUser.findOne({ username: username })
@@ -126,49 +128,23 @@ const postLogin = (req, res) => {
             })
             .then(() => {
                 if (m == 1) {
-                    const { JWT_SECRET } = process.env
-                    jwt.sign({
-                        id: account.id,
-                        username: account.username
+                    req.session.account = account
+                    if (account.check == 0) {
 
-                    }, JWT_SECRET, {
-                        expiresIn: '24h'
-                    }, (err, token) => {
-                        if (err) throw err
-                        if (account.check == 0) {
-                            return res.status(200).json({
-                                code: 1,
-                                message: 'Đăng nhập thành công đổi mật khẩu',
-                                token: token,
-                                data: account
+                        console.log(req.session.account)
+                        return res.redirect('/users/first-change-pass')
+                    } else {
+                        return res.redirect('/')
+                    }
 
-                            })
-                        } else {
-                            return res.status(200).json({
-                                code: 1,
-                                message: 'Đăng nhập thành công',
-                                token: token,
-                                data: account
 
-                            })
-                        }
-
-                    })
 
                 } else {
-                    return res.status(400).json({
-                        code: 2,
-                        message: 'Sai thông tin đăng nhập'
-
-                    })
+                    return res.render('login', { message: 'Sai thông tin đăng nhập' })
                 }
             })
             .catch(e => {
-                return res.status(400).json({
-                    code: 2,
-                    message: e.message
-
-                })
+                return res.render('login', { message: e.message })
             })
 
     } else {
@@ -179,7 +155,7 @@ const postLogin = (req, res) => {
             message = messages[fiels]
             break
         }
-        return res.status(400).json({ code: 1, message: message })
+        return res.render('login', { message: message.msg })
     }
 }
 
@@ -190,7 +166,8 @@ const getFirstChangePass = (req, res) => {
 
 const postFirstChangePass = (req, res, next) => {
     let { password, repassword } = req.body
-    let id = mongoose.Types.ObjectId(takeID(req.headers.authorization).id)
+    let id = req.session.account._id
+
     if (!password || !repassword || password != repassword) {
         return res.status(400).json({
             code: 2,
@@ -217,12 +194,28 @@ const postFirstChangePass = (req, res, next) => {
     }
 }
 
-const getProfilePage = (req, res) => {
-    res.render('profile')
+const getProfile = (req, res) => {
+    console.log(req.session.account)
+    let id = req.session.account._id
+    if (!id) {
+        res.redirect('/users/login')
+    }
+    dataUser.findOne({ id: id })
+        .then(acc => {
+            res.render('profile', { acc: acc })
+        })
+        .catch(err => {
+            res.redirect('/error')
+        })
+
+}
+
+const putLogin = (req, res) => {
+
 }
 
 module.exports = {
-    getProfilePage,
+    getProfile,
     getRegister,
     postRegister,
     getLogin,

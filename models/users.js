@@ -19,6 +19,7 @@ const UserSchema = new Schema({
     username: String,
     password: String,
     check: Number,
+    checkLoginFail: Number
 });
 
 module.exports = mongoose.model("users", UserSchema);

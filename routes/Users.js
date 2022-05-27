@@ -16,7 +16,8 @@ Router.post('/register',
     registerValidator,
     userController.postRegister)
 Router.get('/login', userController.getLogin)
-Router.post('/login', loginValidator, userController.postLogin)
-Router.get('/first-change-pass', checkLogin, userController.getFirstChangePass)
-Router.post('/first-change-pass', checkLogin, userController.postFirstChangePass)
+Router.post('/login', userController.postLogin)
+Router.get('/first-change-pass', userController.getFirstChangePass)
+Router.post('/first-change-pass', userController.postFirstChangePass)
+Router.get("/profile", userController.getProfile)
 module.exports = Router
