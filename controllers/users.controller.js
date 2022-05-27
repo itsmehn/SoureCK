@@ -109,9 +109,7 @@ const getLogin = (req, res) => {
 const postLogin = (req, res) => {
     let result = validationResult(req)
     let { username, password } = req.body
-
     if (result.errors.length === 0) {
-
         dataUser.findOne({ username: username })
             .then(acc => {
                 if (!acc) {
@@ -122,22 +120,17 @@ const postLogin = (req, res) => {
                     if (acc.password === password) {
                         m = 1
                     }
-
                 }
-
             })
             .then(() => {
                 if (m == 1) {
                     req.session.account = account
                     if (account.check == 0) {
-
-                        console.log(req.session.account)
+                        //Lần đầu tiên đăng nhập
                         return res.redirect('/users/first-change-pass')
                     } else {
-                        return res.redirect('/')
+                        res.redirect('/')
                     }
-
-
 
                 } else {
                     return res.render('login', { message: 'Sai thông tin đăng nhập' })
@@ -160,35 +153,27 @@ const postLogin = (req, res) => {
 }
 
 const getFirstChangePass = (req, res) => {
-    res.render('change-password-first')
+    res.render('change-password-first', { message: '' })
 }
 
 
-const postFirstChangePass = (req, res, next) => {
+const postFirstChangePass = (req, res) => {
     let { password, repassword } = req.body
     let id = req.session.account._id
-
-    if (!password || !repassword || password != repassword) {
-        return res.status(400).json({
-            code: 2,
-            message: 'Mật khẩu chưa khớp'
-
-        })
+    if (!password || !repassword || password != repassword || !password.match(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])([a-zA-Z0-9]{8})$/)) {
+        return res.render('change-password-first', { message: 'Mật khẩu chưa hợp lệ' })
     } else {
         dataUser.findByIdAndUpdate(id, { password: password, check: 1 }, {
                 new: true
             })
             .then((account) => {
+                req.session.account = account
                 if (account) {
-                    return res.status(200).json({
-                        code: 0,
-                        message: 'Thành công',
-                        data: account
-                    })
-                } else return res.json({ code: 2, message: "Không tìm được tài khoản" });
+                    return res.redirect('/users/profile')
+                } else return res.render('change-password-first', { message: '' });
             })
             .catch((e) => {
-                return res.json({ code: 3, message: "Đây không phải id hợp lệ" });
+                return res.render('change-password-first', { message: '' });
             });
 
     }
@@ -210,9 +195,14 @@ const getProfile = (req, res) => {
 
 }
 
-const putLogin = (req, res) => {
-
+const getChangePass = (req, res) => {
+    res.render('change-password')
 }
+
+const postChangePass = (req, res) => {
+    res.render('change-password')
+}
+
 
 module.exports = {
     getProfile,
@@ -221,5 +211,7 @@ module.exports = {
     getLogin,
     postLogin,
     getFirstChangePass,
-    postFirstChangePass
+    postFirstChangePass,
+    getChangePass,
+    postChangePass
 }
