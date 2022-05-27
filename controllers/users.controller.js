@@ -15,6 +15,10 @@ const { Router } = require('express')
 const { match } = require('assert')
 const session = require('express-session')
 
+
+const wallet =  require('../models/wallet')
+const users = require('../models/users')
+const { json } = require('body-parser')
 const getRegister = (req, res) => {
     res.render('register', { phoneNumber: '', email: '', fullName: '', dateOfbirth: '', address: '', message: '' })
 }
@@ -57,36 +61,36 @@ const postRegister = async(req, res) => {
                     check: 0,
                     checkLoginFail: 0
                 })
+                
 
                 user.save().then(() => {
 
-                    let messageOptions = {
-                        from: 'sinhvien@phongdaotao.com',
-                        to: email,
-                        subject: "GỬI THÔNG TIN TÀI KHOẢN EWALLET",
-                        text: ` Hi ${fullName},
-                                Lời đầu tiên chúng tôi cảm ơn bạn đã tin tưởng sử dụng website. Chúng tôi gửi bạn thông tin đăng nhập website.
-                                Username: ${username}
-                                Password: ${password}
-                                Mọi thông tin thắc mắc liên hệ gmail, số điện thoại của chúng tôi.
-                                Trân trọng,
-                                Đội ngũ Ewallet`
-                    };
+                    // let messageOptions = {
+                    //     from: 'sinhvien@phongdaotao.com',
+                    //     to: email,
+                    //     subject: "GỬI THÔNG TIN TÀI KHOẢN EWALLET",
+                    //     text: ` Hi ${fullName},
+                    //             Lời đầu tiên chúng tôi cảm ơn bạn đã tin tưởng sử dụng website. Chúng tôi gửi bạn thông tin đăng nhập website.
+                    //             Username: ${username}
+                    //             Password: ${password}
+                    //             Mọi thông tin thắc mắc liên hệ gmail, số điện thoại của chúng tôi.
+                    //             Trân trọng,
+                    //             Đội ngũ Ewallet`
+                    // };
 
 
-                    transporter.sendMail(messageOptions, (error, info) => {
-                        if (error) {
-                            console.log(error)
-                        }
-                        res.redirect('/login')
-                    });
+                    // transporter.sendMail(messageOptions, (error, info) => {
+                    //     if (error) {
+                    //         console.log(error)
+                    //     }
+                    //     res.redirect('/login')
+                    // });
+                    return res.redirect(`/users/login/${phoneNumber}`)
                 })
-
             })
             .catch(e => {
                 return res.render('register', { phoneNumber: '', email: '', fullName: '', dateOfbirth: '', address: '', message: e.message })
             })
-
     } else {
         let messages = result.mapped()
         let message = ''
@@ -210,6 +214,24 @@ const getProfile = (req, res) => {
 
 }
 
+const getCreatWallet = async (req,res) => {
+    let id = req.params.id
+    if(!id) {
+        return res.redirect('/user/login')
+    }else{
+        await users.findOne({phoneNumber:id})
+        .then((d) => {
+            let userId = d._id
+            let userWallett =  new wallet({
+                userId: userId
+            })
+            userWallett.save();
+        }).then(() => {
+            return res.redirect('/users/login')
+        }).catch(e => console.log(e))
+    }
+}
+
 const putLogin = (req, res) => {
 
 }
@@ -221,5 +243,6 @@ module.exports = {
     getLogin,
     postLogin,
     getFirstChangePass,
-    postFirstChangePass
+    postFirstChangePass,
+    getCreatWallet
 }
