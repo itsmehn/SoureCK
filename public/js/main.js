@@ -2,7 +2,7 @@
 $("input").click(e => {
         $("#alert").hide().css("visibility", "hidden");
     })
-    // Mỹ Anh
+// Mỹ Anh
     // menu
 document.addEventListener("DOMContentLoaded", function(event) {
 
