@@ -7,12 +7,13 @@ const cookieParser = require("cookie-parser");
 const expressSession = require('express-session')
 const cookieSession = require('cookie-session')
 const MemoryStore = require('session-memory-store')(expressSession)
-
-
+const cron = require('node-cron');
+const mongodb = require('./db')
 const app = express();
 const users = require('./routes/Users')
 const me = require('./routes/me')
 const wallet = require('./routes/wallet')
+
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -48,12 +49,23 @@ app.use((req, res) => {
 
 const port = process.env.PORT || 3000;
 const URI = process.env.MONGODB_URL;
+app.listen(port, () => {
+    console.log("http://localhost:"+port)
+})
 
-mongoose.connect(URI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    })
-    .then(() => {
-        app.listen(port, () => console.log(`http://localhost:${port}`));
-    })
-    .catch((e) => console.log("Unable to connect " + e.message));
+mongodb.connect()
+
+
+// auto update count withdraw
+const walletModel = require('./models/wallet')
+const job = new cron.schedule('0 0 0 * * *',() => {
+    console.log('hello')
+    walletModel.updateMany({},{$set: {countWithdraw:2}})
+    .catch(e => console.log(e))
+
+},{
+    scheduled: true,
+    timezone: "Asia/Ho_Chi_Minh"
+})
+  
+job.start();

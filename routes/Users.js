@@ -22,4 +22,5 @@ Router.post('/first-change-pass', userController.postFirstChangePass)
 Router.get("/profile", userController.getProfile)
 Router.get("/changepassword", userController.getChangePass)
 Router.post("/changepassword", userController.getChangePass)
+
 module.exports = Router

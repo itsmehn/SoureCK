@@ -128,6 +128,7 @@ const postLogin = (req, res) => {
             .then(() => {
                 if (m == 1) {
                     req.session.account = account
+
                     if (account.check == 0) {
                         //Lần đầu tiên đăng nhập
                         return res.redirect('/users/first-change-pass')
