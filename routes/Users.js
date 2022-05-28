@@ -20,5 +20,7 @@ Router.post('/login', userController.postLogin)
 Router.get('/first-change-pass', userController.getFirstChangePass)
 Router.post('/first-change-pass', userController.postFirstChangePass)
 Router.get("/profile", userController.getProfile)
-Router.get("/login/:id",userController.getCreatWallet)
+Router.get("/changepassword", userController.getChangePass)
+Router.post("/changepassword", userController.getChangePass)
+
 module.exports = Router

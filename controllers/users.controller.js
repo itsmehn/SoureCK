@@ -15,10 +15,7 @@ const { Router } = require('express')
 const { match } = require('assert')
 const session = require('express-session')
 
-
-const wallet =  require('../models/wallet')
-const users = require('../models/users')
-const { json } = require('body-parser')
+//API REGISTER
 const getRegister = (req, res) => {
     res.render('register', { phoneNumber: '', email: '', fullName: '', dateOfbirth: '', address: '', message: '' })
 }
@@ -61,7 +58,6 @@ const postRegister = async(req, res) => {
                     check: 0,
                     checkLoginFail: 0
                 })
-                
 
                 user.save().then(() => {
 
@@ -83,14 +79,15 @@ const postRegister = async(req, res) => {
                         if (error) {
                             console.log(error)
                         }
-                        return res.redirect(`/users/login/${phoneNumber}`)
+                        res.redirect('/login')
                     });
-                    
                 })
+
             })
             .catch(e => {
                 return res.render('register', { phoneNumber: '', email: '', fullName: '', dateOfbirth: '', address: '', message: e.message })
             })
+
     } else {
         let messages = result.mapped()
         let message = ''
@@ -106,6 +103,7 @@ const postRegister = async(req, res) => {
 
 }
 
+//API LOGIN
 const getLogin = (req, res) => {
     res.render('login', { username: '', password: '', message: '' })
 }
@@ -113,35 +111,30 @@ const getLogin = (req, res) => {
 const postLogin = (req, res) => {
     let result = validationResult(req)
     let { username, password } = req.body
-
     if (result.errors.length === 0) {
-
         dataUser.findOne({ username: username })
             .then(acc => {
                 if (!acc) {
                     throw new Error('Tài khoản không tồn tại')
                 } else {
+
                     account = acc
                     m = 0
                     if (acc.password === password) {
                         m = 1
                     }
-
                 }
-
             })
             .then(() => {
                 if (m == 1) {
                     req.session.account = account
-                    if (account.check == 0) {
 
-                        console.log(req.session.account)
+                    if (account.check == 0) {
+                        //Lần đầu tiên đăng nhập
                         return res.redirect('/users/first-change-pass')
                     } else {
-                        return res.redirect('/')
+                        res.redirect('/')
                     }
-
-
 
                 } else {
                     return res.render('login', { message: 'Sai thông tin đăng nhập' })
@@ -163,41 +156,35 @@ const postLogin = (req, res) => {
     }
 }
 
+//API FIRST CHANGE PASSWORD
 const getFirstChangePass = (req, res) => {
-    res.render('change-password-first')
+    res.render('change-password-first', { message: '' })
 }
 
 
-const postFirstChangePass = (req, res, next) => {
+const postFirstChangePass = (req, res) => {
     let { password, repassword } = req.body
     let id = req.session.account._id
-
-    if (!password || !repassword || password != repassword) {
-        return res.status(400).json({
-            code: 2,
-            message: 'Mật khẩu chưa khớp'
-
-        })
+    if (!password || !repassword || password != repassword || !password.match(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])([a-zA-Z0-9]{8})$/)) {
+        return res.render('change-password-first', { message: 'Mật khẩu chưa hợp lệ' })
     } else {
         dataUser.findByIdAndUpdate(id, { password: password, check: 1 }, {
                 new: true
             })
             .then((account) => {
+                req.session.account = account
                 if (account) {
-                    return res.status(200).json({
-                        code: 0,
-                        message: 'Thành công',
-                        data: account
-                    })
-                } else return res.json({ code: 2, message: "Không tìm được tài khoản" });
+                    return res.redirect('/users/profile')
+                } else return res.render('change-password-first', { message: '' });
             })
             .catch((e) => {
-                return res.json({ code: 3, message: "Đây không phải id hợp lệ" });
+                return res.render('change-password-first', { message: '' });
             });
 
     }
 }
 
+//API GET PROFILE
 const getProfile = (req, res) => {
     console.log(req.session.account)
     let id = req.session.account._id
@@ -214,27 +201,32 @@ const getProfile = (req, res) => {
 
 }
 
-const getCreatWallet = async (req,res) => {
-    let id = req.params.id
-    if(!id) {
-        return res.redirect('/user/login')
-    }else{
-        await users.findOne({phoneNumber:id})
-        .then((d) => {
-            let userId = d._id
-            let userWallett =  new wallet({
-                userId: userId
-            })
-            userWallett.save();
-        }).then(() => {
-            return res.redirect('/users/login')
-        }).catch(e => console.log(e))
-    }
+//API CHANGE PASSWORD (1.6)
+const getChangePass = (req, res) => {
+    res.render('change-password', { message: '' })
 }
 
-const putLogin = (req, res) => {
-
+const postChangePass = (req, res) => {
+    let { oldpass, newpass, renewpass } = req.body
+    dataUser.findOne({ id: req.session.account._id })
+        .then(account => {
+            if (account.password != oldpass) {
+                console.log('FAIL')
+                res.render('change-password', { message: 'Đổi mật khẩu thất bại.' })
+            } else {
+                if (newpass != renewpass) {
+                    console.log('FAIL')
+                    res.render('change-password', { message: 'Mật khẩu mới không khớp' })
+                } else {
+                    dataUser.findByIdAndUpdate(account.id, { password: newpass })
+                        .then(newpass => {
+                            console.log('success' + newpass)
+                        })
+                }
+            }
+        })
 }
+
 
 module.exports = {
     getProfile,
@@ -244,5 +236,6 @@ module.exports = {
     postLogin,
     getFirstChangePass,
     postFirstChangePass,
-    getCreatWallet
+    getChangePass,
+    postChangePass
 }
