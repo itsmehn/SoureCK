@@ -186,14 +186,14 @@ const postFirstChangePass = (req, res) => {
 
 //API GET PROFILE
 const getProfile = (req, res) => {
-    console.log(req.session.account)
+
     let id = req.session.account._id
     if (!id) {
         res.redirect('/users/login')
     }
     dataUser.findOne({ id: id })
         .then(acc => {
-            res.render('profile', { acc: acc })
+            res.render('profile', { acc: acc, message: '    ' })
         })
         .catch(err => {
             res.redirect('/error')
@@ -208,41 +208,61 @@ const getChangePass = (req, res) => {
 
 const postChangePass = (req, res) => {
     let { oldpass, newpass, renewpass } = req.body
+    console.log(req.body)
     dataUser.findOne({ id: req.session.account._id })
         .then(account => {
             if (account.password != oldpass) {
-                console.log('FAIL')
-                res.render('change-password', { message: 'Đổi mật khẩu thất bại.' })
+
+                return res.render('change-password', { message: 'Đổi mật khẩu thất bại.' })
             } else {
                 if (newpass != renewpass) {
-                    console.log('FAIL')
-                    res.render('change-password', { message: 'Mật khẩu mới không khớp' })
+
+                    return res.render('change-password', { message: 'Mật khẩu mới không khớp' })
                 } else {
                     dataUser.findByIdAndUpdate(account.id, { password: newpass })
                         .then(newpass => {
-                            console.log('success' + newpass)
+                            return res.redirect('/users/profile')
                         })
                 }
             }
         })
 }
 
-const getCreatWallet = async (req,res) => {
+const getCreatWallet = async(req, res) => {
     let id = req.params.id
-    if(!id) {
+    if (!id) {
         return res.redirect('/user/login')
-    }else{
-        await users.findOne({phoneNumber:id})
-        .then((d) => {
-            let userId = d._id
-            let userWallett =  new wallet({
-                userId: userId
-            })
-            userWallett.save();
-        }).then(() => {
-            return res.redirect('/users/login')
-        }).catch(e => console.log(e))
+    } else {
+        await users.findOne({ phoneNumber: id })
+            .then((d) => {
+                let userId = d._id
+                let userWallett = new wallet({
+                    userId: userId
+                })
+                userWallett.save();
+            }).then(() => {
+                return res.redirect('/users/login')
+            }).catch(e => console.log(e))
     }
+}
+
+//changeCMND
+const postProfile = (req, res) => {
+    const imageFront = req.files.imageFront
+    const imageBack = req.files.imageBack
+    console.log(req.files)
+    let id = req.session.account._id
+    dataUser.findByIdAndUpdate(id, { imageBack: imageBack[0].filename, imageFront: imageFront[0].filename }, {
+            new: true
+        })
+        .then(account => {
+            req.session.account = account
+            if (account) {
+                console.log("Thành công")
+                return res.render('profile', { message: '   ' })
+            } else return res.render('profile', { message: 'Không thành công' })
+        })
+
 }
 
 module.exports = {
@@ -255,5 +275,6 @@ module.exports = {
     postFirstChangePass,
     getChangePass,
     postChangePass,
-    getCreatWallet
+    getCreatWallet,
+    postProfile
 }

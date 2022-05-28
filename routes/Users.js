@@ -21,7 +21,8 @@ Router.get('/first-change-pass', userController.getFirstChangePass)
 Router.post('/first-change-pass', userController.postFirstChangePass)
 Router.get("/profile", userController.getProfile)
 Router.get("/changepassword", userController.getChangePass)
-Router.post("/changepassword", userController.getChangePass)
-Router.get("/login/:id",userController.getCreatWallet)
+Router.post("/changepassword", userController.postChangePass)
+Router.get("/login/:id", userController.getCreatWallet)
+Router.post('/profile', upload.fields([{ name: 'imageFront', maxCount: 1 }, { name: 'imageBack', maxCount: 1 }]), userController.postProfile)
 
 module.exports = Router
