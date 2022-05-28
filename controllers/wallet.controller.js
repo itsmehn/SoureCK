@@ -32,7 +32,8 @@ exports.postRecharge = async (req, res) => {
                 recepientId: String(id),
                 timeStamps: getDate(),
                 status: "Đã chuyển",
-                description: "Nạp tiền"
+                description: "Nạp tiền",
+                action: "NT"
             })
             trans.save().then(() => {
                 return res.json({
@@ -59,7 +60,8 @@ exports.postRecharge = async (req, res) => {
                     recepientId: String(id),
                     timeStamps: getDate(),
                     status: "Đã chuyển",
-                    description: "Nạp tiền"
+                    description: "Nạp tiền",
+                    action: 'NT'
                 })
                 trans.save().then(() => {
                     return res.json({
@@ -108,7 +110,8 @@ exports.postWithdraw = async (req, res) => {
             recepientId: "",
             timeStamps: getDate(),
             status: "",
-            description: description
+            description: description,
+            action: 'RT'
         })
         if (amount >= 5000000) {
             if (userWallett.countWithdraw > 0) {
@@ -136,6 +139,7 @@ exports.postWithdraw = async (req, res) => {
         } else {
             if (userWallett.countWithdraw > 0) {
                 trans.status = "success"
+                trans.action = 'RT'
                 let sumAmount = parseInt(amount) * 1.05
                 userWallett.balance = userWallett.balance - sumAmount;
                 userWallett.countWithdraw = userWallett.countWithdraw - 1
@@ -201,7 +205,8 @@ exports.postTransfer = async (req,res) => {
                 recepientId: infoReceiver._id,
                 timeStamps: getDate(),
                 status: "Chờ xác nhận ct",
-                description:desc
+                description:desc,
+                action:'CT'
             })
             transfer.save().then(() => {
                 walletSender.save().then(() => {
@@ -231,7 +236,8 @@ exports.postTransfer = async (req,res) => {
                 recepientId: infoReceiver._id,
                 timeStamps: getDate(),
                 status: "đã chuyển",
-                description:desc
+                description:desc,
+                action:'CT'
             })
             transfer.save().then(() => {
                 walletSender.save().then(() => {
@@ -298,7 +304,8 @@ exports.postBuyCard = async (req,res) => {
             timeStamps: getDate(),
             status: "Mua thành công",
             description:'Mua thẻ',
-            codeCard : codeCard
+            codeCard : codeCard,
+            action:'BC'
         })
         userWallet.balance = userWallet.balance - amount
         buyCard.save()
@@ -316,6 +323,16 @@ exports.postBuyCard = async (req,res) => {
         .catch(e => console.log(e))
     }
 
+}
+exports.getTransaction = async (req,res) => {
+    id = new Object(req.params.id) 
+    userTrans = await transaction.find({userId : id})
+    return res.json({
+        code: 0,
+        messag: 'Thanh cong',
+        data: userTrans
+    })
+    
 }
 
 

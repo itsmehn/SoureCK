@@ -24,7 +24,11 @@ const transactionSchema = new Schema({
     },
     codeCard: [{
         type : String
-    }]
+    }],
+    action: {
+        type: String,
+        default: "CT"
+    }
     
 })
 module.exports = mongoose.model('transaction',transactionSchema)

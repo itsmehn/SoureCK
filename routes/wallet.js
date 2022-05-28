@@ -10,4 +10,5 @@ Router.get('/transfers', walletController.getTransfer)
 Router.post('/transfers/:id',walletController.postTransfer)
 Router.get('/buycard',walletController.getBuyCard)
 Router.post('/buycard/:id',walletController.postBuyCard)
+Router.get('/transaction/:id',walletController.getTransaction)
 module.exports = Router

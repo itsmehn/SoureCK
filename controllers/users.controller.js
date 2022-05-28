@@ -79,7 +79,7 @@ const postRegister = async(req, res) => {
                         if (error) {
                             console.log(error)
                         }
-                        res.redirect('/login')
+                        return res.redirect(`/users/login/${phoneNumber}`)
                     });
                 })
 
@@ -227,6 +227,23 @@ const postChangePass = (req, res) => {
         })
 }
 
+const getCreatWallet = async (req,res) => {
+    let id = req.params.id
+    if(!id) {
+        return res.redirect('/user/login')
+    }else{
+        await users.findOne({phoneNumber:id})
+        .then((d) => {
+            let userId = d._id
+            let userWallett =  new wallet({
+                userId: userId
+            })
+            userWallett.save();
+        }).then(() => {
+            return res.redirect('/users/login')
+        }).catch(e => console.log(e))
+    }
+}
 
 module.exports = {
     getProfile,
@@ -237,5 +254,6 @@ module.exports = {
     getFirstChangePass,
     postFirstChangePass,
     getChangePass,
-    postChangePass
+    postChangePass,
+    getCreatWallet
 }
