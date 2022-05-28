@@ -21,6 +21,10 @@ const transactionSchema = new Schema({
     description: {
         type: String,
         default: 'Chuyen Tien'
-    }
+    },
+    codeCard: [{
+        type : String
+    }]
+    
 })
 module.exports = mongoose.model('transaction',transactionSchema)
