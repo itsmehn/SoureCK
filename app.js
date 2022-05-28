@@ -8,7 +8,7 @@ const expressSession = require('express-session')
 const cookieSession = require('cookie-session')
 const MemoryStore = require('session-memory-store')(expressSession)
 
-
+const mongodb = require('./db')
 const app = express();
 const users = require('./routes/Users')
 const me = require('./routes/me')
@@ -47,12 +47,8 @@ app.use((req, res) => {
 
 const port = process.env.PORT || 3000;
 const URI = process.env.MONGODB_URL;
+app.listen(port, () => {
+    console.log("http://localhost:8080")
+})
 
-mongoose.connect(URI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    })
-    .then(() => {
-        app.listen(port, () => console.log(`http://localhost:${port}`));
-    })
-    .catch((e) => console.log("Unable to connect " + e.message));
+mongodb.connect()
