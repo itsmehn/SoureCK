@@ -15,6 +15,7 @@ const { Router } = require('express')
 const { match } = require('assert')
 const session = require('express-session')
 
+//API REGISTER
 const getRegister = (req, res) => {
     res.render('register', { phoneNumber: '', email: '', fullName: '', dateOfbirth: '', address: '', message: '' })
 }
@@ -102,6 +103,7 @@ const postRegister = async(req, res) => {
 
 }
 
+//API LOGIN
 const getLogin = (req, res) => {
     res.render('login', { username: '', password: '', message: '' })
 }
@@ -115,6 +117,7 @@ const postLogin = (req, res) => {
                 if (!acc) {
                     throw new Error('Tài khoản không tồn tại')
                 } else {
+
                     account = acc
                     m = 0
                     if (acc.password === password) {
@@ -152,6 +155,7 @@ const postLogin = (req, res) => {
     }
 }
 
+//API FIRST CHANGE PASSWORD
 const getFirstChangePass = (req, res) => {
     res.render('change-password-first', { message: '' })
 }
@@ -179,6 +183,7 @@ const postFirstChangePass = (req, res) => {
     }
 }
 
+//API GET PROFILE
 const getProfile = (req, res) => {
     console.log(req.session.account)
     let id = req.session.account._id
@@ -195,12 +200,30 @@ const getProfile = (req, res) => {
 
 }
 
+//API CHANGE PASSWORD (1.6)
 const getChangePass = (req, res) => {
-    res.render('change-password')
+    res.render('change-password', { message: '' })
 }
 
 const postChangePass = (req, res) => {
-    res.render('change-password')
+    let { oldpass, newpass, renewpass } = req.body
+    dataUser.findOne({ id: req.session.account._id })
+        .then(account => {
+            if (account.password != oldpass) {
+                console.log('FAIL')
+                res.render('change-password', { message: 'Đổi mật khẩu thất bại.' })
+            } else {
+                if (newpass != renewpass) {
+                    console.log('FAIL')
+                    res.render('change-password', { message: 'Mật khẩu mới không khớp' })
+                } else {
+                    dataUser.findByIdAndUpdate(account.id, { password: newpass })
+                        .then(newpass => {
+                            console.log('success' + newpass)
+                        })
+                }
+            }
+        })
 }
 
 

@@ -40,8 +40,9 @@ app.use('/wallet', wallet)
 app.use((req, res) => {
     if (!req.session.account) {
         res.redirect('/users/login')
+    } else {
+        res.redirect('/error')
     }
-
 
 })
 
