@@ -14,6 +14,7 @@ const dataUser = require('../models/users')
 const { Router } = require('express')
 const { match } = require('assert')
 const session = require('express-session')
+const wallet =  require('../models/wallet')
 
 
 
@@ -135,6 +136,8 @@ const postLogin = (req, res) => {
             .then(() => {
                 if (m == 1) {
                     req.session.account = account
+                    res.locals.account = account
+                    console.log(req.session.account)
 
                     if (account.check == 0) {
                         //Lần đầu tiên đăng nhập
@@ -189,7 +192,7 @@ const getFirstChangePass = (req, res) => {
 const postFirstChangePass = (req, res) => {
     let { password, repassword } = req.body
     let id = req.session.account._id
-    if (!password || !repassword || password != repassword || !password.match(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])([a-zA-Z0-9]{8})$/)) {
+    if (!password || !repassword || password != repassword) {
         return res.render('change-password-first', { message: 'Mật khẩu chưa hợp lệ' })
     } else {
         dataUser.findByIdAndUpdate(id, { password: password, check: 1 }, {
@@ -209,19 +212,13 @@ const postFirstChangePass = (req, res) => {
 }
 
 //API GET PROFILE
-const getProfile = (req, res) => {
+const getProfile = async (req, res) => {
 
-    let id = req.session.account._id
-    if (!id) {
-        res.redirect('/users/login')
+    let acc = req.session.account
+    if (!acc) {
+        return res.redirect('/users/login')
     }
-    dataUser.findOne({ id: id })
-        .then(acc => {
-            res.render('profile', { acc: acc, message: '    ' })
-        })
-        .catch(err => {
-            res.redirect('/error')
-        })
+    return res.render('profile', { acc: acc, message: ' ' })
 
 }
 
@@ -255,9 +252,9 @@ const postChangePass = (req, res) => {
 const getCreatWallet = async(req, res) => {
     let id = req.params.id
     if (!id) {
-        return res.redirect('/user/login')
+        return res.redirect('/users/login')
     } else {
-        await users.findOne({ phoneNumber: id })
+        await dataUser.findOne({ phoneNumber: id })
             .then((d) => {
                 let userId = d._id
                 let userWallett = new wallet({
