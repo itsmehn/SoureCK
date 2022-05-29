@@ -2,6 +2,7 @@ const wallet = require('../models/wallet')
 const transaction = require('../models/transaction')
 const user = require('../models/users')
 const random = require('random')
+const transporter = require("../middlewares/sendMail")
 //get recharge
 exports.getRecharge = (req, res) => {
     return res.json({
@@ -172,168 +173,196 @@ exports.postWithdraw = async (req, res) => {
 
 }
 
-exports.getTransfer = (req,res) => {
+exports.getTransfer = (req, res) => {
     return res.json({
         code: 0,
         message: "Get transfer success"
     })
 }
-exports.postTransfer = async (req,res) => {
-    idSender = new Object(req.params.id) 
-    let {numReceiver,desc,nameReceiver,amount,checkFee} = req.body
-    if(!numReceiver || !desc || !nameReceiver || !amount){
+exports.postTransfer = async (req, res) => {
+    idSender = new Object(req.params.id)
+    let { numReceiver, desc, nameReceiver, amount, checkFee } = req.body
+    if (!numReceiver || !desc || !nameReceiver || !amount) {
         return res.json({
             code: 2,
             message: 'Thieu thong tin'
         })
-    }else{
-        walletSender = await wallet.findOne({userId: idSender})
-        infoReceiver = await user.findOne({phoneNumber:numReceiver});
-        walletReceiver = await wallet.findOne({userId: infoReceiver._id})
-        console.log(walletReceiver)
-        if(infoReceiver === null) {
+    } else {
+        infoSender = await user.findOne({ _id: idSender })
+        walletSender = await wallet.findOne({ userId: idSender })
+        infoReceiver = await user.findOne({ phoneNumber: numReceiver });
+        walletReceiver = await wallet.findOne({ userId: infoReceiver._id })
+        if (infoReceiver === null) {
             return res.json({
-                code:1,
+                code: 1,
                 message: 'khong tim thay nguoi nhan'
             })
-        }else if(amount >5000000) {
-            let sumAmount = amount * 1.05
-            walletSender.balance = walletSender.balance - sumAmount
+        } else if (amount > (parseInt(walletSender.balance + 100000))) {
+            return res.json({
+                code: 1,
+                message: 'Tiền của bạn đã hết mời nạp thêm'
+            })
+        }
+        else if (amount > 5000000) {
+            let sumAmount
+            if (checkFee) {
+                sumAmount = amount * 0.95
+                walletSender.balance = walletSender.balance - amount
+            } else {
+                sumAmount = amount * 1.05
+                walletSender.balance = walletSender.balance - sumAmount
+
+            }
             let transfer = new transaction({
-                userId : idSender,
-                amount : sumAmount,
+                userId: idSender,
+                amount: sumAmount,
                 recepientId: infoReceiver._id,
                 timeStamps: getDate(),
                 status: "Chờ xác nhận ct",
-                description:desc,
-                action:'CT'
+                description: desc,
+                action: 'CT'
             })
             transfer.save().then(() => {
                 walletSender.save().then(() => {
+
                     return res.json({
                         code: 0,
-                        message : 'Chờ xác nhận',
-                        data:transfer
+                        message: 'Chờ xác nhận',
+                        data: transfer
                     })
-                    
+
+
                 })
-                
+
             }).catch(e => console.log(e))
-        }else {
-            let sumAmount = amount * 1.05
-            if(checkFee) {
+        } else {
+            let sumAmount
+            if (checkFee) {
+                sumAmount = amount * 0.95
                 walletSender.balance = walletSender.balance - amount
-                walletReceiver.balance = walletReceiver.balance + amount - amount*0.05
-            }else {
+                walletReceiver.balance = walletReceiver.balance + sumAmount
+            } else {
+                sumAmount = amount * 1.05
                 walletSender.balance = walletSender.balance - sumAmount
-                walletReceiver.balance = walletReceiver.balance + amount 
+                walletReceiver.balance = walletReceiver.balance + amount
             }
-            
-            
+
+
             let transfer = new transaction({
-                userId : idSender,
-                amount : sumAmount,
+                userId: idSender,
+                amount: sumAmount,
                 recepientId: infoReceiver._id,
                 timeStamps: getDate(),
                 status: "đã chuyển",
-                description:desc,
-                action:'CT'
+                description: desc,
+                action: 'CT'
             })
             transfer.save().then(() => {
                 walletSender.save().then(() => {
-                    walletReceiver.save().then(()=> {
+                    walletReceiver.save().then(() => {
                         return res.json({
                             code: 0,
-                            message : 'Chờ xác nhận',
-                            data:transfer
+                            message: 'Chờ xác nhận',
+                            data: transfer
                         })
                     })
                 })
-                
+
 
             }).catch(e => console.log(e))
         }
-            
-        
+
+
     }
 }
-exports.getBuyCard = (req,res) => {
+exports.getBuyCard = (req, res) => {
     return res.json({
         code: 0,
         message: "Get Buy Card success"
     })
 }
-exports.postBuyCard = async (req,res) => {
+exports.postBuyCard = async (req, res) => {
     id = new Object(req.params.id)
-    userWallet = await wallet.findOne({userId:id})
-    let {nha_mang,menh_gia,qty} = req.body
-    if(!nha_mang || !menh_gia || !qty) {
+    userWallet = await wallet.findOne({ userId: id })
+    let { nha_mang, menh_gia, qty } = req.body
+    if (!nha_mang || !menh_gia || !qty) {
         return res.json({
-            code:1,
+            code: 1,
             message: 'Thieu thong tin'
         })
-    }else {
-        
-        let codeCard = []
-        if(nha_mang === "Viettel") {
-            for(i = 0 ;i< qty;i++) {
-                a = '11111' + String(random.int((min=1000),(max = 9999)))
-                codeCard.push(a)
-            }
-        }else if(nha_mang === 'Mobifone'){
-            for(i = 0 ;i< qty;i++) {
-                a = '22222' + String(random.int((min=1000),(max = 9999)))
-                codeCard.push(a)
-            }
-        }else if(nha_mang === 'Vinaphone') {
-            for(i = 0 ;i< qty;i++) {
-                a = '33333' + String(random.int((min=1000),(max = 9999)))
-                codeCard.push(a)
-            }
-        }else{
-            return res.json({
-                code:1,
-                message:"Khong cung cap nha mang nay"
-            })
-        }
-        amount = parseInt(menh_gia) * parseInt(qty)
-        let buyCard = new transaction({
-            userId : id,
-            amount :amount ,
-            recepientId: id,
-            timeStamps: getDate(),
-            status: "Mua thành công",
-            description:'Mua thẻ',
-            codeCard : codeCard,
-            action:'BC'
-        })
-        userWallet.balance = userWallet.balance - amount
-        buyCard.save()
-        .then(() => {
-            userWallet.save()
-            .then(() => {
-                return res.json({
-                    code : 0,
-                    message: "Mua thanh cong",
-                    data: buyCard,
-                    userWallet:userWallet
-                })
-            })
-        })
-        .catch(e => console.log(e))
     }
+    else {
+        amount = parseInt(menh_gia) * parseInt(qty)
+        if (amount > (parseInt(userWallet.balance + 100000))) {
+            return res.json({
+                code: 1,
+                message: 'Tiền của bạn đã hết mời nạp thêm'
+            })
+        } else {
+            let codeCard = []
+            if (nha_mang === "Viettel") {
+                for (i = 0; i < qty; i++) {
+                    a = '11111' + String(random.int((min = 1000), (max = 9999)))
+                    codeCard.push(a)
+                }
+            } else if (nha_mang === 'Mobifone') {
+                for (i = 0; i < qty; i++) {
+                    a = '22222' + String(random.int((min = 1000), (max = 9999)))
+                    codeCard.push(a)
+                }
+            } else if (nha_mang === 'Vinaphone') {
+                for (i = 0; i < qty; i++) {
+                    a = '33333' + String(random.int((min = 1000), (max = 9999)))
+                    codeCard.push(a)
+                }
+            } else {
+                return res.json({
+                    code: 1,
+                    message: "Khong cung cap nha mang nay"
+                })
+            }
 
+            let buyCard = new transaction({
+                userId: id,
+                amount: amount,
+                recepientId: id,
+                timeStamps: getDate(),
+                status: "Mua thành công",
+                description: 'Mua thẻ',
+                codeCard: codeCard,
+                action: 'BC'
+            })
+            userWallet.balance = userWallet.balance - amount
+            buyCard.save()
+                .then(() => {
+                    userWallet.save()
+                        .then(() => {
+                            return res.json({
+                                code: 0,
+                                message: "Mua thanh cong",
+                                data: buyCard,
+                                userWallet: userWallet
+                            })
+                        })
+                })
+                .catch(e => console.log(e))
+        }
+    }
 }
-exports.getTransaction = async (req,res) => {
-    id = new Object(req.params.id) 
-    userTrans = await transaction.find({userId : id})
+
+
+
+exports.getTransaction = async (req, res) => {
+    id = new Object(req.params.id)
+    userTrans = await transaction.find({ userId: id })
     return res.json({
         code: 0,
         messag: 'Thanh cong',
         data: userTrans
     })
-    
+
 }
+
 
 
 // get date

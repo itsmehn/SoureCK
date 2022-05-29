@@ -4,9 +4,9 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const path = require('path')
 const cookieParser = require("cookie-parser");
-const expressSession = require('express-session')
+const session = require('express-session')
 const cookieSession = require('cookie-session')
-const MemoryStore = require('session-memory-store')(expressSession)
+const MemoryStore = require('session-memory-store')(session)
 const cron = require('node-cron');
 const mongodb = require('./db')
 const app = express();
@@ -25,6 +25,7 @@ app.use(
         origin: "*",
     })
 );
+
 app.use(cookieParser())
 app.use(cookieSession({
     secret: 'secret',
@@ -33,7 +34,6 @@ app.use(cookieSession({
     resave: false,
     saveUninitialized: true
 }))
-
 
 app.use('/users', users)
 app.use('/', me)

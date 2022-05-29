@@ -1,9 +1,8 @@
 const express = require("express");
-const { getProfilePage } = require("../controllers/users.controller");
+const userCt = require('../controllers/users.controller')
 const router = express.Router()
 
-router.get('/', (req, res) => {
-    res.render("home-page")
-})
+router.get('/',userCt.getHomePage)
+router.get('/logout',userCt.getLogout)
 
 module.exports = router

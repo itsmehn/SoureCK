@@ -15,6 +15,10 @@ const { Router } = require('express')
 const { match } = require('assert')
 const session = require('express-session')
 
+
+
+
+
 //API REGISTER
 const getRegister = (req, res) => {
     res.render('register', { phoneNumber: '', email: '', fullName: '', dateOfbirth: '', address: '', message: '' })
@@ -79,7 +83,7 @@ const postRegister = async(req, res) => {
                         if (error) {
                             console.log(error)
                         }
-                        return res.redirect(`/users/login/${phoneNumber}`)
+                        return res.redirect(`/users/createwallet/${phoneNumber}`)
                     });
                 })
 
@@ -105,6 +109,9 @@ const postRegister = async(req, res) => {
 
 //API LOGIN
 const getLogin = (req, res) => {
+    if(req.session.account){
+        return res.redirect('/users/homepage')
+    }
     res.render('login', { username: '', password: '', message: '' })
 }
 
@@ -133,7 +140,7 @@ const postLogin = (req, res) => {
                         //Lần đầu tiên đăng nhập
                         return res.redirect('/users/first-change-pass')
                     } else {
-                        res.redirect('/')
+                        return res.redirect('/users/homepage')
                     }
 
                 } else {
@@ -156,6 +163,23 @@ const postLogin = (req, res) => {
     }
 }
 
+const getHomePage = async (req,res) => {
+    if(req.session.account){
+        return res.redirect('/users/homepage')
+    }
+    res.render('home-page')
+}
+const getHomePageLogin =  (req,res) => {
+    if(!req.session.account){
+        return res.redirect('/users/login')
+    }
+    account = req.session.account
+    res.render('home-page-login',{account:account})
+}
+const getLogout = (req,res) => {
+    req.session = null
+    res.redirect('/')
+}
 //API FIRST CHANGE PASSWORD
 const getFirstChangePass = (req, res) => {
     res.render('change-password-first', { message: '' })
@@ -276,5 +300,8 @@ module.exports = {
     getChangePass,
     postChangePass,
     getCreatWallet,
-    postProfile
+    postProfile,
+    getHomePage,
+    getLogout,
+    getHomePageLogin
 }
