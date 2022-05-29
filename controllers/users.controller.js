@@ -138,7 +138,6 @@ const postLogin = (req, res) => {
                 if (m == 1) {
                     req.session.account = account
                     res.locals.account = account
-                        // console.log(req.session.account)
 
                     if (account.check == 0) {
                         //Lần đầu tiên đăng nhập

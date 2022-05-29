@@ -27,7 +27,6 @@ exports.postRecharge = async (req, res) => {
                     userId: id,
                     amount: parseInt(amount),
                     recepientId: String(id),
-                    timeStamps: getDate(),
                     status: "Đã chuyển",
                     description: "Nạp tiền",
                     action: "NT"
@@ -48,7 +47,6 @@ exports.postRecharge = async (req, res) => {
                         userId: id,
                         amount: parseInt(amount),
                         recepientId: String(id),
-                        timeStamps: getDate(),
                         status: "Đã chuyển",
                         description: "Nạp tiền",
                         action: 'NT'
@@ -71,92 +69,70 @@ exports.postRecharge = async (req, res) => {
 }
 // get withdraw
 exports.getWithdraw = async (req, res) => {
-    return res.json({
-        code: 0,
-        message: "Get withdraw success"
-    })
+    res.locals.account = req.session.account
+    return res.render('withdraw-money',{amount:'', soThe:'', deadline:'',description:'', cvvCode:'',message:'', success : ''})
 }
 // post withdraw
 exports.postWithdraw = async (req, res) => {
+    let account = req.session.account
+    let id = new Object(account._id)
     let { amount, soThe, deadline, cvvCode, description } = req.body;
-    if (!amount || !soThe || !deadline || !cvvCode) {
-        return res.json({
-            code: 2,
-            message: 'Thieu thong tin'
-        })
-    }else if(parseInt(amount) % 50000 != 0 ) {
-        return res.json({
-            code: 1,
-            message: 'Cần phải rút bội số của 50000'
-        })
-    } else if (soThe === '111111' && deadline === '10/10/2022' && cvvCode === '411') {
-        // thay bằng session
-        let id = new Object(req.params.id)
-        userWallett = await wallet.findOne({ userId: id })
-        let trans = new transaction({
-            userId: id,
-            amount: parseInt(amount),
-            recepientId: "",
-            timeStamps: getDate(),
-            status: "",
-            description: description,
-            action: 'RT'
-        })
-        if (amount >= 5000000) {
-            if (userWallett.countWithdraw > 0) {
-                let sumAmount = parseInt(amount) * 1.05
-                userWallett.countWithdraw = userWallett.countWithdraw - 1
-                userWallett.balance = userWallett.balance - sumAmount;
-                trans.amount = sumAmount
-                trans.status = "Chờ xác nhận"
-                userWallett.save().then(() => {
-                    trans.save().then(() => {
-                        return res.json({
-                            code: 0,
-                            message: 'Dang cho xac nhan',
-                            transacion: trans
-                        })
-                    }).catch(e => console.log(e))
-                })
-            } else {
-                return res.json({
-                    code: 1,
-                    message: 'Het so lan rut tien'
-                })
-            }
-
-        } else {
-            if (userWallett.countWithdraw > 0) {
-                trans.status = "success"
-                trans.action = 'RT'
-                let sumAmount = parseInt(amount) * 1.05
-                userWallett.balance = userWallett.balance - sumAmount;
-                userWallett.countWithdraw = userWallett.countWithdraw - 1
-                userWallett.save().then(() => {
+    result = validationResult(req)
+    if(result.errors.length === 0){
+        if(parseInt(amount) % 50000 != 0 ) {
+            return res.render('withdraw-money',{amount, soThe, deadline, cvvCode, description,message:'Cần phải rút bội số của 50000',success:''})
+        } else if (soThe === '111111' && deadline === '10/10/2022' && cvvCode === '411') {
+            // thay bằng session
+            userWallett = await wallet.findOne({ userId: id })
+            let trans = new transaction({
+                userId: id,
+                amount: parseInt(amount),
+                recepientId: "",
+                status: "",
+                description: description,
+                action: 'RT'
+            })
+            if (amount >= 5000000) {
+                if (userWallett.countWithdraw > 0) {
+                    let sumAmount = parseInt(amount) * 1.05
+                    userWallett.countWithdraw = userWallett.countWithdraw - 1
+                    userWallett.balance = userWallett.balance - sumAmount;
                     trans.amount = sumAmount
-                    trans.status = "Đã rút thành công"
-                    trans.save().then(() => {
-                        return res.json({
-                            code: 0,
-                            message: 'Rút tiền thành công',
-                            transacion: trans
-                        })
-                    }).catch(e => console.log(e))
-                })
+                    trans.status = "Chờ xác nhận"
+                    userWallett.save().then(() => {
+                        trans.save().then(() => {
+                            return res.render('withdraw-money',{amount:'', soThe:'', deadline:'', cvvCode:'', description:'',message:'',success:'Đang chờ xác nhận'})
+                        }).catch(e => console.log(e))
+                    })
+                } else {
+                    return res.render('withdraw-money',{amount, soThe, deadline, cvvCode, description,message:'Tài khoản này đã hết số lần rút',success:''})
+                }
+    
             } else {
-                return res.json({
-                    code: 1,
-                    message: 'Het so lan rut tien'
-                })
+                if (userWallett.countWithdraw > 0) {
+                    trans.status = "success"
+                    trans.action = 'RT'
+                    let sumAmount = parseInt(amount) * 1.05
+                    userWallett.balance = userWallett.balance - sumAmount;
+                    userWallett.countWithdraw = userWallett.countWithdraw - 1
+                    userWallett.save().then(() => {
+                        trans.amount = sumAmount
+                        trans.status = "Đã rút thành công"
+                        trans.save().then(() => {
+                            return res.render('withdraw-money',{amount:'', soThe:'', deadline:'', cvvCode:'', description:'',message:'',success:'Rút tiền thành công'})
+                        }).catch(e => console.log(e))
+                    })
+                } else {
+                    return res.render('withdraw-money',{amount, soThe, deadline, cvvCode, description,message:'Tài khoản này đã hết số lần rút',success:''})
+                }
+    
             }
-
+        } else {
+            return res.render('withdraw-money',{amount, soThe, deadline, cvvCode, description,message:'Thông tin thẻ bị sai',success:''})
         }
-    } else {
-        return res.json({
-            code: 1,
-            message: 'Thong tin the bi sai moi dieu chinh lai cho phu hop'
-        })
-    }
+    }else{
+        return res.render('withdraw-money',{amount:amount, soThe:soThe, deadline:deadline, cvvCode:cvvCode, description :'' , message : result.errors[0].msg,success : ''})
+    } 
 
 
 }
@@ -205,7 +181,6 @@ exports.postTransfer = async (req, res) => {
                 userId: idSender,
                 amount: sumAmount,
                 recepientId: infoReceiver._id,
-                timeStamps: getDate(),
                 status: "Chờ xác nhận ct",
                 description: desc,
                 action: 'CT'
@@ -240,7 +215,6 @@ exports.postTransfer = async (req, res) => {
                 userId: idSender,
                 amount: sumAmount,
                 recepientId: infoReceiver._id,
-                timeStamps: getDate(),
                 status: "đã chuyển",
                 description: desc,
                 action: 'CT'
@@ -314,7 +288,6 @@ exports.postBuyCard = async (req, res) => {
                 userId: id,
                 amount: amount,
                 recepientId: id,
-                timeStamps: getDate(),
                 status: "Mua thành công",
                 description: 'Mua thẻ',
                 codeCard: codeCard,
@@ -354,11 +327,3 @@ exports.getTransaction = async (req, res) => {
 
 
 // get date
-function getDate() {
-    var today = new Date();
-    var dd = String(today.getDate()).padStart(2, '0');
-    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-    var yyyy = today.getFullYear();
-    today = dd + '/' + mm + '/' + yyyy;
-    return today
-}
