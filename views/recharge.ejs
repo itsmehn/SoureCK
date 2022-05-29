@@ -14,47 +14,21 @@
                                     href="#"><samp>&times;</samp></a>
                                 Mã CVC là bắt buộc.
                             </div>
-                            <form class="form" role="form" autocomplete="off" name="fomrRecharge" enctype="application/x-www-form-urlencoded" method="POST">
-                                <div class="form-group">
-                                    <label for="cc_name">Tên chủ thẻ</label>
-                                    <input type="text" class="form-control" id="cc_name" pattern="\w+ \w+.*"
-                                        title="First and last name" required="required">
-                                </div>
+                            <form class="form"  method="POST" novalidate>
                                 <div class="form-group">
                                     <label>Số thẻ</label>
-                                    <input type="text" name="IDCard" class="form-control" autocomplete="off"
-                                        maxlength="6" pattern="(?=.*\d)(?=.*[1-3]).{6}" title="Số thẻ" required="">
+                                    <input type="text" class="form-control" autocomplete="off"
+                                        maxlength="6" title="Số thẻ" name="soThe" value="<%= soThe %>" required>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-md-12">Ngày hết hạn</label>
                                     <div class="col-md-4">
-                                        <select class="form-control" name="cc_exp_mo" size="0">
-                                            <option value="01">01</option>
-                                            <option value="02">02</option>
-                                            <option value="03">03</option>
-                                            <option value="04">04</option>
-                                            <option value="05">05</option>
-                                            <option value="06">06</option>
-                                            <option value="07">07</option>
-                                            <option value="08">08</option>
-                                            <option value="09">09</option>
-                                            <option value="10">10</option>
-                                            <option value="11">11</option>
-                                            <option value="12">12</option>
-                                        </select>
+                                        <input type="text" class="form-control" autocomplete="off" name = "deadline" value="<%= deadline %>"
+                                             required placeholder="Số thẻ">
                                     </div>
                                     <div class="col-md-4">
-                                        <select class="form-control" name="cc_exp_yr" size="0">
-                                            <option>2022</option>
-                                            <option>2023</option>
-                                            <option>2024</option>
-                                            <option>2025</option>
-                                            <option>2026</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <input type="text" class="form-control" autocomplete="off" maxlength="3"
-                                            pattern="\d{3}" title="Three digits at back of your card" required=""
+                                        <input type="text" class="form-control" autocomplete="off" maxlength="3" name = "cvvCode" value="<%= cvvCode %>"
+                                             title="Three digits at back of your card" required
                                             placeholder="CVC">
                                     </div>
                                 </div>
@@ -64,7 +38,7 @@
                                 <div class="form-inline">
                                     <div class="input-group">
                                         <div class="input-group-prepend"><span class="input-group-text">VNĐ</span></div>
-                                        <input type="text" class="form-control text-right" id="exampleInputAmount"
+                                        <input type="text" class="form-control text-right" id="exampleInputAmount" name = "amount" value="<%= amount %>"
                                             placeholder="500000">
                                         <div class="input-group-append"><span class="input-group-text">.00</span></div>
                                     </div>
@@ -78,6 +52,22 @@
                                         <button type="submit" class="btn btn-success btn-lg btn-block">Nạp</button>
                                     </div>
                                 </div>
+                                <%if (message) {%>
+                                    <div class="form-outline mb-3" id="alert">
+                                        <div class="alert alert-danger w-100 py-2 " role="alert">
+                                            <%=message%>
+                                        </div>
+                                    </div>
+
+                                <%}%>
+                                <%if (success) {%>
+                                    <div class="form-outline mb-3" id="alert">
+                                        <div class="alert alert-success w-100 py-2 " role="alert">
+                                            <%=success%>
+                                        </div>
+                                    </div>
+
+                                <%}%>
                             </form>
                         </div>
                     </div>

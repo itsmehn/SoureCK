@@ -137,6 +137,7 @@ const postLogin = (req, res) => {
                 if (m == 1) {
                     req.session.account = account
                     res.locals.account = account
+                    console.log(req.session.account)
 
                     if (account.check == 0) {
                         //Lần đầu tiên đăng nhập
@@ -211,19 +212,13 @@ const postFirstChangePass = (req, res) => {
 }
 
 //API GET PROFILE
-const getProfile = (req, res) => {
+const getProfile = async (req, res) => {
 
-    let id = req.session.account._id
-    if (!id) {
-        res.redirect('/users/login')
+    let acc = req.session.account
+    if (!acc) {
+        return res.redirect('/users/login')
     }
-    dataUser.findOne({ id: id })
-        .then(acc => {
-            res.render('profile', { acc: acc, message: '    ' })
-        })
-        .catch(err => {
-            res.redirect('/error')
-        })
+    return res.render('profile', { acc: acc, message: ' ' })
 
 }
 

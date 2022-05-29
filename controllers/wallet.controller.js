@@ -3,10 +3,11 @@ const transaction = require('../models/transaction')
 const user = require('../models/users')
 const random = require('random')
 const transporter = require("../middlewares/sendMail")
+const { validationResult } = require('express-validator')
 //get recharge
 exports.getRecharge = (req, res) => {
     res.locals.account = req.session.account
-    res.render('recharge')
+    res.render('recharge',{amount:'', soThe:'', deadline:'', cvvCode:'',message:'', success : ''})
 }
 
 // Post recharge
@@ -14,46 +15,14 @@ exports.postRecharge = async (req, res) => {
     // thay params bang session.id
     let account = req.session.account
     let id = new Object(account._id)
+    let result = validationResult(req)
     userWallett = await wallet.findOne({ userId: id })
     let { amount, soThe, deadline, cvvCode } = req.body;
-    if (!amount || !soThe || !deadline || !cvvCode) {
-        return res.json({
-            code: 2,
-            message: 'Thieu thong tin'
-        })
-    }
-    if (soThe === '111111' && deadline === '10/10/2022' && cvvCode === '411') {
-        userWallett.balance = userWallett.balance + parseInt(amount);
-        userWallett.save().then(() => {
-
-            let trans = new transaction({
-                userId: id,
-                amount: parseInt(amount),
-                recepientId: String(id),
-                timeStamps: getDate(),
-                status: "Đã chuyển",
-                description: "Nạp tiền",
-                action: "NT"
-            })
-            trans.save().then(() => {
-                return res.json({
-                    code: 0,
-                    message: 'Nap tien thanh cong',
-                    transacion: trans
-                })
-            })
-        })
-
-    } else if (soThe === '222222' && deadline === '11/11/2022' && cvvCode === '443') {
-        if (amount > 1000000) {
-            return res.json({
-                code: 1,
-                message: 'The nay chi dc nap nhieu nhat 1tr/lan'
-            })
-        } else {
+    if(result.errors.length === 0) {
+        if (soThe === '111111' && deadline === '10/10/2022' && cvvCode === '411') {
             userWallett.balance = userWallett.balance + parseInt(amount);
             userWallett.save().then(() => {
-
+    
                 let trans = new transaction({
                     userId: id,
                     amount: parseInt(amount),
@@ -61,28 +30,43 @@ exports.postRecharge = async (req, res) => {
                     timeStamps: getDate(),
                     status: "Đã chuyển",
                     description: "Nạp tiền",
-                    action: 'NT'
+                    action: "NT"
                 })
                 trans.save().then(() => {
-                    return res.json({
-                        code: 0,
-                        message: 'Nap tien thanh cong',
-                        transacion: trans
-                    })
+                    return res.render('recharge',{amount:'', soThe:'', deadline:'', cvvCode:'',message:'', success : 'Nạp thành công'})
                 })
             })
+    
+        } else if (soThe === '222222' && deadline === '11/11/2022' && cvvCode === '443') {
+            if (amount > 1000000) {
+                return res.render('recharge',{amount:amount, soThe:soThe, deadline:deadline, cvvCode:cvvCode, message : 'Thẻ này chỉ nạp nhiều nhất 1 triệu',success:''})
+            } else {
+                userWallett.balance = userWallett.balance + parseInt(amount);
+                userWallett.save().then(() => {
+    
+                    let trans = new transaction({
+                        userId: id,
+                        amount: parseInt(amount),
+                        recepientId: String(id),
+                        timeStamps: getDate(),
+                        status: "Đã chuyển",
+                        description: "Nạp tiền",
+                        action: 'NT'
+                    })
+                    trans.save().then(() => {
+                        return res.render('recharge',{amount:'', soThe:'', deadline:'', cvvCode:'',message:'', success : 'Nạp thành công'})
+                    })
+                })
+            }
+        } else if (soThe === '333333' && deadline === '12/12/2022' && cvvCode === '577') {
+            return res.render('recharge',{amount:amount, soThe:soThe, deadline:deadline, cvvCode:cvvCode, message : 'Thẻ hết tiền',success : ''})
+        } else {
+            return res.render('recharge',{amount:amount, soThe:soThe, deadline:deadline, cvvCode:cvvCode, message : 'Thông tin thẻ bị sai',success : ''})
         }
-    } else if (soThe === '333333' && deadline === '12/12/2022' && cvvCode === '577') {
-        return res.json({
-            code: 1,
-            message: 'The nay kh nap duoc tien'
-        })
-    } else {
-        return res.json({
-            code: 1,
-            message: 'Thong tin the bi sai moi dieu chinh lai cho phu hop'
-        })
+    }else{
+        return res.render('recharge',{amount:amount, soThe:soThe, deadline:deadline, cvvCode:cvvCode, message : result.errors[0].msg,success : ''})
     }
+
 
 }
 // get withdraw
@@ -99,6 +83,11 @@ exports.postWithdraw = async (req, res) => {
         return res.json({
             code: 2,
             message: 'Thieu thong tin'
+        })
+    }else if(parseInt(amount) % 50000 != 0 ) {
+        return res.json({
+            code: 1,
+            message: 'Cần phải rút bội số của 50000'
         })
     } else if (soThe === '111111' && deadline === '10/10/2022' && cvvCode === '411') {
         // thay bằng session
@@ -149,7 +138,7 @@ exports.postWithdraw = async (req, res) => {
                     trans.save().then(() => {
                         return res.json({
                             code: 0,
-                            message: 'Rut tien thanh cong',
+                            message: 'Rút tiền thành công',
                             transacion: trans
                         })
                     }).catch(e => console.log(e))

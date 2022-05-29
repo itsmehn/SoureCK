@@ -30,22 +30,12 @@ app.use(cookieParser())
 app.use(cookieSession({
     secret: 'secret',
     store: new MemoryStore(60 * 60 * 12),
-    cookie: { maxAge: 60 * 60 * 1000 },
-    resave: false,
-    saveUninitialized: true
+    cookie: { maxAge: 60 * 60 * 1000 }
 }))
 
 app.use('/users', users)
 app.use('/', me)
 app.use('/wallet', wallet)
-app.use((req, res) => {
-    if (!req.session.account) {
-        res.redirect('/users/login')
-    } else {
-        res.redirect('/error')
-    }
-
-})
 
 const port = process.env.PORT || 3000;
 const URI = process.env.MONGODB_URL;
