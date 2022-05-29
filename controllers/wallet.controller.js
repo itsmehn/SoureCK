@@ -11,8 +11,9 @@ exports.getRecharge = (req, res) => {
 
 // Post recharge
 exports.postRecharge = async (req, res) => {
-    // thay params banh session.id
-    let id = new Object(req.params.id)
+    // thay params bang session.id
+    let account = req.session.account
+    let id = new Object(account._id)
     userWallett = await wallet.findOne({ userId: id })
     let { amount, soThe, deadline, cvvCode } = req.body;
     if (!amount || !soThe || !deadline || !cvvCode) {

@@ -14,6 +14,7 @@ const dataUser = require('../models/users')
 const { Router } = require('express')
 const { match } = require('assert')
 const session = require('express-session')
+const wallet =  require('../models/wallet')
 
 
 
@@ -190,7 +191,7 @@ const getFirstChangePass = (req, res) => {
 const postFirstChangePass = (req, res) => {
     let { password, repassword } = req.body
     let id = req.session.account._id
-    if (!password || !repassword || password != repassword || !password.match(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])([a-zA-Z0-9]{8})$/)) {
+    if (!password || !repassword || password != repassword) {
         return res.render('change-password-first', { message: 'Mật khẩu chưa hợp lệ' })
     } else {
         dataUser.findByIdAndUpdate(id, { password: password, check: 1 }, {
@@ -258,7 +259,7 @@ const getCreatWallet = async(req, res) => {
     if (!id) {
         return res.redirect('/users/login')
     } else {
-        await users.findOne({ phoneNumber: id })
+        await dataUser.findOne({ phoneNumber: id })
             .then((d) => {
                 let userId = d._id
                 let userWallett = new wallet({
