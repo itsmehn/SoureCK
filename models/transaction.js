@@ -13,7 +13,8 @@ const transactionSchema = new Schema({
         trim : true
     },
     timeStamps : {
-        type: String
+        type: Date,
+        default:Date.now
     },
     status: {
         type: String,
