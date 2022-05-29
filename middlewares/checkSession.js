@@ -1,5 +1,5 @@
-const checkSession = (req,res,next) => {
-    if(!req.session){
+const checkSession = (req, res, next) => {
+    if (!req.session) {
         return res.redirect('/users/login')
     }
     next()
