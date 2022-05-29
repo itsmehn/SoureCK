@@ -5,10 +5,8 @@ const random = require('random')
 const transporter = require("../middlewares/sendMail")
 //get recharge
 exports.getRecharge = (req, res) => {
-    return res.json({
-        code: 0,
-        message: "Get recharge success"
-    })
+    res.locals.account = req.session.account
+    res.render('recharge')
 }
 
 // Post recharge

@@ -135,6 +135,7 @@ const postLogin = (req, res) => {
             .then(() => {
                 if (m == 1) {
                     req.session.account = account
+                    res.locals.account = account
 
                     if (account.check == 0) {
                         //Lần đầu tiên đăng nhập
@@ -255,7 +256,7 @@ const postChangePass = (req, res) => {
 const getCreatWallet = async(req, res) => {
     let id = req.params.id
     if (!id) {
-        return res.redirect('/user/login')
+        return res.redirect('/users/login')
     } else {
         await users.findOne({ phoneNumber: id })
             .then((d) => {
