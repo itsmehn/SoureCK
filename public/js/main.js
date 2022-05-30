@@ -1,4 +1,3 @@
-//REGISTER
 $("input").click(e => {
     $("#alert").hide().css("visibility", "hidden");
 })
@@ -30,6 +29,32 @@ $('#chooseDefine').change(function() {
     })
 
 });
+
+{
+    $('#acceptActive .btn-primary').click(function(e) {
+        e.preventDefault()
+        let id = $(e.target).data('id')
+        console.log(id)
+
+        $.ajax({
+            // async: false,
+            type: "GET",
+            url: '/admin/account/active/' + id,
+            success: function(res) {
+                if (res.code === 0) {
+                    $('#acceptActivel').modal('hide')
+                    location.reload()
+                }
+            },
+            error: function(err) {
+
+                console.log('The following error occured: ' + err);
+            }
+
+
+        })
+    });
+}
 
 
 const updateTableAcount = (listAccount) => {
@@ -160,71 +185,93 @@ const updateTableAcount = (listAccount) => {
 
     })
 
-    // <%if (e.check <=1 ){%>
-    //     <td class="text-warning">đang chờ kích hoạt</td>
-    //     <td>
-    //         <a href="chitietaccount1.html">Xem chi tiết</a>
-    //         <span>/</span>
-    //         <a href="#">Kích hoạt</a>
-    //     </td>
-    //     <%} else if (e.check == 2) { %>
-    //         <td class="text-success">đã kích hoạt</td>
-    //         <td>
-    //             <a href="chitietaccount2.html">Xem chi tiết</a>
-    //             <span>/</span>
-    //             <a href="#">Kích hoạt</a>
-    //         </td>
-    //         <%} else if (e.check == 3) { %>
-    //             <td class="text-danger">Bị vô hiệu hóa</td>
-    //             <td>
-    //                 <a href="chitietaccount3.html">Xem chi tiết</a>
-    //                 <span>/</span>
-    //                 <a href="#">Kích hoạt</a>
-    //             </td>
-    //             <%} else { %>
-    //                 <td class="text-danger">Bị vô hiệu hóa vĩnh viên</td>
-    //                 <td>
-    //                     <a href="chitietaccount3.html">Xem chi tiết</a>
-    //                     <span>/</span>
-    //                     <a href="#">Kích hoạt</a>
-    //                 </td>
 
 }
 
-// $(".account-detail").click(e => {
-//     const id = e.target.dataset.id
-//     $.ajax({
-//         url: "/admin/account/" + id,
-//         type: "GET",
-//         success: function(res) {
-//             if (res.code === 0) {
-//                 window.location.href = "/admin/account"
-//                 updateAccountDetail(res.account)
-//             }
-//         },
-//         error: function(err) {}
-//     })
-// })
+{
+    $('#requestIDcard .btn-primary').click(function(e) {
+        e.preventDefault()
+        let id = $(e.target).data('id')
+        console.log(id)
 
-// const updateAccountDetail = (account) => {
-//     console.log(account)
+        $.ajax({
+            // async: false,
+            type: "GET",
+            url: '/admin/account/updateIDCard/' + id,
+            success: function(res) {
+                if (res.code === 0) {
+                    $('#requestIDcard').modal('hide')
+                    location.reload()
+                }
+            },
+            error: function(err) {
 
-// }
+                console.log('The following error occured: ' + err);
+            }
 
-// $(".edit-product").click(e => {
-//     const id = e.target.dataset.id
 
-//     $.ajax({
-//         url: "/customer-care/" + id,
-//         type: "GET",
-//         success: function (res) {
-//             $('#edit-modal').modal('show')
-//             updateEditModal(res.product)
-//         },
-//         error: function (err) {
-//         }
-//     })
-// })
+        })
+    });
+}
+
+{
+    $('#reject .btn-primary').click(function(e) {
+        e.preventDefault()
+        let id = $(e.target).data('id')
+        console.log(id)
+
+        $.ajax({
+            // async: false,
+            type: "GET",
+            url: '/admin/account/reject/' + id,
+            success: function(res) {
+                if (res.code === 0) {
+                    $('#reject').modal('hide')
+                    location.reload()
+                }
+            },
+            error: function(err) {
+
+                console.log('The following error occured: ' + err);
+            }
+
+
+        })
+    });
+}
+
+
+{
+    $('#unlock .btn-primary').click(function(e) {
+        e.preventDefault()
+        let id = $(e.target).data('id')
+        console.log(id)
+
+        $.ajax({
+            // async: false,
+            type: "GET",
+            url: '/admin/account/unlock/' + id,
+            success: function(res) {
+                if (res.code === 0) {
+                    $('#unlock').modal('hide')
+                    location.reload()
+                }
+            },
+            error: function(err) {
+
+                console.log('The following error occured: ' + err);
+            }
+
+
+        })
+    });
+}
+
+
+
+
+
+
 
 
 // Mỹ Anh

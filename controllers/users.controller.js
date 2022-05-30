@@ -224,9 +224,9 @@ const getProfile = async(req, res) => {
     }
     let idWallet = acc._id
     console.log(idWallet)
-    let userWallet =  await wallet.findOne({userId:Object(idWallet)})
+    let userWallet = await wallet.findOne({ userId: Object(idWallet) })
     console.log(userWallet)
-    return res.render('profile', { acc: acc, message: ' ' ,userWallet})
+    return res.render('profile', { acc: acc, message: ' ', userWallet })
 
 }
 
@@ -236,8 +236,9 @@ const getChangePass = (req, res) => {
 }
 
 const postChangePass = (req, res) => {
-    let { oldpass, newpass, renewpass } = req.body
     res.locals.account = req.session.account
+    let { oldpass, newpass, renewpass } = req.body
+
     if (oldpass != req.session.account.password) {
         return res.render('change-password', { message: 'Mật khẩu cũ không đúng' })
     } else if (newpass != renewpass) {
@@ -271,19 +272,23 @@ const getCreatWallet = async(req, res) => {
 }
 
 //changeCMND
-const postProfile = (req, res) => {
+const postProfile = async(req, res) => {
     const imageFront = req.files.imageFront
     const imageBack = req.files.imageBack
+    let acc = req.session.account
+    let idWallet = acc._id
+
+    let userWallet = await wallet.findOne({ userId: Object(idWallet) })
         // console.log(req.files)
     let id = req.session.account._id
-    dataUser.findByIdAndUpdate(id, { imageBack: imageBack[0].filename, imageFront: imageFront[0].filename }, {
+    dataUser.findByIdAndUpdate(id, { checkIDCard: 0, imageBack: imageBack[0].filename, imageFront: imageFront[0].filename }, {
             new: true
         })
         .then(account => {
             req.session.account = account
             if (account) {
                 console.log("Thành công")
-                return res.render('profile', { acc: account, message: '   ' })
+                return res.render('profile', { acc: account, message: '   ', userWallet })
             } else return res.render('profile', { message: 'Không thành công' })
         })
 

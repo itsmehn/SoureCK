@@ -55,7 +55,6 @@ const getManagerAccount = async(req, res) => {
                 })
         }
 
-        console.log(listAccount)
 
         return res.json({
             code: 0,
@@ -68,6 +67,8 @@ const getManagerAccount = async(req, res) => {
 }
 
 const getAccount = async(req, res) => {
+    res.locals.account = req.session.account
+
     const { id } = req.params
 
     let user;
@@ -82,103 +83,67 @@ const getAccount = async(req, res) => {
     return res.render("accoutnDetail", { account: user })
 }
 
-const accountDetail = async(req, res) => {
-    const { id } = req.params
-
-    let user;
-    let errorMessage = ""
-    await dataUser.findOne({ _id: id })
-        .then(account => {
-            user = account
-        }).catch(err => {
-            errorMessage = "Loi server"
-        })
-
-    // if (errorMessage.length === 0) {
-    // return res.json()
-    return res.json({
-            code: 0,
-            message: "success",
-            account: user
-        })
-        // }
-}
-
-// middle ware check account => route
 const activeAccount = async(req, res) => {
-    const { phoneNumber } = req.query
-    let user;
-    let errorMessage = "";
-    await dataUser.findOne({ phoneNumber: phoneNumber })
-        .then(account => {
-            if (account.check == 0 || account.check == 1) {
-                user = account;
-            } else {
-                errorMessage = "Account k phu hop"
-            }
-        }).catch(err => {
-            errorMessage = "Loi server"
+    let id = req.params.id
+    console.log(id)
+    dataUser.findByIdAndUpdate(id, { check: 2 })
+        .then(user => {
+            return res.json({
+                code: 0,
+                message: "success",
+                account: user
+            })
         })
-
-    if (err.length > 0) {
-        await dataUser.updateOne({ phoneNumber: phoneNumber }, {
-            check: 2
-        })
-
-        return res.json({
-            code: 0,
-            message: "Success"
-        })
-
-    } else {
-        return res.json({
-            code: 1,
-            message: errorMessage
-        })
-    }
 }
 
-//v ohieu hoa
+//update ID Card
+const updateIDCard = async(req, res) => {
+        let id = req.params.id
+        console.log(id)
+        dataUser.findByIdAndUpdate(id, { checkIDCard: 1 })
+            .then(user => {
+                return res.json({
+                    code: 0,
+                    message: "success",
+                    account: user
+                })
+            })
+    }
+    //v ohieu hoa
 const rejectAccount = async(req, res) => {
-    const { phoneNumber } = req.query
-    let user;
-    let errorMessage = "";
-    await dataUser.findOne({ phoneNumber: phoneNumber })
-        .then(account => {
-            if (account.check != 4) {
-                user = account;
-            } else {
-                errorMessage = "Account k phu hop"
-            }
-        }).catch(err => {
-            errorMessage = "Loi server"
-        })
+    let id = req.params.id
 
-    if (err.length > 0) {
-        await dataUser.updateOne({ phoneNumber: phoneNumber }, {
-            check: 4
+    dataUser.findByIdAndUpdate(id, { check: 4 })
+        .then(user => {
+            return res.json({
+                code: 0,
+                message: "success",
+                account: user
+            })
         })
-
-        return res.json({
-            code: 0,
-            message: "Success"
-        })
-
-    } else {
-        return res.json({
-            code: 1,
-            message: errorMessage
-        })
-    }
 }
 
-//
+const unlockAccount = async(req, res) => {
+    let id = req.params.id
+
+    dataUser.findByIdAndUpdate(id, { check: 1 })
+        .then(user => {
+            return res.json({
+                code: 0,
+                message: "success",
+                account: user
+            })
+        })
+}
+
+//check ID card
 
 module.exports = {
     getManagerAccount,
     // postManagerAccount,
     getAccount,
-    accountDetail,
+    unlockAccount,
     activeAccount,
-    rejectAccount
+    rejectAccount,
+    updateIDCard
 }
