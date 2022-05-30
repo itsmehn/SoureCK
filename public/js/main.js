@@ -2,7 +2,7 @@ $("input").click(e => {
     $("#alert").hide().css("visibility", "hidden");
 })
 
-
+//CALL API MANAGER ACCOUNT SELECTION
 $('#chooseDefine').change(function() {
     const status = this.value
 
@@ -30,6 +30,7 @@ $('#chooseDefine').change(function() {
 
 });
 
+//CALL API ACCEPT ACCOUNT
 {
     $('#acceptActive .btn-primary').click(function(e) {
         e.preventDefault()
@@ -188,6 +189,7 @@ const updateTableAcount = (listAccount) => {
 
 }
 
+//CALL API REQUEST ACCOUNT UPDATE ID CARD IMAGE
 {
     $('#requestIDcard .btn-primary').click(function(e) {
         e.preventDefault()
@@ -214,6 +216,7 @@ const updateTableAcount = (listAccount) => {
     });
 }
 
+//CALL API REJECT ACCOUNT
 {
     $('#reject .btn-primary').click(function(e) {
         e.preventDefault()
@@ -240,7 +243,7 @@ const updateTableAcount = (listAccount) => {
     });
 }
 
-
+//CALL API UNLOCK ACCOUNT
 {
     $('#unlock .btn-primary').click(function(e) {
         e.preventDefault()
@@ -267,10 +270,30 @@ const updateTableAcount = (listAccount) => {
     });
 }
 
+//CALL API SEND OTP
+$('#insertOTP').click(function() {
+    const input = $('#phone').val()
+    console.log(input)
+    $("#hrefchangepass").attr("href", "http://www.google.com/")
+    $.ajax({
+        // async: false,
+        type: "GET",
+        dataType: "json",
+        url: '/users/getOTP',
+        data: {
+            phoneNumber: input
+        },
+        success: function(res) {
 
+        },
+        error: function(err) {
 
+            console.log('The following error occured: ' + err);
+        }
 
+    })
 
+});
 
 
 

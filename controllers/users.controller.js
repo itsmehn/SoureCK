@@ -132,7 +132,10 @@ const postLogin = (req, res) => {
 
                     account = acc
                     m = 0
-                    if (acc.password === password) {
+                    if (acc.check == 4) {
+                        //Lần đầu tiên đăng nhập
+                        return res.render('login', { message: 'Tài khoản này đã bị vô hiệu hóa, vui lòng liên hệ tổng đài 18001008' })
+                    } else if (acc.password === password) {
                         m = 1
                     }
                 }
@@ -296,19 +299,20 @@ const postProfile = async(req, res) => {
 //API FORGET PASSWORD
 const getForgetPassword = (req, res) => {
     let phoneNumber = req.query.phoneNumber
-    phoneNumber = phoneNumber.substring(1)
-    phoneNumber
+    let phoneNumber1 = phoneNumber.substr(1)
+    phoneNumber1 = '+84' + phoneNumber1
+    console.log(phoneNumber)
     let otp = Math.floor(100000 + Math.random() * 900000)
-    dataUser.findOne(phoneNumber)
+    dataUser.findOne({ phoneNumber: phoneNumber })
         .then(() => {
             var params = {
                 'originator': 'TestMessage',
                 'recipients': [
-                    phoneNumber
+                    phoneNumber1
                 ],
-                'body': 'This is a test message'
+                'body': 'Your OTP ' + otp
             };
-
+            dataUser.findOneAndUpdate(phoneNumber, { otp: otp })
             messagebird.messages.create(params, function(err, response) {
                 if (err) {
                     return console.log(err);
@@ -318,59 +322,44 @@ const getForgetPassword = (req, res) => {
         })
 }
 
-
-
-// var params = {
-//     'originator': 'TestMessage',
-//     'recipients': [
-//         '+84346771418'
-//     ],
-//     'body': 'This is a test message'
-// };
-
-// messagebird.messages.create(params, function(err, response) {
-//     if (err) {
-//         return console.log(err);
-//     }
-//     console.log(response);
-// });
-
-
-
-// messagebird.messages.create(params, function(err, response) {
-//     if (err) {
-//         return console.log(err);
-//     }
-//     console.log(response);
-// });
-const getOTP = (req, res) => {
-    res.render('forget-password')
+const postOTP = (req, res) => {
+    let { phoneNumber, otp } = req.body
+    dataUser.findOne({ phoneNumber: phoneNumber })
+        .then(account => {
+            if (account.otp = otp) {
+                console.log("DONE")
+                return res.redirect(`/users/changenewpass/${phoneNumber}`)
+            } else {
+                return res.render('forget-password', { message: 'Nhập sai mã OTP' })
+            }
+        })
 }
 
-// const postForgetPassword = (req, res) => {
-//     const otp = generator.generate({
-//         length: 6,
-//         numbers: true
-//     });
-//     var params = {
-//         'originator': 'TestMessage',
-//         'recipients': [
+const getchangenewpass = (req, res) => {
 
-//         ],
-//         'body': 'This is a test message'
-//     };
-//     messagebird.verify.create(req.body.phoneNumber, {
-//             template: 'Mã otp của bạn ' + otp
-//         })
-//         .then(message => {
-//             console.log('Success' + message)
-//         })
-//         .catch(e => {
-//             console.log(e)
-//         })
+    res.render('change-password-first', { message: '' })
+}
 
-// }
+const postchangenewpass = (req, res) => {
+    let { password, repassword } = req.body
+    let phone = req.params.phoneNumber
+    if (!password || !repassword || password != repassword) {
+        return res.render('change-password-first', { message: 'Mật khẩu chưa hợp lệ' })
+    } else {
+        dataUser.findOneAndUpdate({ phoneNumber: phone }, { password: password }, {
+                new: true
+            })
+            .then((account) => {
+                if (account) {
+                    return res.redirect('/users/login')
+                } else return res.render('change-password-first', { message: '' });
+            })
+    }
+}
 
+const getOTP = (req, res) => {
+    res.render('forget-password', { message: '' })
+}
 
 module.exports = {
     getProfile,
@@ -388,5 +377,8 @@ module.exports = {
     getLogout,
     getHomePageLogin,
     getForgetPassword,
-    getOTP
+    getOTP,
+    postOTP,
+    getchangenewpass,
+    postchangenewpass
 }
