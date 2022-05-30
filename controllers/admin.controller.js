@@ -1,8 +1,10 @@
 const dataUser = require('../models/users')
 const mongoose = require('mongoose')
+const { response } = require('express')
 
 
 const getManagerAccount = async(req, res) => {
+    res.locals.account = req.session.account
     let selectOption = req.query.status
     let listAccount;
     if (!selectOption) {

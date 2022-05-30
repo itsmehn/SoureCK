@@ -10,7 +10,7 @@
                             <h5 class="my-3">
                                 <%=acc.fullName%>
                             </h5>
-                            <p class="text-primary font-weight-bold text-warning mb-4">1.000.000 VNĐ</p>
+                            <p class="text-primary font-weight-bold text-warning mb<-4"><%= userWallet.balance.toLocaleString() %>  VNĐ</p>
                             <div class="d-flex justify-content-center mb-2">
                                 <a href="../views/recharge.ejs">
                                     <button type="submit" class="btn btn-outline-primary mr-2">Nạp tiền</button>
