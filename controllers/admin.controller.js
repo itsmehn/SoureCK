@@ -3,10 +3,11 @@ const mongoose = require('mongoose')
 
 
 const getManagerAccount = (req, res) => {
-    const users = []
+    let selectOption = req.body.cars
+    console.log(selectOption)
     dataUser.find({ check: { $lt: 5 } }).sort({ check: 1, createAt: -1 })
         .then((accounts) => {
-            console.log(accounts.length)
+
             return res.render('manager-account', { accounts: accounts })
         })
         .catch(e => {
@@ -15,6 +16,29 @@ const getManagerAccount = (req, res) => {
 
 }
 
+const postManagerAccount = (req, res) => {
+    let selectOption = req.body.cars
+    console.log(selectOption)
+    res.render('manager-account')
+        // dataUser.find({ check: { $lt: 5 } }).sort({ check: 1, createAt: -1 })
+        //     .then((accounts) => {
+
+    //         return res.render('manager-account', { accounts: accounts })
+    //     })
+    //     .catch(e => {
+    //         console.log(e)
+    //     })
+
+}
+
+
+
+const getAccount = (req, res) => {
+    res.render('chitietaccount1')
+}
+
 module.exports = {
-    getManagerAccount
+    getManagerAccount,
+    postManagerAccount,
+    getAccount
 }
