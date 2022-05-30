@@ -9,7 +9,7 @@ const randomUsername = require('random-mobile');
 const transporter = require("../middlewares/sendMail")
 const takeID = require('../middlewares/takeID')
 const registerValidator = require('../middlewares/registerValidator')
-//const messagebird = require('messagebird')('HN8BlvmUiIXIxCsbCi5PsWazC');
+    //const messagebird = require('messagebird')('HN8BlvmUiIXIxCsbCi5PsWazC');
 
 const dataUser = require('../models/users')
 const { Router } = require('express')
@@ -92,7 +92,7 @@ const postRegister = async(req, res) => {
 
             })
             .catch(e => {
-                return res.render('register', { phoneNumber: '', email: '', fullName: '', dateOfbirth: '', address: '', message: e.message })
+                console(e)
             })
 
     } else {
@@ -152,7 +152,7 @@ const postLogin = (req, res) => {
                 }
             })
             .catch(e => {
-                return res.render('login', { message: e.message })
+                console.log(e)
             })
 
     } else {
@@ -290,13 +290,7 @@ const getForgetPassword = (req, res) => {
 
 
 
-// var params = {
-//     'originator': 'TestMessage',
-//     'recipients': [
-//         '+84346771418'
-//     ],
-//     'body': 'This is a test message'
-// };
+
 
 // messagebird.messages.create(params, function(err, response) {
 //     if (err) {
@@ -304,15 +298,22 @@ const getForgetPassword = (req, res) => {
 //     }
 //     console.log(response);
 // });
-// const getOTP = (req, res) => {
-
-// }
+const getOTP = (req, res) => {
+    res.render('forget-password')
+}
 
 // const postForgetPassword = (req, res) => {
 //     const otp = generator.generate({
 //         length: 6,
 //         numbers: true
 //     });
+//     var params = {
+//         'originator': 'TestMessage',
+//         'recipients': [
+
+//         ],
+//         'body': 'This is a test message'
+//     };
 //     messagebird.verify.create(req.body.phoneNumber, {
 //             template: 'Mã otp của bạn ' + otp
 //         })
@@ -341,5 +342,6 @@ module.exports = {
     getHomePage,
     getLogout,
     getHomePageLogin,
-    getForgetPassword
+    getForgetPassword,
+    getOTP
 }

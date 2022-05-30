@@ -1,20 +1,19 @@
 const mongoose = require('mongoose')
-const { MONGODB_URL } = process.env
+const MONGODB_URL = process.env.MONGODB_URL
 const mongodb = {
     connect: () => {
         mongoose.connect(
-          MONGODB_URL,
-            {
+            MONGODB_URL, {
                 useNewUrlParser: true,
                 useUnifiedTopology: true
             }
-        ).then(()=> {
+        ).then(() => {
             console.log("Database connected")
         }).catch((err) => {
             console.log(err)
         })
     },
-    disconnect: async () => {
+    disconnect: async() => {
         Object.keys(mongoose.connection.models).forEach(key => {
             delete mongoose.connection.models[key]
         })

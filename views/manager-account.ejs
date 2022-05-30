@@ -1,9 +1,9 @@
 <%- include("./layouts/header.ejs") %>
     <!--/container-->
-    <script src="https://kit.fontawesome.com/2e41ebfdb4.js" crossorigin="anonymous"></script>
-    <script src="../public/js/main.js"></script>
+    <!-- <script src="https://kit.fontawesome.com/2e41ebfdb4.js" crossorigin="anonymous"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script> -->
 
     <!--Quản lý tài khoản-->
     <br><br><br>
@@ -15,7 +15,7 @@
                 <div class="row">
 
                     <div class="col-sm-6">
-                        <select name="cars" id="chooseDefine" class="custom-select mb-3">
+                        <select name="" id="chooseDefine" class="custom-select mb-3">
                                 <option value= "0">Tất cả</option>
                                 <option value="1">Danh sách tài khoản đang chờ kích hoạt</option>
                                 <option value="2">Danh sách tài khoản đã kích hoạt</option>
@@ -25,9 +25,7 @@
                     </div>
                     <!--                            
                         -->
-                    <div class="col-sm-2">
-                        <button type="submit" class="btn btn-primary">Tìm</button>
-                    </div>
+
                     <div class="col-sm-4">
                         <div class="add-product">
                             <a href="#">Thêm tài khoản</a>
@@ -40,64 +38,70 @@
                 <!--Danh sách tài khoản đang chờ kích hoạt-->
                 <div>
                     <table class="table table-bordered">
-                        <tr>
-                            <th>STT</th>
-                            <th>ID</th>
-                            <th>Tên tài khoản</th>
-                            <th>Số điện thoại</th>
-                            <th>password</th>
-                            <th>Trạng thái</th>
-                            <th>Setting</th>
-                        </tr>
+                        <thead>
 
-                        <% accounts.forEach((e, i) => {%>
                             <tr>
-                                <td>
-                                    <%=(i+1)%>
-                                </td>
-                                <td>
-                                    <%=e._id%>
-                                </td>
-                                <td>
-                                    <%=e.fullName%>
-                                </td>
-                                <td>
-                                    <%=e.phoneNumber%>
-                                </td>
-                                <td>
-                                    <%=e.password%>
-                                </td>
-                                <%if (e.check <=1 ){%>
-                                    <td class="text-warning">đang chờ kích hoạt</td>
+                                <th>STT</th>
+                                <th>ID</th>
+                                <th>Tên tài khoản</th>
+                                <th>Số điện thoại</th>
+                                <th>password</th>
+                                <th>Trạng thái</th>
+                                <th>Setting</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-hongngocngu">
+                            <% accounts.forEach((e, i) => {%>
+                                <tr>
                                     <td>
-                                        <a href="chitietaccount1.html">Xem chi tiết</a>
-                                        <span>/</span>
-                                        <a href="#">Kích hoạt</a>
+                                        <%=(i+1)%>
                                     </td>
-                                    <%} else if (e.check == 2) { %>
-                                        <td class="text-success">đã kích hoạt</td>
+                                    <td>
+                                        <%=e._id%>
+                                    </td>
+                                    <td>
+                                        <%=e.fullName%>
+                                    </td>
+                                    <td>
+                                        <%=e.phoneNumber%>
+                                    </td>
+                                    <td>
+                                        <%=e.password%>
+                                    </td>
+                                    <%if (e.check <=1 ){%>
+                                        <td class="text-warning">đang chờ kích hoạt</td>
                                         <td>
-                                            <a href="chitietaccount2.html">Xem chi tiết</a>
+                                            <a href="/admin/chitietaccount1">Xem chi tiết</a>
                                             <span>/</span>
                                             <a href="#">Kích hoạt</a>
                                         </td>
-                                        <%} else if (e.check == 3) { %>
-                                            <td class="text-danger">Bị vô hiệu hóa</td>
+                                        <%} else if (e.check == 2) { %>
+                                            <td class="text-success">đã kích hoạt</td>
                                             <td>
-                                                <a href="chitietaccount3.html">Xem chi tiết</a>
+                                                <a href="/admin/chitietaccount2.html">Xem chi tiết</a>
                                                 <span>/</span>
                                                 <a href="#">Kích hoạt</a>
                                             </td>
-                                            <%} else { %>
-                                                <td class="text-danger">Bị vô hiệu hóa vĩnh viên</td>
+                                            <%} else if (e.check == 3) { %>
+                                                <td class="text-danger">Bị vô hiệu hóa</td>
                                                 <td>
-                                                    <a href="chitietaccount3.html">Xem chi tiết</a>
+                                                    <a href="/admin/chitietaccount3.html">Xem chi tiết</a>
                                                     <span>/</span>
                                                     <a href="#">Kích hoạt</a>
                                                 </td>
-                                                <%}%>
-                            </tr>
-                            <%})%>
+                                                <%} else { %>
+                                                    <td class="text-danger">Bị vô hiệu hóa vĩnh viên</td>
+                                                    <td>
+                                                        <a href="/admin/chitietaccount3.html">Xem chi tiết</a>
+                                                        <span>/</span>
+                                                        <a href="#">Kích hoạt</a>
+                                                    </td>
+                                                    <%}%>
+                                </tr>
+                                <%})%>
+                        </tbody>
+
+
 
                     </table>
                 </div>
@@ -105,9 +109,12 @@
             </div>
         </div>
     </div>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script> -->
+    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script> -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
 
-
-
+    <script src="../public/js/main.js"></script>
 
 
 

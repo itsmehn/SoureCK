@@ -1,9 +1,208 @@
 //REGISTER
 $("input").click(e => {
-        $("#alert").hide().css("visibility", "hidden");
+    $("#alert").hide().css("visibility", "hidden");
+})
+
+
+$('#chooseDefine').change(function() {
+    const status = this.value
+
+    // $.ajax({
+    //     url: "/admin/" + id,
+    //     type: "GET",
+    //     success: function (res) {
+    //         updateEditModal(res.user)
+    //     },
+    //     error: function (err) {
+    //     }
+    // })
+    console.log(status)
+    $.ajax({
+        // async: false,
+        type: "GET",
+        dataType: "json",
+        url: '/admin/manageraccount',
+        data: {
+            status: status
+        },
+        success: function(res) {
+            if (res.code === 0) {
+                updateTableAcount(res.listAccount)
+            }
+
+        },
+        error: function(err) {
+
+            console.log('The following error occured: ' + err);
+        }
+
     })
-    // Mỹ Anh
-    // menu
+
+});
+
+
+const updateTableAcount = (listAccount) => {
+    const table = $("#table-hongngocngu");
+    console.log("table, ",
+        table)
+
+    console.log("listacciount, ", listAccount)
+
+    table.html('');
+
+    listAccount.forEach((account, index) => {
+        if (account.check <= 1) {
+            const tr = `
+        <tr>
+            <td>
+         ${index + 1}
+                </td>
+                <td>
+                    ${account._id}
+                </td>
+                <td>
+                ${account.fullName}
+                </td>
+                <td>
+                ${account.phoneNumber}
+                </td>
+                <td>
+                ${account.password}
+                </td>
+              
+                    <td class="text-warning">đang chờ kích hoạt</td>
+                    <td>
+                        <a href="/admin/chitietaccount1">Xem chi tiết</a>
+                        <span>/</span>
+                        <a href="#">Kích hoạt</a>
+                    </td>
+                
+       </tr>
+        
+        `
+            table.append(tr)
+        } else if (account.check == 2) {
+            const tr = `
+        <tr>
+            <td>
+         ${index + 1}
+                </td>
+                <td>
+                    ${account._id}
+                </td>
+                <td>
+                ${account.fullName}
+                </td>
+                <td>
+                ${account.phoneNumber}
+                </td>
+                <td>
+                ${account.password}
+                <td class="text-success">đã kích hoạt</td>
+                        <td>
+                            <a href="/admin/chitietaccount2.html">Xem chi tiết</a>
+                            <span>/</span>
+                            <a href="#">Kích hoạt</a>
+                        </td>
+                    
+       </tr>
+        
+        `
+            table.append(tr)
+        } else if (account.check == 3) {
+            const tr = `
+        <tr>
+            <td>
+         ${index + 1}
+                </td>
+                <td>
+                    ${account._id}
+                </td>
+                <td>
+                ${account.fullName}
+                </td>
+                <td>
+                ${account.phoneNumber}
+                </td>
+                <td>
+                ${account.password}
+                <td class="text-danger">Bị vô hiệu hóa</td>
+                <td>
+                <a href="/admin/chitietaccount3.html">Xem chi tiết</a>
+                 <span>/</span>
+                 <a href="#">Kích hoạt</a>
+                 </td>
+       </tr>
+        
+        `
+            table.append(tr)
+        } else {
+            const tr = `
+        <tr>
+            <td>
+         ${index + 1}
+                </td>
+                <td>
+                    ${account._id}
+                </td>
+                <td>
+                ${account.fullName}
+                </td>
+                <td>
+                ${account.phoneNumber}
+                </td>
+                <td>
+                ${account.password}
+                <td class="text-danger">Bị vô hiệu hóa vĩnh viên</td>
+                 <td>
+                   <a href="/admin/chitietaccount3.html">Xem chi tiết</a>
+               <span>/</span>
+                <a href="#">Kích hoạt</a>
+                  </td>
+       </tr>
+        
+        `
+            table.append(tr)
+        }
+
+
+
+    })
+
+    // <%if (e.check <=1 ){%>
+    //     <td class="text-warning">đang chờ kích hoạt</td>
+    //     <td>
+    //         <a href="chitietaccount1.html">Xem chi tiết</a>
+    //         <span>/</span>
+    //         <a href="#">Kích hoạt</a>
+    //     </td>
+    //     <%} else if (e.check == 2) { %>
+    //         <td class="text-success">đã kích hoạt</td>
+    //         <td>
+    //             <a href="chitietaccount2.html">Xem chi tiết</a>
+    //             <span>/</span>
+    //             <a href="#">Kích hoạt</a>
+    //         </td>
+    //         <%} else if (e.check == 3) { %>
+    //             <td class="text-danger">Bị vô hiệu hóa</td>
+    //             <td>
+    //                 <a href="chitietaccount3.html">Xem chi tiết</a>
+    //                 <span>/</span>
+    //                 <a href="#">Kích hoạt</a>
+    //             </td>
+    //             <%} else { %>
+    //                 <td class="text-danger">Bị vô hiệu hóa vĩnh viên</td>
+    //                 <td>
+    //                     <a href="chitietaccount3.html">Xem chi tiết</a>
+    //                     <span>/</span>
+    //                     <a href="#">Kích hoạt</a>
+    //                 </td>
+
+}
+
+
+// Mỹ Anh
+// menu
 document.addEventListener("DOMContentLoaded", function(event) {
 
     const showNavbar = (toggleId, navId, bodyId, headerId) => {
@@ -435,27 +634,3 @@ $(".custom-file-input").on("change", function() {
     var fileName = $(this).val().split("\\").pop();
     $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
 });
-
-
-// $('#chooseDefine').on('change', function() {
-//     const account = this.value
-
-//     console.log(account)
-//     $.ajax({
-//         type: "GET",
-//         dataType: "json",
-//         async: false,
-//         url: 'http://localhost:3000/admin/manageraccount',
-//         data: {
-
-//             account: account
-//         },
-//         beforeSend: function() {},
-//         success: function(response) {
-//             console.log(response)
-//                 //console.log(response.number_page)
-
-//         }
-//     })
-
-// });
