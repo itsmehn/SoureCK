@@ -2,28 +2,6 @@
     <section style="background-color: #eee;">
         <div class="container py-5 mt-5">
             <div class="row">
-                <div class="col-lg-4">
-                    <div class="card mb-4">
-                        <div class="card-body text-center">
-                            <img src="https://images.cults3d.com/8OWKFqd-Qk3M1E2ImZp_O2Y6x4I=/516x516/https://files.cults3d.com/uploaders/22153232/illustration-file/56a6b33b-5fb5-4ba9-8408-2ab5c826e4db/st%2Csmall%2C507x507-pad%2C600x600%2Cf8f8f8.jpg"
-                                alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
-                            <h5 class="my-3">Đăng Khoa</h5>
-                            <p class="text-primary font-weight-bold text-warning mb-4">1.000.000 VNĐ</p>
-                            <div class="d-flex justify-content-center mb-2">
-                                <a href="../views/recharge.ejs">
-                                    <button type="submit" class="btn btn-outline-primary mr-2">Nạp tiền</button>
-                                </a>
-                                <a href="../views/withdraw-money.ejs">
-                                    <button type="submit" class="btn btn-outline-primary">Rút tiền</button>
-                                </a>
-                            </div>
-                            <div class="d-flex justify-content-center mb-2">
-                                <p class="text-primary font-weight-bold text-danger mb-4 mt-4">Chờ xác minh tài khoản
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div class="col-lg-8">
                     <!-- form card cc payment -->
                     <div class="card card-outline-secondary">
@@ -34,7 +12,7 @@
                                 <a class="close font-weight-normal initialism" data-dismiss="alert" href="#"><samp>&times;</samp></a> 
                                 CVC code is required.
                             </div> -->
-                            <form class="form" role="form" autocomplete="off">
+                            <form class="form" autocomplete="off" method="post" novalidate>
                                 <div class="form-group row">
                                     <label class="col-md-12">Chọn thẻ</label>
                                     <div class="col-md-4">
@@ -46,16 +24,16 @@
                                         </select>
                                     </div>
                                     <div class="col-md-4">
-                                        <select class="form-control mt-1" name="menh_gia" size="0">
+                                        <select class="form-control mt-1" name="menh_gia" size="0" id="menh_gia">
                                             <option selected>Mệnh giá</option>
-                                            <option value="10">10,000 VNĐ</option>
-                                            <option value="20">20,000 VNĐ</option>
-                                            <option value="50">50,000 VNĐ</option>
-                                            <option value="100">100,000 VNĐ</option>
+                                            <option value="10000">10,000 VNĐ</option>
+                                            <option value="20000">20,000 VNĐ</option>
+                                            <option value="50000">50,000 VNĐ</option>
+                                            <option value="100000">100,000 VNĐ</option>
                                         </select>
                                     </div>
                                     <div class="col-md-4">
-                                        <select class="form-control mt-1" name="so_luong" size="0">
+                                        <select class="form-control mt-1" name="qty" size="0" id="qty">
                                             <option selected>Số lượng</option>
                                             <option value="1">1</option>
                                             <option value="2">2</option>
@@ -69,7 +47,9 @@
                                     <label for="fee" class="col-md-12">Tổng tiền</label>
                                 </div>
                                 <div class="row" id="fee">
-                                    <div class="font-weight-bold col-6 text-center">250,000 VNĐ</div>
+                                    <div class="font-weight-bold col-6 text-center" id="sumCard" >
+                                        0 Đ
+                                    </div>
                                     <div class="col-6 m-auto text-center">Phí dịch vụ: 0 VNĐ</div>
                                 </div>
                                 <hr>
@@ -83,6 +63,22 @@
                                         </a>
                                     </div>
                                 </div>
+                                <%if (message) {%>
+                                    <div class="form-outline mb-3" id="alert">
+                                        <div class="alert alert-danger w-100 py-2 " role="alert">
+                                            <%=message%>
+                                        </div>
+                                    </div>
+
+                                <%}%>
+                                <%if (success) {%>
+                                    <div class="form-outline mb-3" id="alert">
+                                        <div class="alert alert-success w-100 py-2 " role="alert">
+                                            <%=success%>
+                                        </div>
+                                    </div>
+
+                                <%}%>
                             </form>
                         </div>
                     </div>
@@ -90,4 +86,19 @@
                 </div>
             </div>
         </div>
+
+        <script>
+            function f(event) { 
+                var element = event.currentTarget
+                let menh_gia = document.getElementById("menh_gia")
+                let sumCard =  document.getElementById("sumCard")
+                if(menh_gia.value != 'Mệnh giá' ) {
+                    sumCard.innerHTML = element.value * menh_gia.value
+                    sumCard.innerHTML = Number(sumCard.innerHTML).toLocaleString() + ' Đ'
+                }
+                
+              }
+              document.getElementById("qty").addEventListener("change", f)
+
+        </script>
         <%- include("./layouts/footer.ejs") %> 

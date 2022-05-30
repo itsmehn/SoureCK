@@ -1,5 +1,8 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
+var randomstring = require("randomstring");
+const { v1: uuidv1 } = require('uuid');
+
 const transactionSchema = new Schema({
     userId: {
         type: Schema.Types.ObjectId,
@@ -7,6 +10,10 @@ const transactionSchema = new Schema({
     },
     amount : {
         type : Number,
+    },
+    fee: {
+        type: Number,
+        default : 0
     },
     recepientId: {
         type: String,
@@ -29,7 +36,11 @@ const transactionSchema = new Schema({
     action: {
         type: String,
         default: "CT"
+    },
+    codeTrans: {
+        type:String,
+        default: uuidv1(),
+        unique:true
     }
-    
 })
 module.exports = mongoose.model('transaction',transactionSchema)

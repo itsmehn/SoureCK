@@ -36,6 +36,7 @@
         "random-cn-mobile": "^0.0.0",
         "random-mobile": "^1.0.2",
         "random-number": "^0.0.9",
+        "randomstring": "^1.2.2",
         "randon": "^1.0.0",
         "session-memory-store": "^1.0.0",
         "unique-username-generator": "^1.1.1",

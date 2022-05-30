@@ -1,5 +1,5 @@
 const checkSession = (req, res, next) => {
-    if (!req.session) {
+    if (!req.session.account) {
         return res.redirect('/users/login')
     }
     next()

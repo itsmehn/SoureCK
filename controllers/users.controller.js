@@ -9,7 +9,7 @@ const randomUsername = require('random-mobile');
 const transporter = require("../middlewares/sendMail")
 const takeID = require('../middlewares/takeID')
 const registerValidator = require('../middlewares/registerValidator')
-const messagebird = require('messagebird')('HN8BlvmUiIXIxCsbCi5PsWazC');
+//const messagebird = require('messagebird')('HN8BlvmUiIXIxCsbCi5PsWazC');
 
 const dataUser = require('../models/users')
 const { Router } = require('express')

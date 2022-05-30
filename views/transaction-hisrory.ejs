@@ -20,25 +20,6 @@
                         <div class="row">
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                 <div class="breadcome-heading">
-                                    <form role="search" class="sr-input-func">
-                                        <!--<input type="text" placeholder="Search..." class="search-int form-control">-->
-                                        <input class="form-control" id="myInput" type="text" placeholder="Search..">                                        
-                                        <!--<a href="#"><i class="fa fa-search"></i></a>-->
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                <div class="container-fluid">
-                                    <ul>
-                                        <li>
-                                            <a href="../views/home-page.ejs">Home</a> <span class="bread-slash">/</span>
-                                        </li>
-                                        <li>
-                                            <span class="bread-blod">Lịch sử giao dịch</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -55,55 +36,44 @@
                     <div>
                         <table  class="table table-bordered">
                             <tr>
-                                <th>Icon</th>
+                                <th>STT</th>
                                 <th>Loại giao dịch</th>
-                                <th>Số tiền</th>
+                                <th>Số tiền (VNĐ)</th>
                                 <th>Thời gian thực hiện</th>
                                 <th>Trạng thái</th>  
                                 <th></th>                                                                        
                             </tr>
-                            <tr>
-                                <td>1</td>
-                                <td>Thẻ điện thoại</td>
-                                <td>2.000.000 đ</td>
-                                <td>10:13 - 11/05/2022</td>                                
-                                <td>thành công</td>   
-                                <td> <a href="../views/transaction-detail-DT.ejs">Xem chi tiết</a></td>                                                                           
-                            </tr>                                
-                            <tr>
-                                <td>2</td>                                
-                                <td>Chuyển khoản</td>
-                                <td>1.500.000 đ</td> 
-                                <td>10:13 - 12/05/2022</td>
-                                <td>thành công</td>        
-                                <td> <a href="../views/transaction-detail-CK.ejs">Xem chi tiết</a></td>                                                                                                            
-                            </tr>
-                            <tr>
-                                <td>2</td>                                
-                                <td>Nạp tiền</td>
-                                <td>1.500.000 đ</td> 
-                                <td>10:13 - 12/05/2022</td>
-                                <td>thành công</td>      
-                                <td> <a href="../views/transaction-detail-NT.ejs">Xem chi tiết</a></td>                                                                                                              
-                            </tr>
-                            <tr>
-                                <td>2</td>                                
-                                <td>Rút tiền</td>
-                                <td>1.500.000 đ</td> 
-                                <td>10:13 - 12/05/2022</td>
-                                <td>thành công</td>      
-                                <td> <a href="../views/transaction-detail-RT.ejs">Xem chi tiết</a></td>                                                                                                              
-                            </tr>
+                            <% userTrans.forEach((u,index) => { %>
+                                <tr>
+                                    <td><%= index += 1 %></td>
+                                    <td>
+                                        <% if(u.action == 'CT') { %>
+                                            Chuyển tiền
+                                        <% } else if(u.action == 'RT') { %>
+                                            Rút tiền
+                                        <% } else if(u.action == 'NT') { %> 
+                                            Nạp tiền
+                                        <% } else if(u.action == 'BC') {%>
+                                            Mua thẻ
+                                        <% } %>  
+                                    </td>
+                                    <td><%= u.amount.toLocaleString()%></td>
+                                    <td><%= u.timeStamps %></td>                                
+                                    <td><%= u.status %></td>   
+                                    <td> 
+                                        <% if(u.action == 'CT') { %>
+                                            <a href="/wallet/history-detail-transfer/<%= u.codeTrans %>">Xem chi tiết</a>
+                                        <% } else if(u.action == 'RT') { %>
+                                            <a href="/wallet/history-detail-withdraw/<%= u.codeTrans  %>">Xem chi tiết</a>
+                                        <% } else if(u.action == 'NT') { %> 
+                                            <a href="/wallet/history-detail-recharge/<%= u.codeTrans  %>">Xem chi tiết</a>
+                                        <% } else if(u.action == 'BC') {%>
+                                            <a href="/wallet/history-detail-buycard/<%= u.codeTrans  %>">Xem chi tiết</a>
+                                        <% } %> 
+                                    </td>                                                                           
+                                </tr>  
+                             <%}) %> 
                         </table>
-                    </div>
-                    <div class="custom-pagination">
-                        <ul class="pagination">
-                            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                            <li class="page-item"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                        </ul>
                     </div>
                 </div>
             </div>           
