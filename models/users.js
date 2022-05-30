@@ -11,7 +11,9 @@ const UserSchema = new Schema({
         type: String,
         unique: true,
     },
-    fullName: String,
+    fullName: {
+        type: String
+    },
     dateOfbirth: Date,
     address: String,
     imageFront: String,
@@ -21,7 +23,10 @@ const UserSchema = new Schema({
     check: Number,
     //value check: 0- new register; 1- first login and change password; 2- dc kich hoat; 3- vo hieu hoa; 4- vo thoi han
     checkLoginFail: Number,
-    role: String,
+    role: {
+        type: String,
+        default:'user'
+    },
     createAt: { type: Date, default: Date.now() },
     updateAt: Date,
     constLoginFail: Number,
