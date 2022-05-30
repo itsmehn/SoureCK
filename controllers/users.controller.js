@@ -9,6 +9,7 @@ const randomUsername = require('random-mobile');
 const transporter = require("../middlewares/sendMail")
 const takeID = require('../middlewares/takeID')
 const registerValidator = require('../middlewares/registerValidator')
+const messagebird = require('messagebird')('HN8BlvmUiIXIxCsbCi5PsWazC');
 
 const dataUser = require('../models/users')
 const { Router } = require('express')
@@ -282,6 +283,49 @@ const postProfile = (req, res) => {
 
 }
 
+//API FORGET PASSWORD
+const getForgetPassword = (req, res) => {
+    res.render('forget-password')
+}
+
+
+
+// var params = {
+//     'originator': 'TestMessage',
+//     'recipients': [
+//         '+84346771418'
+//     ],
+//     'body': 'This is a test message'
+// };
+
+// messagebird.messages.create(params, function(err, response) {
+//     if (err) {
+//         return console.log(err);
+//     }
+//     console.log(response);
+// });
+// const getOTP = (req, res) => {
+
+// }
+
+// const postForgetPassword = (req, res) => {
+//     const otp = generator.generate({
+//         length: 6,
+//         numbers: true
+//     });
+//     messagebird.verify.create(req.body.phoneNumber, {
+//             template: 'Mã otp của bạn ' + otp
+//         })
+//         .then(message => {
+//             console.log('Success' + message)
+//         })
+//         .catch(e => {
+//             console.log(e)
+//         })
+
+// }
+
+
 module.exports = {
     getProfile,
     getRegister,
@@ -296,5 +340,6 @@ module.exports = {
     postProfile,
     getHomePage,
     getLogout,
-    getHomePageLogin
+    getHomePageLogin,
+    getForgetPassword
 }

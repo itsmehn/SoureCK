@@ -13,7 +13,7 @@ const app = express();
 const users = require('./routes/Users')
 const me = require('./routes/me')
 const wallet = require('./routes/wallet')
-
+const admin = require('./routes/adminRoute')
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -36,6 +36,7 @@ app.use(cookieSession({
 app.use('/users', users)
 app.use('/', me)
 app.use('/wallet', wallet)
+app.use('/admin', admin)
 
 const port = process.env.PORT || 3000;
 const URI = process.env.MONGODB_URL;
