@@ -4,10 +4,13 @@ const user = require('../models/users')
 const random = require('random')
 const transporter = require("../middlewares/sendMail")
 const { validationResult } = require('express-validator')
+const { v1: uuidv1 } = require('uuid');
+var randomstring = require("randomstring");
+const { use } = require('../middlewares/sendMail')
 //get recharge
 exports.getRecharge = (req, res) => {
     res.locals.account = req.session.account
-    res.render('recharge',{amount:'', soThe:'', deadline:'', cvvCode:'',message:'', success : ''})
+    res.render('recharge', { amount: '', soThe: '', deadline: '', cvvCode: '', message: '', success: '' })
 }
 
 // Post recharge
@@ -16,53 +19,58 @@ exports.postRecharge = async (req, res) => {
     let account = req.session.account
     let id = new Object(account._id)
     let result = validationResult(req)
+    let codeTrans = uuidv1()
     userWallett = await wallet.findOne({ userId: id })
     let { amount, soThe, deadline, cvvCode } = req.body;
-    if(result.errors.length === 0) {
+    if (result.errors.length === 0) {
         if (soThe === '111111' && deadline === '10/10/2022' && cvvCode === '411') {
             userWallett.balance = userWallett.balance + parseInt(amount);
             userWallett.save().then(() => {
-    
+
                 let trans = new transaction({
                     userId: id,
                     amount: parseInt(amount),
-                    recepientId: String(id),
-                    status: "Đã chuyển",
+                    fee: 0,
+                    recepientId: "",
+                    status: "Thành công",
                     description: "Nạp tiền",
-                    action: "NT"
-                })
+                    action: "NT",
+                    codeTrans:codeTrans
+                    })
                 trans.save().then(() => {
-                    return res.render('recharge',{amount:'', soThe:'', deadline:'', cvvCode:'',message:'', success : 'Nạp thành công'})
+                    return res.render('recharge', { amount: '', soThe: '', deadline: '', cvvCode: '', message: '', success: 'Nạp thành công' })
                 })
             })
-    
+
         } else if (soThe === '222222' && deadline === '11/11/2022' && cvvCode === '443') {
             if (amount > 1000000) {
-                return res.render('recharge',{amount:amount, soThe:soThe, deadline:deadline, cvvCode:cvvCode, message : 'Thẻ này chỉ nạp nhiều nhất 1 triệu',success:''})
+                return res.render('recharge', { amount: amount, soThe: soThe, deadline: deadline, cvvCode: cvvCode, message: 'Thẻ này chỉ nạp nhiều nhất 1 triệu', success: '' })
             } else {
                 userWallett.balance = userWallett.balance + parseInt(amount);
                 userWallett.save().then(() => {
-    
+
                     let trans = new transaction({
                         userId: id,
                         amount: parseInt(amount),
-                        recepientId: String(id),
-                        status: "Đã chuyển",
+                        fee : 0,
+                        recepientId: "",
+                        status: "Thành công",
                         description: "Nạp tiền",
-                        action: 'NT'
+                        action: 'NT',
+                        codeTrans:codeTrans
                     })
                     trans.save().then(() => {
-                        return res.render('recharge',{amount:'', soThe:'', deadline:'', cvvCode:'',message:'', success : 'Nạp thành công'})
+                        return res.render('recharge', { amount: '', soThe: '', deadline: '', cvvCode: '', message: '', success: 'Nạp thành công' })
                     })
                 })
             }
         } else if (soThe === '333333' && deadline === '12/12/2022' && cvvCode === '577') {
-            return res.render('recharge',{amount:amount, soThe:soThe, deadline:deadline, cvvCode:cvvCode, message : 'Thẻ hết tiền',success : ''})
+            return res.render('recharge', { amount: amount, soThe: soThe, deadline: deadline, cvvCode: cvvCode, message: 'Thẻ hết tiền', success: '' })
         } else {
-            return res.render('recharge',{amount:amount, soThe:soThe, deadline:deadline, cvvCode:cvvCode, message : 'Thông tin thẻ bị sai',success : ''})
+            return res.render('recharge', { amount: amount, soThe: soThe, deadline: deadline, cvvCode: cvvCode, message: 'Thông tin thẻ bị sai', success: '' })
         }
-    }else{
-        return res.render('recharge',{amount:amount, soThe:soThe, deadline:deadline, cvvCode:cvvCode, message : result.errors[0].msg,success : ''})
+    } else {
+        return res.render('recharge', { amount: amount, soThe: soThe, deadline: deadline, cvvCode: cvvCode, message: result.errors[0].msg, success: '' })
     }
 
 
@@ -70,196 +78,176 @@ exports.postRecharge = async (req, res) => {
 // get withdraw
 exports.getWithdraw = async (req, res) => {
     res.locals.account = req.session.account
-    return res.render('withdraw-money',{amount:'', soThe:'', deadline:'',description:'', cvvCode:'',message:'', success : ''})
+    return res.render('withdraw-money', { amount: '', soThe: '', deadline: '', description: '', cvvCode: '', message: '', success: '' })
 }
 // post withdraw
 exports.postWithdraw = async (req, res) => {
+    let codeTrans = uuidv1()
     let account = req.session.account
     let id = new Object(account._id)
     let { amount, soThe, deadline, cvvCode, description } = req.body;
     result = validationResult(req)
-    if(result.errors.length === 0){
-        if(parseInt(amount) % 50000 != 0 ) {
-            return res.render('withdraw-money',{amount, soThe, deadline, cvvCode, description,message:'Cần phải rút bội số của 50000',success:''})
+    if (result.errors.length === 0) {
+        if (parseInt(amount) % 50000 !== 0) {
+            return res.render('withdraw-money', { amount, soThe, deadline, cvvCode, description, message: 'Cần phải rút bội số của 50000', success: '' })
         } else if (soThe === '111111' && deadline === '10/10/2022' && cvvCode === '411') {
             // thay bằng session
             userWallett = await wallet.findOne({ userId: id })
+            let fee = parseInt(amount) * 0.05
             let trans = new transaction({
                 userId: id,
                 amount: parseInt(amount),
+                fee: fee,
                 recepientId: "",
                 status: "",
                 description: description,
-                action: 'RT'
+                action: 'RT',
+                codeTrans:codeTrans
             })
-            if (amount >= 5000000) {
+            if (parseInt(amount) >= 5000000) {
                 if (userWallett.countWithdraw > 0) {
-                    let sumAmount = parseInt(amount) * 1.05
                     userWallett.countWithdraw = userWallett.countWithdraw - 1
-                    userWallett.balance = userWallett.balance - sumAmount;
-                    trans.amount = sumAmount
+                    userWallett.balance = userWallett.balance - parseInt(amount) - fee;
                     trans.status = "Chờ xác nhận"
                     userWallett.save().then(() => {
                         trans.save().then(() => {
-                            return res.render('withdraw-money',{amount:'', soThe:'', deadline:'', cvvCode:'', description:'',message:'',success:'Đang chờ xác nhận'})
+                            return res.render('withdraw-money', { amount: '', soThe: '', deadline: '', cvvCode: '', description: '', message: '', success: 'Đang chờ xác nhận' })
                         }).catch(e => console.log(e))
                     })
                 } else {
-                    return res.render('withdraw-money',{amount, soThe, deadline, cvvCode, description,message:'Tài khoản này đã hết số lần rút',success:''})
+                    return res.render('withdraw-money', { amount, soThe, deadline, cvvCode, description, message: 'Tài khoản này đã hết số lần rút', success: '' })
                 }
-    
+
             } else {
                 if (userWallett.countWithdraw > 0) {
-                    trans.status = "success"
-                    trans.action = 'RT'
-                    let sumAmount = parseInt(amount) * 1.05
-                    userWallett.balance = userWallett.balance - sumAmount;
+                    userWallett.balance = userWallett.balance - parseInt(amount) - fee;
                     userWallett.countWithdraw = userWallett.countWithdraw - 1
                     userWallett.save().then(() => {
-                        trans.amount = sumAmount
-                        trans.status = "Đã rút thành công"
+                        trans.status = "Thành công"
                         trans.save().then(() => {
-                            return res.render('withdraw-money',{amount:'', soThe:'', deadline:'', cvvCode:'', description:'',message:'',success:'Rút tiền thành công'})
+                            return res.render('withdraw-money', { amount: '', soThe: '', deadline: '', cvvCode: '', description: '', message: '', success: 'Rút tiền thành công' })
                         }).catch(e => console.log(e))
                     })
                 } else {
-                    return res.render('withdraw-money',{amount, soThe, deadline, cvvCode, description,message:'Tài khoản này đã hết số lần rút',success:''})
+                    return res.render('withdraw-money', { amount, soThe, deadline, cvvCode, description, message: 'Tài khoản này đã hết số lần rút', success: '' })
                 }
-    
+
             }
         } else {
-            return res.render('withdraw-money',{amount, soThe, deadline, cvvCode, description,message:'Thông tin thẻ bị sai',success:''})
+            return res.render('withdraw-money', { amount, soThe, deadline, cvvCode, description, message: 'Thông tin thẻ bị sai', success: '' })
         }
-    }else{
-        return res.render('withdraw-money',{amount:amount, soThe:soThe, deadline:deadline, cvvCode:cvvCode, description :'' , message : result.errors[0].msg,success : ''})
-    } 
+    } else {
+        return res.render('withdraw-money', { amount: amount, soThe: soThe, deadline: deadline, cvvCode: cvvCode, description: '', message: result.errors[0].msg, success: '' })
+    }
 
 
 }
 
 exports.getTransfer = (req, res) => {
-    return res.json({
-        code: 0,
-        message: "Get transfer success"
-    })
+    res.locals.account = req.session.account
+    return res.render('transfer', { numReceiver: '', desc: '', amount: '', checkFee: '', message: '', success: '' })
+
 }
 exports.postTransfer = async (req, res) => {
-    idSender = new Object(req.params.id)
-    let { numReceiver, desc, nameReceiver, amount, checkFee } = req.body
-    if (!numReceiver || !desc || !nameReceiver || !amount) {
-        return res.json({
-            code: 2,
-            message: 'Thieu thong tin'
-        })
+    let codeTrans = uuidv1()
+    account = req.session.account
+    idSender = account._id
+    let { numReceiver, desc, amount, checkFee } = req.body
+    let result = validationResult(req)
+    if (result.errors.length !== 0) {
+        return res.render('transfer', { numReceiver, desc, amount, checkFee, message: result.errors[0].msg, success: '' })
     } else {
+        fee = parseInt(amount)*0.05
         infoSender = await user.findOne({ _id: idSender })
         walletSender = await wallet.findOne({ userId: idSender })
         infoReceiver = await user.findOne({ phoneNumber: numReceiver });
-        walletReceiver = await wallet.findOne({ userId: infoReceiver._id })
-        if (infoReceiver === null) {
-            return res.json({
-                code: 1,
-                message: 'khong tim thay nguoi nhan'
-            })
-        } else if (amount > (parseInt(walletSender.balance + 100000))) {
-            return res.json({
-                code: 1,
-                message: 'Tiền của bạn đã hết mời nạp thêm'
-            })
-        }
-        else if (amount > 5000000) {
-            let sumAmount
-            if (checkFee) {
-                sumAmount = amount * 0.95
-                walletSender.balance = walletSender.balance - amount
-            } else {
-                sumAmount = amount * 1.05
-                walletSender.balance = walletSender.balance - sumAmount
-
+        if (!infoReceiver) {
+            return res.render('transfer', { numReceiver, desc, amount, checkFee, message: 'Không tìm thấy người dùng', success: '' })
+        } else {
+            walletReceiver = await wallet.findOne({ userId: infoReceiver._id })
+            if (amount > (parseInt(walletSender.balance) + 100000)) {
+                return res.render('transfer', { numReceiver, desc, amount, checkFee, message: 'Tiền của bạn không đủ', success: '' })
             }
-            let transfer = new transaction({
-                userId: idSender,
-                amount: sumAmount,
-                recepientId: infoReceiver._id,
-                status: "Chờ xác nhận ct",
-                description: desc,
-                action: 'CT'
-            })
-            transfer.save().then(() => {
-                walletSender.save().then(() => {
+            else if (amount >= 5000000) {
+                let sumAmount
+                if (checkFee) {
+                    walletSender.balance = parseInt(walletSender.balance) - amount
+                } else {
+                    sumAmount = amount * 1.05
+                    walletSender.balance = parseInt(walletSender.balance) - sumAmount
+                }
+                let transfer = new transaction({
+                    userId: idSender,
+                    amount: amount,
+                    fee:fee,
+                    recepientId: infoReceiver._id,
+                    status: "Chờ xác nhận",
+                    description: desc,
+                    action: 'CT',
+                    codeTrans:codeTrans
+                })
+                transfer.save().then(() => {
+                    walletSender.save().then(() => {
 
-                    return res.json({
-                        code: 0,
-                        message: 'Chờ xác nhận',
-                        data: transfer
+                        return res.render('transfer', { numReceiver: '', desc: '', amount: '', checkFee: '', message: '', success: 'Chờ xác nhận giao dịch' })
+
+
                     })
 
-
-                })
-
-            }).catch(e => console.log(e))
-        } else {
-            let sumAmount
-            if (checkFee) {
-                sumAmount = amount * 0.95
-                walletSender.balance = walletSender.balance - amount
-                walletReceiver.balance = walletReceiver.balance + sumAmount
+                }).catch(e => console.log(e))
             } else {
-                sumAmount = amount * 1.05
-                walletSender.balance = walletSender.balance - sumAmount
-                walletReceiver.balance = walletReceiver.balance + amount
-            }
+                let sumAmount
+                if (checkFee) {
+                    walletSender.balance = parseInt(walletSender.balance) - parseInt(amount)
+                    walletReceiver.balance = parseInt(walletReceiver.balance) + parseInt(amount)*0.95
+                } else {
+                    sumAmount =parseInt(amount) * 1.05
+                    walletSender.balance = parseInt(walletSender.balance) - sumAmount
+                    walletReceiver.balance = parseInt(walletReceiver.balance) + parseInt(amount) 
+                }
 
 
-            let transfer = new transaction({
-                userId: idSender,
-                amount: sumAmount,
-                recepientId: infoReceiver._id,
-                status: "đã chuyển",
-                description: desc,
-                action: 'CT'
-            })
-            transfer.save().then(() => {
-                walletSender.save().then(() => {
-                    walletReceiver.save().then(() => {
-                        return res.json({
-                            code: 0,
-                            message: 'Chờ xác nhận',
-                            data: transfer
+                let transfer = new transaction({
+                    userId: idSender,
+                    amount: amount,
+                    fee : fee,
+                    recepientId: infoReceiver._id,
+                    status: "Thành công",
+                    description: desc,
+                    action: 'CT',
+                    codeTrans:codeTrans
+                })
+                transfer.save().then(() => {
+                    walletSender.save().then(() => {
+                        walletReceiver.save().then(() => {
+                            return res.render('transfer', { numReceiver: '', desc: '', amount: '', checkFee: '', message: '', success: 'Giao dịch thành công' })
                         })
                     })
-                })
 
 
-            }).catch(e => console.log(e))
+                }).catch(e => console.log(e))
+            }
         }
-
-
     }
 }
 exports.getBuyCard = (req, res) => {
-    return res.json({
-        code: 0,
-        message: "Get Buy Card success"
-    })
+    res.locals.account = req.session.account
+    return res.render('buy-phone-card', { message: '', success: '' })
 }
 exports.postBuyCard = async (req, res) => {
-    id = new Object(req.params.id)
-    userWallet = await wallet.findOne({ userId: id })
+    let codeTrans = uuidv1()
+    account = req.session.account
+    id = account._id
     let { nha_mang, menh_gia, qty } = req.body
-    if (!nha_mang || !menh_gia || !qty) {
-        return res.json({
-            code: 1,
-            message: 'Thieu thong tin'
-        })
+    let result = validationResult(req)
+    if (result.errors.length !== 0) {
+        return res.render('buy-phone-card', { message: result.errors[0].msg, success: '' })
     }
     else {
+        userWallet = await wallet.findOne({ userId: id })
         amount = parseInt(menh_gia) * parseInt(qty)
         if (amount > (parseInt(userWallet.balance + 100000))) {
-            return res.json({
-                code: 1,
-                message: 'Tiền của bạn đã hết mời nạp thêm'
-            })
+            return res.render('buy-phone-card', { message: 'Tiền của bạn đã hết', success: '' })
         } else {
             let codeCard = []
             if (nha_mang === "Viettel") {
@@ -278,52 +266,108 @@ exports.postBuyCard = async (req, res) => {
                     codeCard.push(a)
                 }
             } else {
-                return res.json({
-                    code: 1,
-                    message: "Khong cung cap nha mang nay"
-                })
+                return res.render('buy-phone-card', { message: 'Bạn chưa mệnh giá hoặc nhà mạng', success: '' })
             }
-
             let buyCard = new transaction({
                 userId: id,
                 amount: amount,
-                recepientId: id,
-                status: "Mua thành công",
+                fee:0,
+                recepientId:"",
+                status: "Thành công",
                 description: 'Mua thẻ',
                 codeCard: codeCard,
-                action: 'BC'
+                action: 'BC',
+                codeTrans: codeTrans
+
             })
             userWallet.balance = userWallet.balance - amount
             buyCard.save()
                 .then(() => {
                     userWallet.save()
                         .then(() => {
-                            return res.json({
-                                code: 0,
-                                message: "Mua thanh cong",
-                                data: buyCard,
-                                userWallet: userWallet
-                            })
+                            return res.redirect(`/wallet/buycard-detail/${codeTrans}`)
                         })
                 })
                 .catch(e => console.log(e))
         }
     }
 }
+exports.getBuyCardDetail = async (req, res) => {
+    res.locals.account = req.session.account
+    let codeTrans = req.params.id
+    buyCard = await transaction.findOne({ codeTrans: codeTrans })
+    let code = buyCard.codeCard[0].substring(0, 5)
+    let nha_mang
+    let qty = buyCard.codeCard.length
+    let amount = buyCard.amount
+    let don_gia = amount / qty
 
+    if (code == '11111') {
+        nha_mang = 'Viettel'
+    } else if (code == '22222') {
+        nha_mang = 'Mobifone'
+    } else if (code == '33333') {
+        nha_mang = 'Vinaphone'
+    }
+    let dateObj = buyCard.timeStamps
+    var month = dateObj.getUTCMonth() + 1; //months from 1-12
+    var day = dateObj.getUTCDate();
+    var year = dateObj.getUTCFullYear();
 
+    newdate = day + "/" + month + "/" + year;
 
-exports.getTransaction = async (req, res) => {
-    id = new Object(req.params.id)
-    userTrans = await transaction.find({ userId: id })
-    return res.json({
-        code: 0,
-        messag: 'Thanh cong',
-        data: userTrans
-    })
+    return res.render('phone-card-details', { nha_mang, don_gia, qty, amount, codeTrans,newdate,codeCard:buyCard.codeCard})
 
 }
 
 
 
-// get date
+exports.getTransaction = async (req, res) => {
+    res.locals.account = req.session.account
+    account = req.session.account
+    userTrans = await transaction.find({
+        $or: [
+            {
+                $and: [
+                    {
+                        recepientId: String(account._id)
+                    },
+                    {
+                        status:'Thành công'
+                    }
+                ]
+            },
+            {
+                userId: account._id
+            }
+        ]
+    }).sort({timeStamps: -1})
+    return res.render('transaction-hisrory',{userTrans})
+
+}
+exports.getDetailTransfer = async (req,res) => {
+    res.locals.account = req.session.account
+    let id = req.params.id
+    let transfer = await transaction.findOne({codeTrans:id})
+    let recepientId = transfer.recepientId
+    let userReceiver = await user.findOne({_id : Object(recepientId)})
+    return res.render('transaction-detail-CK',{transfer,userReceiver})
+}
+exports.getDetailRecharge = async (req,res) => {
+    res.locals.account = req.session.account
+    let id = req.params.id
+    let recharge = await transaction.findOne({codeTrans:id})
+    return res.render('transaction-detail-NT',{recharge})
+}
+exports.getDetailWithdraw = async (req,res) => {
+    res.locals.account = req.session.account
+    let id = req.params.id
+    let withdraw = await transaction.findOne({codeTrans:id})
+    return res.render('transaction-detail-RT',{withdraw})
+}
+exports.getDetailBuyCard = async (req,res) => {
+    res.locals.account = req.session.account
+    let id = req.params.id
+    let buyCard = await transaction.findOne({codeTrans:id})
+    return res.render('transaction-detail-DT',{buyCard})
+}

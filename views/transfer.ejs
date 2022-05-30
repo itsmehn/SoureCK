@@ -2,52 +2,20 @@
     <section style="background-color: #eee;">
         <div class="container py-5 mt-5">
             <div class="row">
-                <div class="col-lg-4">
-                    <div class="card mb-4">
-                        <div class="card-body text-center">
-                            <img src="https://images.cults3d.com/8OWKFqd-Qk3M1E2ImZp_O2Y6x4I=/516x516/https://files.cults3d.com/uploaders/22153232/illustration-file/56a6b33b-5fb5-4ba9-8408-2ab5c826e4db/st%2Csmall%2C507x507-pad%2C600x600%2Cf8f8f8.jpg" alt="avatar" class="rounded-circle img-fluid"
-                                style="width: 150px;">
-                            <h5 class="my-3">Đăng Khoa</h5>
-                            <p class="text-primary font-weight-bold text-warning mb-4">1.000.000 VNĐ</p>
-                            <div class="d-flex justify-content-center mb-2">
-                                <a href="recharge.html">
-                                    <button type="submit" class="btn btn-outline-primary mr-2">Nạp tiền</button>
-                                </a>
-                                <a href="withdraw-money.html">
-                                    <button type="submit" class="btn btn-outline-primary">Rút tiền</button>
-                                </a>
-                            </div>
-                            <div class="d-flex justify-content-center mb-2">
-                                <p class="text-primary font-weight-bold text-danger mb-4 mt-4">Chờ xác minh tài khoản</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div class="col-lg-8">
                     <!-- form card cc payment -->
                     <div class="card card-outline-secondary">
                         <div class="card-body">
                             <h3 class="text-center">Chuyển tiền</h3>
                             <hr>
-                            <form class="form" role="form" autocomplete="off">
+                            <form class="form"  autocomplete="off" method="post" novalidate>
                                 <div class="form-group">
                                     <label>Số điện thoại người nhận</label>
-                                    <input type="text" name="IDCard" class="form-control" autocomplete="off" maxlength="10" pattern="(?=.*\d)(?=.*[0-9]).{10}" title="Số điện thoại người nhận" required="" placeholder="Nhập số điện thoại người nhận">
+                                    <input type="text" name="numReceiver" value="<%= numReceiver %>" class="form-control" autocomplete="off" title="Số điện thoại người nhận" required="" placeholder="Nhập số điện thoại người nhận">
                                 </div>
                                 <div class="form-group">
                                     <label>Ghi chú</label>
-                                    <input type="text" name="IDCard" class="form-control" autocomplete="off" required="" placeholder="Nhập ghi chú">
-                                </div>
-                                <div class="form-group">
-                                    <label for="cc_name">Tên người nhận</label>
-                                    <input type="text" class="form-control" id="cc_name" pattern="\w+ \w+.*" title="First and last name" required="required" placeholder="Nhập tên người nhận">
-                                </div>
-                                <div class="form-group">
-                                    <label for="OTP">Mã OTP</label>
-                                    <div class="row col-12">
-                                        <input type="password" class="form-control col-9" id="OTP" pattern="(?=.*\d)(?=.*[0-9]).{6}" title="Must contain at 6 char" required="" placeholder="Nhập mã OTP">
-                                        <button type="submit" class="btn btn-outline-primary btn-sm col-2 ml-4">Nhận mã</button>
-                                    </div>
+                                    <input type="text" name="desc" value="<%= desc %>" class="form-control" autocomplete="off" required="" placeholder="Nhập ghi chú">
                                 </div>
                                 <div class="row">
                                     <label class="col-md-6">Số tiền</label>
@@ -55,27 +23,41 @@
                                 <div class="form-inline">
                                     <div class="input-group">
                                         <div class="input-group-prepend"><span class="input-group-text">VNĐ</span></div>
-                                        <input type="text" class="form-control text-right" id="" placeholder="500000">
+                                        <input type="text" class="form-control text-right" id="" placeholder="500000" name="amount" value="<%= amount %>">
                                         <div class="input-group-append"><span class="input-group-text">.00</span></div>
                                         <input id="fee" type="text" class="form-control ml-5" id="exampleInputAmount" placeholder="Phí chuyển 5% tổng số tiền" readonly>
                                     </div>
                                 </div>
                                 <div class="form-check mt-3 ml-1">
                                     <label class="form-check-label">
-                                        <input type="checkbox" class="form-check-input"> <span>Người nhận chịu phí</span>
+                                        <input type="checkbox" class="form-check-input" name="checkFee" > <span>Người nhận chịu phí</span>
                                     </label>
                                 </div>
                                 <hr>
                                 <div class="form-group row">
                                     <div class="col-md-6">
-                                        <button type="reset" class="btn btn-default btn-lg btn-block">Thoát</button>
+                                        <button type="reset" class="btn btn-default btn-lg btn-block " >Thoát</button>
                                     </div>
                                     <div class="col-md-6">
-                                        <a href="transfer-detail.html" class=" text-decoration-none">
-                                            <button type="button" class="btn btn-primary btn-lg btn-block">Chuyển</button>
-                                        </a>
+                                        <button type="submit" class="btn btn-success btn-lg btn-block">Chuyển</button>
                                     </div>
                                 </div>
+                                <%if (message) {%>
+                                    <div class="form-outline mb-3" id="alert">
+                                        <div class="alert alert-danger w-100 py-2 " role="alert">
+                                            <%=message%>
+                                        </div>
+                                    </div>
+
+                                <%}%>
+                                <%if (success) {%>
+                                    <div class="form-outline mb-3" id="alert">
+                                        <div class="alert alert-success w-100 py-2 " role="alert">
+                                            <%=success%>
+                                        </div>
+                                    </div>
+
+                                <%}%>
                             </form>
                         </div>
                     </div>
