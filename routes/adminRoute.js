@@ -1,9 +1,10 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const Router = express.Router()
-const checkAdmin = require('../middlewares/checkAdmin')
-
+const isAdmin = require('../middlewares/checkAdmin')
+const check = require('../middlewares/checkSession')
 const adminController = require('../controllers/admin.controller')
+
 
 Router.get('/manageraccount', adminController.getManagerAccount)
     // Router.post('/manageraccount', adminController.postManagerAccount)
