@@ -9,12 +9,13 @@ const randomUsername = require('random-mobile');
 const transporter = require("../middlewares/sendMail")
 const takeID = require('../middlewares/takeID')
 const registerValidator = require('../middlewares/registerValidator')
+//const messagebird = require('messagebird')('HN8BlvmUiIXIxCsbCi5PsWazC');
 
 const dataUser = require('../models/users')
 const { Router } = require('express')
 const { match } = require('assert')
 const session = require('express-session')
-const wallet =  require('../models/wallet')
+const wallet = require('../models/wallet')
 
 
 
@@ -65,27 +66,28 @@ const postRegister = async(req, res) => {
                 })
 
                 user.save().then(() => {
+                    // EMAIL THÔNG BÁO ĐĂNG KÝ
+                    // let messageOptions = {
+                    //     from: 'sinhvien@phongdaotao.com',
+                    //     to: email,
+                    //     subject: "GỬI THÔNG TIN TÀI KHOẢN EWALLET",
+                    //     text: ` Hi ${fullName},
+                    //             Lời đầu tiên chúng tôi cảm ơn bạn đã tin tưởng sử dụng website. Chúng tôi gửi bạn thông tin đăng nhập website.
+                    //             Username: ${username}
+                    //             Password: ${password}
+                    //             Mọi thông tin thắc mắc liên hệ gmail, số điện thoại của chúng tôi.
+                    //             Trân trọng,
+                    //             Đội ngũ Ewallet`
+                    // };
 
-                    let messageOptions = {
-                        from: 'sinhvien@phongdaotao.com',
-                        to: email,
-                        subject: "GỬI THÔNG TIN TÀI KHOẢN EWALLET",
-                        text: ` Hi ${fullName},
-                                Lời đầu tiên chúng tôi cảm ơn bạn đã tin tưởng sử dụng website. Chúng tôi gửi bạn thông tin đăng nhập website.
-                                Username: ${username}
-                                Password: ${password}
-                                Mọi thông tin thắc mắc liên hệ gmail, số điện thoại của chúng tôi.
-                                Trân trọng,
-                                Đội ngũ Ewallet`
-                    };
-
-
-                    transporter.sendMail(messageOptions, (error, info) => {
-                        if (error) {
-                            console.log(error)
-                        }
-                        return res.redirect(`/users/createwallet/${phoneNumber}`)
-                    });
+                    return res.render('register', { account: { username, password, phoneNumber } })
+                        // transporter.sendMail(messageOptions, (error, info) => {
+                        //     if (error) {
+                        //         console.log(error)
+                        //     }
+                        //     res.render('register', { account: { username, password } })
+                        //     return res.redirect(`/users/createwallet/${phoneNumber}`)
+                        // });
                 })
 
             })
@@ -110,7 +112,7 @@ const postRegister = async(req, res) => {
 
 //API LOGIN
 const getLogin = (req, res) => {
-    if(req.session.account){
+    if (req.session.account) {
         return res.redirect('/users/homepage')
     }
     res.render('login', { username: '', password: '', message: '' })
@@ -165,25 +167,26 @@ const postLogin = (req, res) => {
     }
 }
 
-const getHomePage = async (req,res) => {
-    if(req.session.account){
+const getHomePage = async(req, res) => {
+    if (req.session.account) {
         return res.redirect('/users/homepage')
     }
     res.render('home-page')
 }
-const getHomePageLogin =  (req,res) => {
-    if(!req.session.account){
+const getHomePageLogin = (req, res) => {
+    if (!req.session.account) {
         return res.redirect('/users/login')
     }
     account = req.session.account
-    res.render('home-page-login',{account:account})
+    res.render('home-page-login', { account: account })
 }
-const getLogout = (req,res) => {
-    req.session = null
-    res.redirect('/')
-}
-//API FIRST CHANGE PASSWORD
+const getLogout = (req, res) => {
+        req.session = null
+        res.redirect('/')
+    }
+    //API FIRST CHANGE PASSWORD
 const getFirstChangePass = (req, res) => {
+
     res.render('change-password-first', { message: '' })
 }
 
@@ -211,8 +214,8 @@ const postFirstChangePass = (req, res) => {
 }
 
 //API GET PROFILE
-const getProfile = async (req, res) => {
-
+const getProfile = async(req, res) => {
+    res.locals.account = req.session.account
     let acc = req.session.account
     if (!acc) {
         return res.redirect('/users/login')
@@ -228,24 +231,19 @@ const getChangePass = (req, res) => {
 
 const postChangePass = (req, res) => {
     let { oldpass, newpass, renewpass } = req.body
-    console.log(req.body)
-    dataUser.findOne({ id: req.session.account._id })
-        .then(account => {
-            if (account.password != oldpass) {
 
-                return res.render('change-password', { message: 'Đổi mật khẩu thất bại.' })
-            } else {
-                if (newpass != renewpass) {
+    if (oldpass != req.session.account.password) {
+        return res.render('change-password', { message: 'Mật khẩu cũ không đúng' })
+    } else if (newpass != renewpass) {
 
-                    return res.render('change-password', { message: 'Mật khẩu mới không khớp' })
-                } else {
-                    dataUser.findByIdAndUpdate(account.id, { password: newpass })
-                        .then(newpass => {
-                            return res.redirect('/users/profile')
-                        })
-                }
-            }
-        })
+        return res.render('change-password', { message: 'Mật khẩu mới không khớp' })
+    } else {
+        dataUser.findByIdAndUpdate(req.session.account._id)
+            .then(newpass => {
+                return res.redirect('/users/profile')
+            })
+    }
+
 }
 
 const getCreatWallet = async(req, res) => {
@@ -270,7 +268,7 @@ const getCreatWallet = async(req, res) => {
 const postProfile = (req, res) => {
     const imageFront = req.files.imageFront
     const imageBack = req.files.imageBack
-    console.log(req.files)
+        // console.log(req.files)
     let id = req.session.account._id
     dataUser.findByIdAndUpdate(id, { imageBack: imageBack[0].filename, imageFront: imageFront[0].filename }, {
             new: true
@@ -279,11 +277,54 @@ const postProfile = (req, res) => {
             req.session.account = account
             if (account) {
                 console.log("Thành công")
-                return res.render('profile', { message: '   ' })
+                return res.render('profile', { acc: account, message: '   ' })
             } else return res.render('profile', { message: 'Không thành công' })
         })
 
 }
+
+//API FORGET PASSWORD
+const getForgetPassword = (req, res) => {
+    res.render('forget-password')
+}
+
+
+
+// var params = {
+//     'originator': 'TestMessage',
+//     'recipients': [
+//         '+84346771418'
+//     ],
+//     'body': 'This is a test message'
+// };
+
+// messagebird.messages.create(params, function(err, response) {
+//     if (err) {
+//         return console.log(err);
+//     }
+//     console.log(response);
+// });
+// const getOTP = (req, res) => {
+
+// }
+
+// const postForgetPassword = (req, res) => {
+//     const otp = generator.generate({
+//         length: 6,
+//         numbers: true
+//     });
+//     messagebird.verify.create(req.body.phoneNumber, {
+//             template: 'Mã otp của bạn ' + otp
+//         })
+//         .then(message => {
+//             console.log('Success' + message)
+//         })
+//         .catch(e => {
+//             console.log(e)
+//         })
+
+// }
+
 
 module.exports = {
     getProfile,
@@ -299,5 +340,6 @@ module.exports = {
     postProfile,
     getHomePage,
     getLogout,
-    getHomePageLogin
+    getHomePageLogin,
+    getForgetPassword
 }

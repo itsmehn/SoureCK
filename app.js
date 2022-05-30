@@ -13,7 +13,7 @@ const app = express();
 const users = require('./routes/Users')
 const me = require('./routes/me')
 const wallet = require('./routes/wallet')
-
+const admin = require('./routes/adminRoute')
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -36,11 +36,12 @@ app.use(cookieSession({
 app.use('/users', users)
 app.use('/', me)
 app.use('/wallet', wallet)
+app.use('/admin', admin)
 
 const port = process.env.PORT || 3000;
 const URI = process.env.MONGODB_URL;
 app.listen(port, () => {
-    console.log("http://localhost:"+port)
+    console.log("http://localhost:" + port)
 })
 
 mongodb.connect()
@@ -48,14 +49,14 @@ mongodb.connect()
 
 // auto update count withdraw
 const walletModel = require('./models/wallet')
-const job = new cron.schedule('0 0 0 * * *',() => {
+const job = new cron.schedule('0 0 0 * * *', () => {
     console.log('hello')
-    walletModel.updateMany({},{$set: {countWithdraw:2}})
-    .catch(e => console.log(e))
+    walletModel.updateMany({}, { $set: { countWithdraw: 2 } })
+        .catch(e => console.log(e))
 
-},{
+}, {
     scheduled: true,
     timezone: "Asia/Ho_Chi_Minh"
 })
-  
+
 job.start();

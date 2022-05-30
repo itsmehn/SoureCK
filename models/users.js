@@ -19,8 +19,13 @@ const UserSchema = new Schema({
     username: String,
     password: String,
     check: Number,
+    //value check: 0- new register; 1- first login and change password; 2- dc kich hoat; 3- vo hieu hoa; 4- vo thoi han
     checkLoginFail: Number,
-    role: String
+    role: String,
+    createAt: { type: Date, default: Date.now() },
+    updateAt: Date,
+    constLoginFail: Number,
+    loginFailAt: Date
 });
 
 module.exports = mongoose.model("users", UserSchema);
