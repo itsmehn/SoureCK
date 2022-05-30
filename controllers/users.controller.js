@@ -9,7 +9,9 @@ const randomUsername = require('random-mobile');
 const transporter = require("../middlewares/sendMail")
 const takeID = require('../middlewares/takeID')
 const registerValidator = require('../middlewares/registerValidator')
-    //const messagebird = require('messagebird')('HN8BlvmUiIXIxCsbCi5PsWazC');
+const messagebird = require('messagebird')('HN8BlvmUiIXIxCsbCi5PsWazC');
+
+
 
 const dataUser = require('../models/users')
 const { Router } = require('express')
@@ -231,7 +233,7 @@ const getChangePass = (req, res) => {
 
 const postChangePass = (req, res) => {
     let { oldpass, newpass, renewpass } = req.body
-
+    res.locals.account = req.session.account
     if (oldpass != req.session.account.password) {
         return res.render('change-password', { message: 'Mật khẩu cũ không đúng' })
     } else if (newpass != renewpass) {
@@ -285,10 +287,45 @@ const postProfile = (req, res) => {
 
 //API FORGET PASSWORD
 const getForgetPassword = (req, res) => {
-    res.render('forget-password')
+    let phoneNumber = req.query.phoneNumber
+    phoneNumber = phoneNumber.substring(1)
+    phoneNumber
+    let otp = Math.floor(100000 + Math.random() * 900000)
+    dataUser.findOne(phoneNumber)
+        .then(() => {
+            var params = {
+                'originator': 'TestMessage',
+                'recipients': [
+                    phoneNumber
+                ],
+                'body': 'This is a test message'
+            };
+
+            messagebird.messages.create(params, function(err, response) {
+                if (err) {
+                    return console.log(err);
+                }
+                console.log(response);
+            });
+        })
 }
 
 
+
+// var params = {
+//     'originator': 'TestMessage',
+//     'recipients': [
+//         '+84346771418'
+//     ],
+//     'body': 'This is a test message'
+// };
+
+// messagebird.messages.create(params, function(err, response) {
+//     if (err) {
+//         return console.log(err);
+//     }
+//     console.log(response);
+// });
 
 
 

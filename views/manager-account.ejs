@@ -71,28 +71,28 @@
                                     <%if (e.check <=1 ){%>
                                         <td class="text-warning">đang chờ kích hoạt</td>
                                         <td>
-                                            <a href="/admin/chitietaccount1">Xem chi tiết</a>
+                                            <a href="/admin/account/<%= e._id %>">Xem chi tiết</a>
                                             <span>/</span>
                                             <a href="#">Kích hoạt</a>
                                         </td>
                                         <%} else if (e.check == 2) { %>
                                             <td class="text-success">đã kích hoạt</td>
                                             <td>
-                                                <a href="/admin/chitietaccount2.html">Xem chi tiết</a>
+                                                <a href="/admin/account/<%= e._id %>">Xem chi tiết</a>
                                                 <span>/</span>
                                                 <a href="#">Kích hoạt</a>
                                             </td>
                                             <%} else if (e.check == 3) { %>
                                                 <td class="text-danger">Bị vô hiệu hóa</td>
                                                 <td>
-                                                    <a href="/admin/chitietaccount3.html">Xem chi tiết</a>
+                                                    <a href="/admin/account/<%= e._id %>">Xem chi tiết</a>
                                                     <span>/</span>
                                                     <a href="#">Kích hoạt</a>
                                                 </td>
                                                 <%} else { %>
                                                     <td class="text-danger">Bị vô hiệu hóa vĩnh viên</td>
                                                     <td>
-                                                        <a href="/admin/chitietaccount3.html">Xem chi tiết</a>
+                                                        <a href="/admin/account/<%= e._id %>">Xem chi tiết</a>
                                                         <span>/</span>
                                                         <a href="#">Kích hoạt</a>
                                                     </td>
@@ -106,6 +106,26 @@
                     </table>
                 </div>
                 <!--end-->
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Yêu cầu xác minh tài khoản</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <!-- Modal body -->
+                <div class="modal-body">
+                    Yêu cầu xác minh tài khoản thành công
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>

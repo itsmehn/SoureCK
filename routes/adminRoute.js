@@ -7,6 +7,7 @@ const adminController = require('../controllers/admin.controller')
 
 Router.get('/manageraccount', checkAdmin, adminController.getManagerAccount)
     // Router.post('/manageraccount', adminController.postManagerAccount)
-Router.get('/showaccount', adminController.getAccount)
+    // Router.get('/account', adminController.getAccount)
+Router.get('/account/:id', adminController.getAccount)
 
 module.exports = Router

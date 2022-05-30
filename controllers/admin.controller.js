@@ -65,12 +65,118 @@ const getManagerAccount = async(req, res) => {
 
 }
 
-const getAccount = (req, res) => {
-    res.render('chitietaccount1')
+const getAccount = async(req, res) => {
+    const { id } = req.params
+
+    let user;
+    let errorMessage = ""
+    await dataUser.findOne({ _id: id })
+        .then(account => {
+            user = account
+        }).catch(err => {
+            errorMessage = "Loi server"
+        })
+
+    return res.render("accoutnDetail", { account: user })
 }
+
+const accountDetail = async(req, res) => {
+    const { id } = req.params
+
+    let user;
+    let errorMessage = ""
+    await dataUser.findOne({ _id: id })
+        .then(account => {
+            user = account
+        }).catch(err => {
+            errorMessage = "Loi server"
+        })
+
+    // if (errorMessage.length === 0) {
+    // return res.json()
+    return res.json({
+            code: 0,
+            message: "success",
+            account: user
+        })
+        // }
+}
+
+// middle ware check account => route
+const activeAccount = async(req, res) => {
+    const { phoneNumber } = req.query
+    let user;
+    let errorMessage = "";
+    await dataUser.findOne({ phoneNumber: phoneNumber })
+        .then(account => {
+            if (account.check == 0 || account.check == 1) {
+                user = account;
+            } else {
+                errorMessage = "Account k phu hop"
+            }
+        }).catch(err => {
+            errorMessage = "Loi server"
+        })
+
+    if (err.length > 0) {
+        await dataUser.updateOne({ phoneNumber: phoneNumber }, {
+            check: 2
+        })
+
+        return res.json({
+            code: 0,
+            message: "Success"
+        })
+
+    } else {
+        return res.json({
+            code: 1,
+            message: errorMessage
+        })
+    }
+}
+
+//v ohieu hoa
+const rejectAccount = async(req, res) => {
+    const { phoneNumber } = req.query
+    let user;
+    let errorMessage = "";
+    await dataUser.findOne({ phoneNumber: phoneNumber })
+        .then(account => {
+            if (account.check != 4) {
+                user = account;
+            } else {
+                errorMessage = "Account k phu hop"
+            }
+        }).catch(err => {
+            errorMessage = "Loi server"
+        })
+
+    if (err.length > 0) {
+        await dataUser.updateOne({ phoneNumber: phoneNumber }, {
+            check: 4
+        })
+
+        return res.json({
+            code: 0,
+            message: "Success"
+        })
+
+    } else {
+        return res.json({
+            code: 1,
+            message: errorMessage
+        })
+    }
+}
+
+//
 
 module.exports = {
     getManagerAccount,
     // postManagerAccount,
-    getAccount
+    getAccount,
+    accountDetail,
+    activeAccount,
+    rejectAccount
 }

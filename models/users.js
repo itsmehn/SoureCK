@@ -25,7 +25,11 @@ const UserSchema = new Schema({
     checkLoginFail: Number,
     role: {
         type: String,
-        default:'user'
+        default: 'user'
+    },
+    otp: {
+        type: Number,
+        expires: '1m'
     },
     createAt: { type: Date, default: Date.now() },
     updateAt: Date,
