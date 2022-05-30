@@ -225,7 +225,6 @@ const getProfile = async(req, res) => {
     let idWallet = acc._id
     console.log(idWallet)
     let userWallet = await wallet.findOne({ userId: Object(idWallet) })
-    console.log(userWallet)
     return res.render('profile', { acc: acc, message: ' ', userWallet })
 
 }

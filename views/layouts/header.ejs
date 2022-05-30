@@ -53,6 +53,17 @@
                         <i class='bx bx-user nav_icon'></i>
                         <span class="nav_name ml-3">Tài khoản</span>
                     </a>
+                    <% if(locals.account) { 
+                        if(locals.account.fullName === 'ADMIN') {%> 
+                        <a href="../views/manager-account.ejs" class="nav_link">
+                            <i class="bi bi-cash-coin nav_icon bx"></i>
+                            <span class="nav_name ml-3">Quản lý tài khoản</span>
+                        </a>
+                        <a href="../views/transfer-approvals.ejs" class="nav_link">
+                            <i class="bi bi-cash-stack nav_icon bx"></i>
+                            <span class="nav_name ml-3">Phê duyệt giao dịch</span>
+                        </a> 
+                     <% } } %>
                     <a href="/wallet/recharge" class="nav_link">
                         <i class="bi bi-cash-coin nav_icon bx"></i>
                         <span class="nav_name ml-3">Nạp tiền</span>
