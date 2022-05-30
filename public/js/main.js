@@ -437,25 +437,25 @@ $(".custom-file-input").on("change", function() {
 });
 
 
-$('#chooseDefine').on('change', function() {
-    const account = this.value
+// $('#chooseDefine').on('change', function() {
+//     const account = this.value
 
-    console.log(account)
-    $.ajax({
-        type: "GET",
-        dataType: "json",
-        async: false,
-        url: 'http://localhost:3000/notification/getNotification',
-        data: {
-            startFromNo_d: startFromNo_d,
-            department: department
-        },
-        beforeSend: function() {},
-        success: function(response) {
-            console.log(response)
-                //console.log(response.number_page)
+//     console.log(account)
+//     $.ajax({
+//         type: "GET",
+//         dataType: "json",
+//         async: false,
+//         url: 'http://localhost:3000/admin/manageraccount',
+//         data: {
 
-        }
-    })
+//             account: account
+//         },
+//         beforeSend: function() {},
+//         success: function(response) {
+//             console.log(response)
+//                 //console.log(response.number_page)
 
-});
+//         }
+//     })
+
+// });
