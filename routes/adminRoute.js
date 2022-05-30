@@ -1,13 +1,13 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const Router = express.Router()
-const isAdmin = require('../middlewares/checkAdmin')
-const check = require('../middlewares/checkSession')
+const isAdmin = require('../middlewares/isAdmin')
+
 const adminController = require('../controllers/admin.controller')
 
-
-Router.get('/manageraccount', adminController.getManagerAccount)
+Router.get('/manageraccount', isAdmin, adminController.getManagerAccount)
     // Router.post('/manageraccount', adminController.postManagerAccount)
-Router.get('/showaccount', adminController.getAccount)
+    // Router.get('/account', adminController.getAccount)
+Router.get('/account/:id', isAdmin, adminController.getAccount)
 
 module.exports = Router

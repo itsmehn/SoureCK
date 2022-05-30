@@ -7,15 +7,6 @@ $("input").click(e => {
 $('#chooseDefine').change(function() {
     const status = this.value
 
-    // $.ajax({
-    //     url: "/admin/" + id,
-    //     type: "GET",
-    //     success: function (res) {
-    //         updateEditModal(res.user)
-    //     },
-    //     error: function (err) {
-    //     }
-    // })
     console.log(status)
     $.ajax({
         // async: false,
@@ -199,6 +190,41 @@ const updateTableAcount = (listAccount) => {
     //                 </td>
 
 }
+
+// $(".account-detail").click(e => {
+//     const id = e.target.dataset.id
+//     $.ajax({
+//         url: "/admin/account/" + id,
+//         type: "GET",
+//         success: function(res) {
+//             if (res.code === 0) {
+//                 window.location.href = "/admin/account"
+//                 updateAccountDetail(res.account)
+//             }
+//         },
+//         error: function(err) {}
+//     })
+// })
+
+// const updateAccountDetail = (account) => {
+//     console.log(account)
+
+// }
+
+// $(".edit-product").click(e => {
+//     const id = e.target.dataset.id
+
+//     $.ajax({
+//         url: "/customer-care/" + id,
+//         type: "GET",
+//         success: function (res) {
+//             $('#edit-modal').modal('show')
+//             updateEditModal(res.product)
+//         },
+//         error: function (err) {
+//         }
+//     })
+// })
 
 
 // Mỹ Anh
