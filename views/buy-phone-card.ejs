@@ -87,18 +87,20 @@
             </div>
         </div>
 
+
+        <%- include("./layouts/footer.ejs") %> 
         <script>
-            function f(event) { 
+            function f(event) {
                 var element = event.currentTarget
                 let menh_gia = document.getElementById("menh_gia")
-                let sumCard =  document.getElementById("sumCard")
-                if(menh_gia.value != 'Mệnh giá' ) {
+                let sumCard = document.getElementById("sumCard")
+                if (menh_gia.value != 'Mệnh giá') {
                     sumCard.innerHTML = element.value * menh_gia.value
                     sumCard.innerHTML = Number(sumCard.innerHTML).toLocaleString() + ' Đ'
                 }
-                
-              }
-              document.getElementById("qty").addEventListener("change", f)
-
+            
+            }
+            $(document).ready(function() {
+                document.getElementById("qty").addEventListener("change", f)
+            })
         </script>
-        <%- include("./layouts/footer.ejs") %> 

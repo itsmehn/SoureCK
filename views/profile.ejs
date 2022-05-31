@@ -10,7 +10,8 @@
                             <h5 class="my-3">
                                 <%=acc.fullName%>
                             </h5>
-                            <p class="text-primary font-weight-bold text-warning mb<-4"><%= userWallet.balance.toLocaleString() %>  VNĐ</p>
+                            <p class="text-primary font-weight-bold text-warning mb<-4">
+                                <%= userWallet.balance.toLocaleString() %> VNĐ</p>
                             <div class="d-flex justify-content-center mb-2">
                                 <a href="../views/recharge.ejs">
                                     <button type="submit" class="btn btn-outline-primary mr-2">Nạp tiền</button>
@@ -19,10 +20,26 @@
                                     <button type="submit" class="btn btn-outline-primary">Rút tiền</button>
                                 </a>
                             </div>
-                            <div class="d-flex justify-content-center mb-2">
-                                <p class="text-primary font-weight-bold text-danger mb-4 mt-4">Chờ xác minh tài khoản
-                                </p>
-                            </div>
+                            <%if (acc.checkIDCard == 1) {%>
+                                <div class="d-flex justify-content-center mb-2">
+                                    <p class="text-primary font-weight-bold text-warning mb-4 mt-3">Chờ cập nhật
+                                    </p>
+                                </div>
+                                <% }else if (acc.check == 1) {%>
+
+                                    <div class="d-flex justify-content-center mb-2">
+                                        <p class="text-primary font-weight-bold text-danger mb-4 mt-3">Chờ xác minh tài khoản
+                                        </p>
+                                    </div>
+
+                                    <%} else {%>
+
+                                        <div class="d-flex justify-content-center mb-2">
+                                            <p class="text-primary font-weight-bold text-success mb-4 mt-3">Đã xác minh
+                                            </p>
+                                        </div>
+                                        <%}%>
+
                         </div>
                     </div>
                     <div class="card mb-4 mb-lg-0">
@@ -132,6 +149,7 @@
                                 </div>
                                 <%}%>
 
+
                                     <div class="card mb-4 mb-md-0">
                                         <div class="card-body">
                                             <p class="mb-4"><span class="text-primary font-italic me-1">Thông báo</span>
@@ -142,6 +160,10 @@
                                             <p class="mt-4 mb-1" style="font-size: .77rem;">[Tài khoản đã xác minh thành công] Sau khi tài khoản có trạng thái "Đã xác minh" thì người dùng có thể sử dụng tất cả các dịch vụ mà webiste chúng tôi cung cấp</p>
                                         </div>
                                     </div>
+
+
+
+
                         </div>
                     </div>
                 </div>
@@ -160,80 +182,82 @@
             <!-- The Modal -->
             <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                       </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
 
-                            <div class="col-md-12 col-md-12 col-sm-12 col-xs-12">
-                                <h4>Mặt trước</h4>
-                                <div class="ml-3 mt-4">
-                                    <img src="../public/images/uploads/<%=acc.imageFront%>" style="min-width: 0px !important; min-height: 0px !important; max-width: none !important; max-height: none !important; width: 250px; height: 164px; margin-left: -25px; margin-top: -20px;">
-                                </div>
-                                <div class="common-pre-dz">
-                                    <p>
-                                        Vui lòng tài ảnh
-                                    </p>
-                                    <div class="btn-group images-cropper-pro">
-                                        <!--
+                                <div class="col-md-12 col-md-12 col-sm-12 col-xs-12">
+                                    <h4>Mặt trước</h4>
+                                    <div class="ml-3 mt-4">
+                                        <img src="../public/images/uploads/<%=acc.imageFront%>" style="min-width: 0px !important; min-height: 0px !important; max-width: none !important; max-height: none !important; width: 250px; height: 164px; margin-left: -25px; margin-top: -20px;">
+                                    </div>
+                                    <div class="common-pre-dz">
+                                        <p>
+                                            Vui lòng tài ảnh
+                                        </p>
+                                        <div class="btn-group images-cropper-pro">
+                                            <!--
                                         <label title="Upload image file" for="inputImage" class="btn btn-primary img-cropper-cp">
                                             <input type="file" accept="image/*" name="file" id="inputImage" class="hide"> Tải ảnh lên
                                         </label>
                                         -->
-                                        <div class="d-flex flex-row align-items-center mb-4">
-                
-                                            <div class="form-outline flex-fill mb-0">
-                                                <label for="imageFront" class="form-label fw-bold">Hình ảnh mặt trước chứng minh nhân dân</label>
-                                                <input class="form-control" type="file" id="imageFront" name="imageFront">
+                                            <div class="d-flex flex-row align-items-center mb-4">
+
+                                                <div class="form-outline flex-fill mb-0">
+                                                    <label for="imageFront" class="form-label fw-bold">Hình ảnh mặt trước chứng minh nhân dân</label>
+                                                    <input class="form-control" type="file" id="imageFront" name="imageFront">
+                                                </div>
                                             </div>
+
+
                                         </div>
-                
-                
                                     </div>
                                 </div>
-                            </div>
-                            <hr>
-                            <div class="col-md-12 col-md-12 col-sm-12 col-xs-12">
-                                <h4>Mặt sau</h4>
-                                <div class="ml-3 mt-4">
-                                    <img src="../public/images/uploads/<%=acc.imageBack%>" style="min-width: 0px !important; min-height: 0px !important; max-width: none !important; max-height: none !important; width: 250px; height: 164px; margin-left: -25px; margin-top: -20px;">
-                                </div>
-                                <div class="common-pre-dz">
-                
-                                    <p>
-                                        Vui lòng tài ảnh
-                                    </p>
-                                    <div class="btn-group images-cropper-pro">
-                                        <!--
+                                <hr>
+                                <div class="col-md-12 col-md-12 col-sm-12 col-xs-12">
+                                    <h4>Mặt sau</h4>
+                                    <div class="ml-3 mt-4">
+                                        <img src="../public/images/uploads/<%=acc.imageBack%>" style="min-width: 0px !important; min-height: 0px !important; max-width: none !important; max-height: none !important; width: 250px; height: 164px; margin-left: -25px; margin-top: -20px;">
+                                    </div>
+                                    <div class="common-pre-dz">
+
+                                        <p>
+                                            Vui lòng tài ảnh
+                                        </p>
+                                        <div class="btn-group images-cropper-pro">
+                                            <!--
                                         <label title="Upload image file" for="inputImage" class="btn btn-primary img-cropper-cp">
                                             <input type="file" accept="image/*" name="file" id="inputImage" class="hide"> Tải ảnh lên
                                         </label>
                                         -->
-                                        <div class="d-flex flex-row align-items-center mb-4">
-                
-                                            <div class="form-outline flex-fill mb-0">
-                                                <label for="imageBack" class="form-label fw-bold">Hình ảnh mặt sau chứng minh nhân dân</label>
-                                                <input class="form-control" type="file" id="imageBack" name="imageBack">
+                                            <div class="d-flex flex-row align-items-center mb-4">
+
+                                                <div class="form-outline flex-fill mb-0">
+                                                    <label for="imageBack" class="form-label fw-bold">Hình ảnh mặt sau chứng minh nhân dân</label>
+                                                    <input class="form-control" type="file" id="imageBack" name="imageBack">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
-                
+                        </div>
+                        <div class="modal-footer">
+
+                            <button type="submit" class="btn btn-primary">Cập nhật</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+
                         </div>
                     </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                      <button type="button" class="btn btn-primary">Save changes</button>
-                    </div>
-                  </div>
                 </div>
-              </div>
+            </div>
         </form>
     </div>
 

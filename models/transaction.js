@@ -15,6 +15,9 @@ const transactionSchema = new Schema({
         type: Number,
         default : 0
     },
+    userFee: {
+        type: Number
+    },
     recepientId: {
         type: String,
         trim : true

@@ -1,11 +1,25 @@
-//REGISTER
 $("input").click(e => {
     $("#alert").hide().css("visibility", "hidden");
 })
 
+// Event change phonecard
 
 
-$('#chooseDefine').change(function() {
+// accept withdraw
+
+
+// Reject 
+
+
+
+// accept transaction
+
+
+
+
+
+//CALL API MANAGER ACCOUNT SELECTION
+$('#chooseDefine').change(function () {
     const status = this.value
 
     console.log(status)
@@ -17,13 +31,13 @@ $('#chooseDefine').change(function() {
         data: {
             status: status
         },
-        success: function(res) {
+        success: function (res) {
             if (res.code === 0) {
                 updateTableAcount(res.listAccount)
             }
 
         },
-        error: function(err) {
+        error: function (err) {
 
             console.log('The following error occured: ' + err);
         }
@@ -31,6 +45,33 @@ $('#chooseDefine').change(function() {
     })
 
 });
+
+//CALL API ACCEPT ACCOUNT
+{
+    $('#acceptActive .btn-primary').click(function (e) {
+        e.preventDefault()
+        let id = $(e.target).data('id')
+        console.log(id)
+
+        $.ajax({
+            // async: false,
+            type: "GET",
+            url: '/admin/account/active/' + id,
+            success: function (res) {
+                if (res.code === 0) {
+                    $('#acceptActivel').modal('hide')
+                    location.reload()
+                }
+            },
+            error: function (err) {
+
+                console.log('The following error occured: ' + err);
+            }
+
+
+        })
+    });
+}
 
 
 const updateTableAcount = (listAccount) => {
@@ -161,76 +202,120 @@ const updateTableAcount = (listAccount) => {
 
     })
 
-    // <%if (e.check <=1 ){%>
-    //     <td class="text-warning">đang chờ kích hoạt</td>
-    //     <td>
-    //         <a href="chitietaccount1.html">Xem chi tiết</a>
-    //         <span>/</span>
-    //         <a href="#">Kích hoạt</a>
-    //     </td>
-    //     <%} else if (e.check == 2) { %>
-    //         <td class="text-success">đã kích hoạt</td>
-    //         <td>
-    //             <a href="chitietaccount2.html">Xem chi tiết</a>
-    //             <span>/</span>
-    //             <a href="#">Kích hoạt</a>
-    //         </td>
-    //         <%} else if (e.check == 3) { %>
-    //             <td class="text-danger">Bị vô hiệu hóa</td>
-    //             <td>
-    //                 <a href="chitietaccount3.html">Xem chi tiết</a>
-    //                 <span>/</span>
-    //                 <a href="#">Kích hoạt</a>
-    //             </td>
-    //             <%} else { %>
-    //                 <td class="text-danger">Bị vô hiệu hóa vĩnh viên</td>
-    //                 <td>
-    //                     <a href="chitietaccount3.html">Xem chi tiết</a>
-    //                     <span>/</span>
-    //                     <a href="#">Kích hoạt</a>
-    //                 </td>
 
 }
 
-// $(".account-detail").click(e => {
-//     const id = e.target.dataset.id
-//     $.ajax({
-//         url: "/admin/account/" + id,
-//         type: "GET",
-//         success: function(res) {
-//             if (res.code === 0) {
-//                 window.location.href = "/admin/account"
-//                 updateAccountDetail(res.account)
-//             }
-//         },
-//         error: function(err) {}
-//     })
-// })
+//CALL API REQUEST ACCOUNT UPDATE ID CARD IMAGE
+{
+    $('#requestIDcard .btn-primary').click(function (e) {
+        e.preventDefault()
+        let id = $(e.target).data('id')
+        console.log(id)
 
-// const updateAccountDetail = (account) => {
-//     console.log(account)
+        $.ajax({
+            // async: false,
+            type: "GET",
+            url: '/admin/account/updateIDCard/' + id,
+            success: function (res) {
+                if (res.code === 0) {
+                    $('#requestIDcard').modal('hide')
+                    location.reload()
+                }
+            },
+            error: function (err) {
 
-// }
+                console.log('The following error occured: ' + err);
+            }
 
-// $(".edit-product").click(e => {
-//     const id = e.target.dataset.id
 
-//     $.ajax({
-//         url: "/customer-care/" + id,
-//         type: "GET",
-//         success: function (res) {
-//             $('#edit-modal').modal('show')
-//             updateEditModal(res.product)
-//         },
-//         error: function (err) {
-//         }
-//     })
-// })
+        })
+    });
+}
+
+//CALL API REJECT ACCOUNT
+{
+    $('#reject .btn-primary').click(function (e) {
+        e.preventDefault()
+        let id = $(e.target).data('id')
+        console.log(id)
+
+        $.ajax({
+            // async: false,
+            type: "GET",
+            url: '/admin/account/reject/' + id,
+            success: function (res) {
+                if (res.code === 0) {
+                    $('#reject').modal('hide')
+                    location.reload()
+                }
+            },
+            error: function (err) {
+
+                console.log('The following error occured: ' + err);
+            }
+
+
+        })
+    });
+}
+
+//CALL API UNLOCK ACCOUNT
+{
+    $('#unlock .btn-primary').click(function (e) {
+        e.preventDefault()
+        let id = $(e.target).data('id')
+        console.log(id)
+
+        $.ajax({
+            // async: false,
+            type: "GET",
+            url: '/admin/account/unlock/' + id,
+            success: function (res) {
+                if (res.code === 0) {
+                    $('#unlock').modal('hide')
+                    location.reload()
+                }
+            },
+            error: function (err) {
+
+                console.log('The following error occured: ' + err);
+            }
+
+
+        })
+    });
+}
+
+//CALL API SEND OTP
+$('#insertOTP').click(function () {
+    const input = $('#phone').val()
+    console.log(input)
+    $("#hrefchangepass").attr("href", "http://www.google.com/")
+    $.ajax({
+        // async: false,
+        type: "GET",
+        dataType: "json",
+        url: '/users/getOTP',
+        data: {
+            phoneNumber: input
+        },
+        success: function (res) {
+
+        },
+        error: function (err) {
+
+            console.log('The following error occured: ' + err);
+        }
+
+    })
+
+});
+
 
 
 // Mỹ Anh
 // menu
-document.addEventListener("DOMContentLoaded", function(event) {
+document.addEventListener("DOMContentLoaded", function (event) {
 
     const showNavbar = (toggleId, navId, bodyId, headerId) => {
         const toggle = document.getElementById(toggleId),
@@ -243,10 +328,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
             toggle.addEventListener('click', () => {
                 // show navbar
                 nav.classList.toggle('show')
-                    // change icon
+                // change icon
                 toggle.classList.toggle('bx-x')
                 bodypd.classList.toggle('body-pd')
-                    // add padding to header
+                // add padding to header
                 headerpd.classList.toggle('body-pd')
             })
         }
@@ -269,7 +354,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 });
 // end menu
 
-(function($) {
+(function ($) {
     "use strict";
 
     /*----------------------------
@@ -278,35 +363,35 @@ document.addEventListener("DOMContentLoaded", function(event) {
     /*----------------------------
      jQuery myTab
     ------------------------------ */
-    $('#myTab a').on('click', function(e) {
+    $('#myTab a').on('click', function (e) {
         e.preventDefault()
         $(this).tab('show')
     });
-    $('#myTab3 a').on('click', function(e) {
+    $('#myTab3 a').on('click', function (e) {
         e.preventDefault()
         $(this).tab('show')
     });
-    $('#myTab4 a').on('click', function(e) {
+    $('#myTab4 a').on('click', function (e) {
         e.preventDefault()
         $(this).tab('show')
     });
-    $('#myTabedu1 a').on('click', function(e) {
+    $('#myTabedu1 a').on('click', function (e) {
         e.preventDefault()
         $(this).tab('show')
     });
 
-    $('#single-product-tab a').on('click', function(e) {
+    $('#single-product-tab a').on('click', function (e) {
         e.preventDefault()
         $(this).tab('show')
     });
 
     $('[data-toggle="tooltip"]').tooltip();
 
-    $('#sidebarCollapse').on('click', function() {
+    $('#sidebarCollapse').on('click', function () {
         $('#sidebar').toggleClass('active');
     });
     // Collapse ibox function
-    $('#sidebar ul li').on('click', function() {
+    $('#sidebar ul li').on('click', function () {
         var button = $(this).find('i.fa.indicator-mn');
         button.toggleClass('fa-plus').toggleClass('fa-minus');
 
@@ -314,11 +399,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
     /*-----------------------------
         Menu Stick
     ---------------------------------*/
-    $('#sidebarCollapse').on('click', function() {
+    $('#sidebarCollapse').on('click', function () {
         $("body").toggleClass("mini-navbar");
         SmoothlyMenu();
     });
-    $(document).on('click', '.header-right-menu .dropdown-menu', function(e) {
+    $(document).on('click', '.header-right-menu .dropdown-menu', function (e) {
         e.stopPropagation();
     });
     /*----------------------------
@@ -350,7 +435,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         min: 40,
         max: 600,
         values: [60, 570],
-        slide: function(event, ui) {
+        slide: function (event, ui) {
             $("#amount").val("£" + ui.values[0] + " - £" + ui.values[1]);
         }
     });
@@ -369,9 +454,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
 })(jQuery);
 
 // Avoid `console` errors in browsers that lack a console.
-(function() {
+(function () {
     var method;
-    var noop = function() {};
+    var noop = function () { };
     var methods = [
         'assert', 'clear', 'count', 'debug', 'dir', 'dirxml', 'error',
         'exception', 'group', 'groupCollapsed', 'groupEnd', 'info', 'log',
@@ -393,7 +478,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 // Place any jQuery/helper plugins in here.
 
-(function($) {
+(function ($) {
     "use strict";
 
     var card = new Card({
@@ -410,7 +495,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     var amex = $("#amex");
     cardNumber.payform('formatCardNumber');
     CVV.payform('formatCardCVC');
-    cardNumber.keyup(function() {
+    cardNumber.keyup(function () {
         amex.removeClass('transparent');
         visa.removeClass('transparent');
         mastercard.removeClass('transparent');
@@ -431,7 +516,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             visa.addClass('transparent');
         }
     });
-    confirmButton.on('click', function(e) {
+    confirmButton.on('click', function (e) {
         e.preventDefault();
         var isCardValid = $.payform.validateCardNumber(cardNumber.val());
         var isCvvValid = $.payform.validateCardCVC(CVV.val());
@@ -439,17 +524,17 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 })(jQuery);
 
-var Tabs = function($) {
+var Tabs = function ($) {
     return {
 
-        init: function() {
+        init: function () {
             this.cacheDom();
             this.setupAria();
             this.appendIndicator();
             this.bindEvents();
         },
 
-        cacheDom: function() {
+        cacheDom: function () {
             this.$el = $('.tabs');
             this.$tabList = this.$el.find('ul');
             this.$tab = this.$tabList.find('li');
@@ -461,17 +546,17 @@ var Tabs = function($) {
             this.$tabPanelNotFirst = this.$el.find('section:not(:first-of-type)');
         },
 
-        bindEvents: function() {
-            this.$tabLink.on('click', function() {
+        bindEvents: function () {
+            this.$tabLink.on('click', function () {
                 this.changeTab();
                 this.animateIndicator($(event.currentTarget));
             }.bind(this));
-            this.$tabLink.on('keydown', function() {
+            this.$tabLink.on('keydown', function () {
                 this.changeTabKey();
             }.bind(this));
         },
 
-        changeTab: function() {
+        changeTab: function () {
             var self = $(event.target);
             event.preventDefault();
             this.removeTabFocus();
@@ -480,7 +565,7 @@ var Tabs = function($) {
             this.setSelectedTabPanel(self);
         },
 
-        animateIndicator: function(elem) {
+        animateIndicator: function (elem) {
             var offset = elem.offset().left;
             var width = elem.width();
             var $indicator = this.$tabList.find('.indicator');
@@ -493,11 +578,11 @@ var Tabs = function($) {
             })
         },
 
-        appendIndicator: function() {
+        appendIndicator: function () {
             this.$tabList.append('<div class="indicator"></div>');
         },
 
-        changeTabKey: function() {
+        changeTabKey: function () {
             var self = $(event.target),
                 $target = this.setKeyboardDirection(self, event.keyCode);
 
@@ -510,11 +595,11 @@ var Tabs = function($) {
             this.animateIndicator($target);
         },
 
-        hideAllTabPanels: function() {
+        hideAllTabPanels: function () {
             this.$tabPanel.attr('aria-hidden', 'true');
         },
 
-        removeTabFocus: function(self) {
+        removeTabFocus: function (self) {
             var $this = self || $('[role="tab"]');
 
             $this.attr({
@@ -523,21 +608,21 @@ var Tabs = function($) {
             });
         },
 
-        selectFirstTab: function() {
+        selectFirstTab: function () {
             this.$tabFirst.attr({
                 'aria-selected': 'true',
                 'tabindex': '0'
             });
         },
 
-        setupAria: function() {
+        setupAria: function () {
             this.$tabList.attr('role', 'tablist');
             this.$tab.attr('role', 'presentation');
             this.$tabLink.attr({
                 'role': 'tab',
                 'tabindex': '-1'
             });
-            this.$tabLink.each(function() {
+            this.$tabLink.each(function () {
                 var $this = $(this);
 
                 $this.attr('aria-controls', $this.attr('href').substring(1));
@@ -554,7 +639,7 @@ var Tabs = function($) {
             this.selectFirstTab();
         },
 
-        setKeyboardDirection: function(self, keycode) {
+        setKeyboardDirection: function (self, keycode) {
             var $prev = self.parents('li').prev().children('[role="tab"]'),
                 $next = self.parents('li').next().children('[role="tab"]');
 
@@ -571,14 +656,14 @@ var Tabs = function($) {
             }
         },
 
-        setSelectedTab: function(self) {
+        setSelectedTab: function (self) {
             self.attr({
                 'aria-selected': true,
                 'tabindex': '0'
             }).focus();
         },
 
-        setSelectedTabPanel: function(self) {
+        setSelectedTabPanel: function (self) {
             $('#' + self.attr('href').substring(1)).attr('aria-hidden', null);
         },
 
@@ -608,7 +693,7 @@ function openCity(cityName) {
 
 //--------------
 // Trang navbar
-document.addEventListener("DOMContentLoaded", function(event) {
+document.addEventListener("DOMContentLoaded", function (event) {
 
     const showNavbar = (toggleId, navId, bodyId, headerId) => {
         const toggle = document.getElementById(toggleId),
@@ -621,10 +706,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
             toggle.addEventListener('click', () => {
                 // show navbar
                 nav.classList.toggle('show')
-                    // change icon
+                // change icon
                 toggle.classList.toggle('bx-x')
                 bodypd.classList.toggle('body-pd')
-                    // add padding to header
+                // add padding to header
                 headerpd.classList.toggle('body-pd')
             })
         }
@@ -647,8 +732,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
 });
 
 // Home page
-$(document).ready(function() {
-    $(".wish-icon i").click(function() {
+$(document).ready(function () {
+    $(".wish-icon i").click(function () {
         $(this).toggleClass("fa-heart fa-heart-o");
     });
 });
@@ -657,7 +742,7 @@ $(document).ready(function() {
 
 //Upload file của cmnd
 // Add the following code if you want the name of the file appear on select
-$(".custom-file-input").on("change", function() {
+$(".custom-file-input").on("change", function () {
     var fileName = $(this).val().split("\\").pop();
     $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
 });

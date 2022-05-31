@@ -70,33 +70,22 @@
                                     </td>
                                     <%if (e.check <=1 ){%>
                                         <td class="text-warning">đang chờ kích hoạt</td>
-                                        <td>
-                                            <a href="/admin/account/<%= e._id %>">Xem chi tiết</a>
-                                            <span>/</span>
-                                            <a href="#">Kích hoạt</a>
-                                        </td>
+
                                         <%} else if (e.check == 2) { %>
                                             <td class="text-success">đã kích hoạt</td>
-                                            <td>
-                                                <a href="/admin/account/<%= e._id %>">Xem chi tiết</a>
-                                                <span>/</span>
-                                                <a href="#">Kích hoạt</a>
-                                            </td>
+
                                             <%} else if (e.check == 3) { %>
                                                 <td class="text-danger">Bị vô hiệu hóa</td>
-                                                <td>
-                                                    <a href="/admin/account/<%= e._id %>">Xem chi tiết</a>
-                                                    <span>/</span>
-                                                    <a href="#">Kích hoạt</a>
-                                                </td>
+
                                                 <%} else { %>
                                                     <td class="text-danger">Bị vô hiệu hóa vĩnh viên</td>
-                                                    <td>
-                                                        <a href="/admin/account/<%= e._id %>">Xem chi tiết</a>
-                                                        <span>/</span>
-                                                        <a href="#">Kích hoạt</a>
-                                                    </td>
+
                                                     <%}%>
+                                                        <td>
+                                                            <a href="/admin/account/<%= e._id %>">Xem chi tiết</a>
+
+
+                                                        </td>
                                 </tr>
                                 <%})%>
                         </tbody>

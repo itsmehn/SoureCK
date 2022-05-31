@@ -17,7 +17,7 @@ Router.post('/register',
     userController.postRegister)
 
 Router.get('/login', userController.getLogin)
-Router.get('/homepage',check, checkFirstLogin, userController.getHomePageLogin)
+Router.get('/homepage', check, checkFirstLogin, userController.getHomePageLogin)
 Router.post('/login', userController.postLogin)
 Router.get('/first-change-pass', check, userController.getFirstChangePass)
 Router.post('/first-change-pass', check, userController.postFirstChangePass)
@@ -26,6 +26,10 @@ Router.get("/changepassword", check, checkFirstLogin, userController.getChangePa
 Router.post("/changepassword", check, userController.postChangePass)
 Router.get("/createwallet/:id", userController.getCreatWallet)
 Router.post('/profile', check, upload.fields([{ name: 'imageFront', maxCount: 1 }, { name: 'imageBack', maxCount: 1 }]), userController.postProfile)
-Router.get('/forgetpassword', userController.getForgetPassword)
+Router.get('/forgetpassword', userController.getOTP)
+Router.get('/getOTP', userController.getForgetPassword)
+Router.post('/forgetpassword', userController.postOTP)
+Router.get('/changenewpass/:phoneNumber', userController.getchangenewpass)
+Router.post('/changenewpass/:phoneNumber', userController.postchangenewpass)
 
 module.exports = Router

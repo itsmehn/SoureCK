@@ -83,6 +83,7 @@ exports.getWithdraw = async (req, res) => {
 // post withdraw
 exports.postWithdraw = async (req, res) => {
     let codeTrans = uuidv1()
+    let userFee = 0
     let account = req.session.account
     let id = new Object(account._id)
     let { amount, soThe, deadline, cvvCode, description } = req.body;
@@ -98,6 +99,7 @@ exports.postWithdraw = async (req, res) => {
                 userId: id,
                 amount: parseInt(amount),
                 fee: fee,
+                userFee: userFee,
                 recepientId: "",
                 status: "",
                 description: description,
@@ -157,6 +159,7 @@ exports.postTransfer = async (req, res) => {
     if (result.errors.length !== 0) {
         return res.render('transfer', { numReceiver, desc, amount, checkFee, message: result.errors[0].msg, success: '' })
     } else {
+        let userFee = 0;
         fee = parseInt(amount)*0.05
         infoSender = await user.findOne({ _id: idSender })
         walletSender = await wallet.findOne({ userId: idSender })
@@ -169,17 +172,14 @@ exports.postTransfer = async (req, res) => {
                 return res.render('transfer', { numReceiver, desc, amount, checkFee, message: 'Tiền của bạn không đủ', success: '' })
             }
             else if (amount >= 5000000) {
-                let sumAmount
                 if (checkFee) {
-                    walletSender.balance = parseInt(walletSender.balance) - amount
-                } else {
-                    sumAmount = amount * 1.05
-                    walletSender.balance = parseInt(walletSender.balance) - sumAmount
+                    userFee = 1
                 }
                 let transfer = new transaction({
                     userId: idSender,
                     amount: amount,
                     fee:fee,
+                    userFee: userFee,
                     recepientId: infoReceiver._id,
                     status: "đang chờ",
                     description: desc,
@@ -198,6 +198,7 @@ exports.postTransfer = async (req, res) => {
             } else {
                 let sumAmount
                 if (checkFee) {
+                    userFee = 1;
                     walletSender.balance = parseInt(walletSender.balance) - parseInt(amount)
                     walletReceiver.balance = parseInt(walletReceiver.balance) + parseInt(amount)*0.95
                 } else {
@@ -211,6 +212,7 @@ exports.postTransfer = async (req, res) => {
                     userId: idSender,
                     amount: amount,
                     fee : fee,
+                    userFee:userFee,
                     recepientId: infoReceiver._id,
                     status: "Thành công",
                     description: desc,

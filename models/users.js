@@ -34,7 +34,8 @@ const UserSchema = new Schema({
     createAt: { type: Date, default: Date.now() },
     updateAt: Date,
     constLoginFail: Number,
-    loginFailAt: Date
+    loginFailAt: Date,
+    checkIDCard: { type: Number, default: 0 }
 });
 
 module.exports = mongoose.model("users", UserSchema);
