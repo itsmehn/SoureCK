@@ -122,13 +122,14 @@ const getLogin = (req, res) => {
     res.render('login', { username: '', password: '', message: '' })
 }
 
-const postLogin = (req, res) => {
+const postLogin = async(req, res) => {
     let result = validationResult(req)
     let { username, password } = req.body
     if (result.errors.length === 0) {
         loginFail.findOne({ username: username })
             .then(acc => {
                 if (acc) {
+
                     return res.render('login', { message: 'Tài khoản hiện đang bị tạm khóa, vui lòng thử lại sau 1 phút' })
                 }
             })
@@ -136,67 +137,59 @@ const postLogin = (req, res) => {
                 dataUser.findOne({ username: username })
                     .then(acc => {
                         if (!acc) {
-                            return res.render('login', { message: 'Tài khoản không tồn tại' })
+                            throw new Error('Tài khoản không tồn tại')
                         } else {
 
                             account = acc
-                            m = 0
+
                             if (acc.check == 4) {
-                                //Lần đầu tiên đăng nhập
+
                                 return res.render('login', { message: 'Tài khoản này đã bị vô hiệu hóa, vui lòng liên hệ tổng đài 18001008' })
                             } else if (acc.password === password) {
-                                m = 1
-                            }
-                        }
-                        if (m == 1) {
-                            req.session.account = account
-                            res.locals.account = account
-                            dataUser.findByIdAndUpdate(req.session.account._id, { countLogin: 0, checkLoginFail: 0 }, {
-                                new: true
-                            })
-                            if (account.check == 0) {
-                                //Lần đầu tiên đăng nhập
-                                return res.redirect('/users/first-change-pass')
+                                req.session.account = account
+                                res.locals.account = account
+                                dataUser.findByIdAndUpdate(req.session.account._id, { countLogin: 0, checkLoginFail: 0 }, {
+                                    new: true
+                                })
+                                if (account.check == 0) {
+                                    //Lần đầu tiên đăng nhập
+                                    return res.redirect('/users/first-change-pass')
+                                } else {
+                                    return res.redirect('/users/homepage')
+                                }
                             } else {
-                                return res.redirect('/users/homepage')
-                            }
+                                console.log(account.countLogin)
+                                if (account.countLogin < 2) {
 
-                        } else {
-                            if (account.countLogin < 2) {
+                                    dataUser.findByIdAndUpdate(account._id, { countLogin: account.countLogin + 1, loginFailAt: Date.now() }, {
+                                            new: true
+                                        })
+                                        .then(acc => {
+                                            return res.render('login', { message: 'Sai thông tin đăng nhập' })
+                                        })
 
-                                dataUser.findByIdAndUpdate(account._id, { countLogin: account.countLogin + 1, loginFailAt: Date.now() }, {
+                                } else {
+                                    dataUser.findByIdAndUpdate(account._id, { countLogin: account.countLogin - 2 }, {
                                         new: true
                                     })
-                                    .then(acc => {
-                                        return res.render('login', { message: 'Sai thông tin đăng nhập' })
-                                    })
-
-                            } else {
-                                if (account.checkLoginFail < 1) {
                                     let loginfail = new loginFail({
                                         username: account.username
                                     })
                                     loginfail.save().then(() => {
-                                        dataUser.findByIdAndUpdate(account._id, { checkLoginFail: account.checkLoginFail + 1, countLogin: 0 }, {
-                                            new: true
-                                        }).then(() => {
-                                            return res.render('login', { message: 'Sai thông tin đăng nhập' })
-                                        })
+
+                                        return res.render('login', { message: 'Sai thông tin đăng nhập' })
+
 
                                     })
                                 }
-
-
                             }
-
                         }
                     })
-                    .catch(e => {
-                        console.log(e)
-                    })
+
+                .catch(e => {
+                    console.log(e)
+                })
             })
-
-
     } else {
         let messages = result.mapped()
         let message = ''
