@@ -91,7 +91,7 @@ const updateTableAcount = (listAccount) => {
                     <td>
                         <a href="/admin/chitietaccount1">Xem chi tiết</a>
                         <span>/</span>
-                        <a href="#">Kích hoạt</a>
+                      
                     </td>
                 
        </tr>
@@ -119,7 +119,7 @@ const updateTableAcount = (listAccount) => {
                         <td>
                             <a href="/admin/chitietaccount2.html">Xem chi tiết</a>
                             <span>/</span>
-                            <a href="#">Kích hoạt</a>
+                 
                         </td>
                     
        </tr>
@@ -147,7 +147,7 @@ const updateTableAcount = (listAccount) => {
                 <td>
                 <a href="/admin/chitietaccount3.html">Xem chi tiết</a>
                  <span>/</span>
-                 <a href="#">Kích hoạt</a>
+             
                  </td>
        </tr>
         
@@ -174,7 +174,7 @@ const updateTableAcount = (listAccount) => {
                  <td>
                    <a href="/admin/chitietaccount3.html">Xem chi tiết</a>
                <span>/</span>
-                <a href="#">Kích hoạt</a>
+          
                   </td>
        </tr>
         
@@ -274,7 +274,7 @@ const updateTableAcount = (listAccount) => {
 $('#insertOTP').click(function() {
     const input = $('#phone').val()
     console.log(input)
-    $("#hrefchangepass").attr("href", "http://www.google.com/")
+
     $.ajax({
         // async: false,
         type: "GET",
