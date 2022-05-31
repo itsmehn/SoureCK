@@ -160,33 +160,35 @@
                                     </p>
                                     <table class="table table-bordered">
                                         <tr>
-                                            <th>STT</th>
+                                            <th>Icon</th>
                                             <th>Loại giao dịch</th>
                                             <th>Số tiền</th>
                                             <th>Thời gian thực hiện</th>
                                             <th>Trạng thái</th>
 
                                         </tr>
-                                        <% userTrans.forEach((u,index) => { %>
-                                            <tr>
-                                                <td><%= index += 1 %></td>
-                                                <td>
-                                                    <% if(u.action == 'CT') { %>
-                                                        Chuyển tiền
-                                                    <% } else if(u.action == 'RT') { %>
-                                                        Rút tiền
-                                                    <% } else if(u.action == 'NT') { %> 
-                                                        Nạp tiền
-                                                    <% } else if(u.action == 'BC') {%>
-                                                        Mua thẻ
-                                                    <% } %>  
-                                                </td>
-                                                <td><%= u.amount.toLocaleString()%></td>
-                                                <td><%= u.timeStamps %></td>                                
-                                                <td><%= u.status %></td>
-                                            </tr>
-                                            
-                                        <% }) %> 
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Thẻ điện thoại</td>
+                                            <td>2.000.000 đ</td>
+                                            <td>10:13 - 11/05/2022</td>
+                                            <td>thành công</td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>Chuyển khoản</td>
+                                            <td>1.500.000 đ</td>
+                                            <td>10:13 - 12/05/2022</td>
+                                            <td>thành công</td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>Nạp tiền</td>
+                                            <td>1.500.000 đ</td>
+                                            <td>10:13 - 12/05/2022</td>
+                                            <td>thành công</td>
+                                        </tr>
                                     </table>
                                 </div>
                             </div>

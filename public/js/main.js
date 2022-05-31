@@ -45,7 +45,7 @@ $('#chooseDefine').change(function() {
             url: '/admin/account/active/' + id,
             success: function(res) {
                 if (res.code === 0) {
-                    $('#acceptActivel').modal('hide')
+                    $('#acceptActive').hide().css("visibility", "hidden");
                     location.reload()
                 }
             },
@@ -204,7 +204,7 @@ const updateTableAcount = (listAccount) => {
             url: '/admin/account/updateIDCard/' + id,
             success: function(res) {
                 if (res.code === 0) {
-                    $('#requestIDcard').modal('hide')
+                    $('#requestIDcard').hide().css("visibility", "hidden");
                     location.reload()
                 }
             },
@@ -258,7 +258,7 @@ const updateTableAcount = (listAccount) => {
             url: '/admin/account/unlock/' + id,
             success: function(res) {
                 if (res.code === 0) {
-                    $('#unlock').modal('hide')
+                    $('#unlock').hide().css("visibility", "hidden");
                     location.reload()
                 }
             },
