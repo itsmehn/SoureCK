@@ -108,7 +108,7 @@ exports.postWithdraw = async (req, res) => {
                 if (userWallett.countWithdraw > 0) {
                     userWallett.countWithdraw = userWallett.countWithdraw - 1
                     userWallett.balance = userWallett.balance - parseInt(amount) - fee;
-                    trans.status = "Chờ xác nhận"
+                    trans.status = "đang chờ"
                     userWallett.save().then(() => {
                         trans.save().then(() => {
                             return res.render('withdraw-money', { amount: '', soThe: '', deadline: '', cvvCode: '', description: '', message: '', success: 'Đang chờ xác nhận' })
@@ -181,7 +181,7 @@ exports.postTransfer = async (req, res) => {
                     amount: amount,
                     fee:fee,
                     recepientId: infoReceiver._id,
-                    status: "Chờ xác nhận",
+                    status: "đang chờ",
                     description: desc,
                     action: 'CT',
                     codeTrans:codeTrans
@@ -324,7 +324,7 @@ exports.getBuyCardDetail = async (req, res) => {
 
 exports.getTransaction = async (req, res) => {
     res.locals.account = req.session.account
-    account = req.session.account
+    let account = req.session.account
     userTrans = await transaction.find({
         $or: [
             {

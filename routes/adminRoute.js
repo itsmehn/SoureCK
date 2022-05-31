@@ -10,4 +10,8 @@ Router.get('/manageraccount', isAdmin, adminController.getManagerAccount)
     // Router.get('/account', adminController.getAccount)
 Router.get('/account/:id', isAdmin, adminController.getAccount)
 
+Router.get('/approvals',isAdmin,adminController.adGetTransaction)
+Router.get('/detail-transfer/:id',isAdmin,adminController.getDetailTransfer)
+Router.get('/accept/:id',isAdmin,adminController.getAccept)
+Router.get('/reject/:id',isAdmin,adminController.getReject)
 module.exports = Router

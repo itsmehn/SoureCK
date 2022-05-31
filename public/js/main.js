@@ -4,6 +4,7 @@ $("input").click(e => {
 })
 
 
+
 $('#chooseDefine').change(function() {
     const status = this.value
 

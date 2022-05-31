@@ -1,8 +1,9 @@
 const dataUser = require('../models/users')
 const mongoose = require('mongoose')
 const { response } = require('express')
-
-
+const transaction = require('../models/transaction')
+const user = require('../models/users')
+const wallet = require('../models/wallet')
 const getManagerAccount = async(req, res) => {
     res.locals.account = req.session.account
     let selectOption = req.query.status
@@ -173,6 +174,57 @@ const rejectAccount = async(req, res) => {
 }
 
 //
+const adGetTransaction = async(req,res) => {
+    res.locals.account = req.session.account
+    let account = req.session.account
+    let userTrans = await transaction.find({
+        $and: [
+            {
+                amount:{$gte : 5000000}
+            },
+            {
+                $or:[{
+                    action:'CT'
+                },{
+                    action:'RT'
+                }]
+            }
+        ]
+    }).sort({timeStamps: -1})
+    res.render('transaction-approvals',{userTrans})
+}
+const getDetailTransfer = async (req,res) => {
+    res.locals.account = req.session.account
+    let id = req.params.id
+    let transfer = await transaction.findOne({codeTrans:id})
+    let recepientId = transfer.recepientId
+    let userReceiver = await user.findOne({_id : Object(recepientId)})
+    return res.render('transfer-approval-detail',{transfer,userReceiver})
+}
+const getDetailWithdraw = async (req,res) => {
+    res.locals.account = req.session.account
+    let id = req.params.id
+    let withdraw = await transaction.findOne({codeTrans:id})
+    return res.render('withdraw-approval-detail',{withdraw})
+}
+const getAccept = async(req,res) => {
+    let id = req.params.id
+    let approvalsUserTrans = await transaction.findOne({codeTrans:id})
+    let recepientWallet =  await wallet.findOne({userId: Object(approvalsUserTrans.recepientId)})
+    return res.json({
+        id:id,
+        message : 'Test api',
+        approvalsUserTrans,
+        recepientWallet
+    })
+}
+const getReject = async(req,res) => {
+    let id = req.params.id
+    return res.json({
+        id:id,
+        message : 'Test api'
+    })
+}
 
 module.exports = {
     getManagerAccount,
@@ -180,5 +232,10 @@ module.exports = {
     getAccount,
     accountDetail,
     activeAccount,
-    rejectAccount
+    rejectAccount,
+    adGetTransaction,
+    getDetailTransfer,
+    getDetailWithdraw,
+    getAccept,
+    getReject
 }
