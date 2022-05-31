@@ -9,15 +9,17 @@ const randomUsername = require('random-mobile');
 const transporter = require("../middlewares/sendMail")
 const takeID = require('../middlewares/takeID')
 const registerValidator = require('../middlewares/registerValidator')
-const messagebird = require('messagebird')('HN8BlvmUiIXIxCsbCi5PsWazC');
-
-
+const messagebird = require('messagebird')('sZsABWoTXmtk2HNjnbLcohPeO');
+const dataOTP = require('../models/otp')
+const loginFail = require('../models/loginFail')
 
 const dataUser = require('../models/users')
 const { Router } = require('express')
 const { match } = require('assert')
 const session = require('express-session')
 const wallet = require('../models/wallet')
+const { nextTick } = require('process')
+const otp = require('../models/otp')
 
 
 
@@ -124,39 +126,76 @@ const postLogin = (req, res) => {
     let result = validationResult(req)
     let { username, password } = req.body
     if (result.errors.length === 0) {
-        dataUser.findOne({ username: username })
+        loginFail.findOne({ username: username })
             .then(acc => {
-                if (!acc) {
-                    return res.render('login', { message: 'Tài khoản không tồn tại' })
-                } else {
-
-                    account = acc
-                    m = 0
-                    if (acc.check == 4) {
-                        //Lần đầu tiên đăng nhập
-                        return res.render('login', { message: 'Tài khoản này đã bị vô hiệu hóa, vui lòng liên hệ tổng đài 18001008' })
-                    } else if (acc.password === password) {
-                        m = 1
-                    }
-                }
-                if (m == 1) {
-                    req.session.account = account
-                    res.locals.account = account
-
-                    if (account.check == 0) {
-                        //Lần đầu tiên đăng nhập
-                        return res.redirect('/users/first-change-pass')
-                    } else {
-                        return res.redirect('/users/homepage')
-                    }
-
-                } else {
-                    return res.render('login', { message: 'Sai thông tin đăng nhập' })
+                if (acc) {
+                    return res.render('login', { message: 'Tài khoản hiện đang bị tạm khóa, vui lòng thử lại sau 1 phút' })
                 }
             })
-            .catch(e => {
-                console.log(e)
+            .then(() => {
+                dataUser.findOne({ username: username })
+                    .then(acc => {
+                        if (!acc) {
+                            return res.render('login', { message: 'Tài khoản không tồn tại' })
+                        } else {
+
+                            account = acc
+                            m = 0
+                            if (acc.check == 4) {
+                                //Lần đầu tiên đăng nhập
+                                return res.render('login', { message: 'Tài khoản này đã bị vô hiệu hóa, vui lòng liên hệ tổng đài 18001008' })
+                            } else if (acc.password === password) {
+                                m = 1
+                            }
+                        }
+                        if (m == 1) {
+                            req.session.account = account
+                            res.locals.account = account
+                            dataUser.findByIdAndUpdate(req.session.account._id, { countLogin: 0, checkLoginFail: 0 }, {
+                                new: true
+                            })
+                            if (account.check == 0) {
+                                //Lần đầu tiên đăng nhập
+                                return res.redirect('/users/first-change-pass')
+                            } else {
+                                return res.redirect('/users/homepage')
+                            }
+
+                        } else {
+                            if (account.countLogin < 2) {
+
+                                dataUser.findByIdAndUpdate(account._id, { countLogin: account.countLogin + 1, loginFailAt: Date.now() }, {
+                                        new: true
+                                    })
+                                    .then(acc => {
+                                        return res.render('login', { message: 'Sai thông tin đăng nhập' })
+                                    })
+
+                            } else {
+                                if (account.checkLoginFail < 1) {
+                                    let loginfail = new loginFail({
+                                        username: account.username
+                                    })
+                                    loginfail.save().then(() => {
+                                        dataUser.findByIdAndUpdate(account._id, { checkLoginFail: account.checkLoginFail + 1, countLogin: 0 }, {
+                                            new: true
+                                        }).then(() => {
+                                            return res.render('login', { message: 'Sai thông tin đăng nhập' })
+                                        })
+
+                                    })
+                                }
+
+
+                            }
+
+                        }
+                    })
+                    .catch(e => {
+                        console.log(e)
+                    })
             })
+
 
     } else {
         let messages = result.mapped()
@@ -169,6 +208,7 @@ const postLogin = (req, res) => {
         return res.render('login', { message: message.msg })
     }
 }
+
 
 const getHomePage = async(req, res) => {
     if (req.session.account) {
@@ -245,7 +285,7 @@ const postChangePass = (req, res) => {
 
         return res.render('change-password', { message: 'Mật khẩu mới không khớp' })
     } else {
-        dataUser.findByIdAndUpdate(req.session.account._id)
+        dataUser.findByIdAndUpdate(req.session.account._id, { password: password })
             .then(newpass => {
                 return res.redirect('/users/profile')
             })
@@ -294,6 +334,8 @@ const postProfile = async(req, res) => {
 
 }
 
+
+
 //API FORGET PASSWORD
 const getForgetPassword = (req, res) => {
     let phoneNumber = req.query.phoneNumber
@@ -310,7 +352,11 @@ const getForgetPassword = (req, res) => {
                 ],
                 'body': 'Your OTP ' + otp
             };
-            dataUser.findOneAndUpdate(phoneNumber, { otp: otp })
+            let otps = new dataOTP({
+                phoneNumber: account.phoneNumber,
+                otp: otp
+            })
+            otps.save()
             messagebird.messages.create(params, function(err, response) {
                 if (err) {
                     return console.log(err);
@@ -320,16 +366,20 @@ const getForgetPassword = (req, res) => {
         })
 }
 
+
 const postOTP = (req, res) => {
     let { phoneNumber, otp } = req.body
-    dataUser.findOne({ phoneNumber: phoneNumber })
+    dataOTP.findOne({ phoneNumber: phoneNumber })
         .then(account => {
-            if (account.otp = otp) {
+
+            if (account.otp == otp) {
                 console.log("DONE")
                 return res.redirect(`/users/changenewpass/${phoneNumber}`)
             } else {
                 return res.render('forget-password', { message: 'Nhập sai mã OTP' })
             }
+        }).catch(e => {
+            return res.render('forget-password', { message: 'Nhập sai mã OTP' })
         })
 }
 
@@ -356,8 +406,9 @@ const postchangenewpass = (req, res) => {
 }
 
 const getOTP = (req, res) => {
-    res.render('forget-password', { message: '' })
-}
+        res.render('forget-password', { message: '' })
+    }
+    //END API FORGET PASSWORD
 
 module.exports = {
     getProfile,
