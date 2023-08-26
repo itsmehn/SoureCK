@@ -1,0 +1,152 @@
+<%- include("./layouts/header.ejs") %> 
+
+    <section style="background-color: #eee;">
+        <div class="container py-5 mt-5">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="card mb-4">
+                        <div class="card-body text-center">
+                            <img src="https://images.cults3d.com/8OWKFqd-Qk3M1E2ImZp_O2Y6x4I=/516x516/https://files.cults3d.com/uploaders/22153232/illustration-file/56a6b33b-5fb5-4ba9-8408-2ab5c826e4db/st%2Csmall%2C507x507-pad%2C600x600%2Cf8f8f8.jpg" alt="avatar" class="rounded-circle img-fluid"
+                                style="width: 150px;">
+                            <h5 class="my-3">Đăng Khoa</h5>
+                            <p class="text-primary font-weight-bold text-warning mb-4">1.000.000 VNĐ</p>
+                           
+                            <div class="d-flex justify-content-center mb-2">
+                                <p class="text-primary font-weight-bold text-success mb-4 mt-4">Đã xác minh</p>
+                            </div>
+                            <div class="d-flex justify-content-center mb-2">
+                                <!--<button type="button" class="btn btn-outline-primary mr-2">Yêu cầu xác minh tài khoản</button>-->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card mb-4 mb-lg-0">
+                        <div class="card-body p-0">
+                            <ul class="list-group list-group-flush rounded-3">
+                                <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                                    <p class="mb-0">Tên người dùng</p>
+                                    <p class="mb-0">DangKhoaPika</p>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                                    <p class="mb-0" id="show_hide_password">Mật khẩu</p>
+                                    <p class="mb-0">******</p>
+                                </li>                                
+                                <li class="list-group-item d-flex justify-content-between align-items-center p-3 m-auto">
+                                   
+                                    <a href="./change-password.html">
+                                        <button type="submit" class="btn btn-secondary btn-md float-right">Đổi mật khẩu</button>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Họ và tên</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">Lê Trần Đăng Khoa</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Email</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">example@example.com</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Số điện thoại</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">(097) 234-5678</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Ngày sinh</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">9/19/2001</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Địa chỉ</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">Bay Area, San Francisco, CA</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Ảnh CMND/CCCD</p>
+                                </div>
+                                <div class="col-sm-7">
+                                    <p class="text-muted mb-0">ex.img/pdf</p>
+                                </div>
+                                <div class="col-sm-2">
+                                    <button type="submit" class="btn btn-danger btn-md float-right"> <a href="thaydoicmnd.html">Sửa</a></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card mb-4 mb-md-0">
+                                <div class="card-body">
+                                    <p class="mb-4"><span>Lịch sử giao dịch</span>
+                                    </p>
+                                    <table  class="table table-bordered">
+                                        <tr>
+                                            <th>Icon</th>
+                                            <th>Loại giao dịch</th>
+                                            <th>Số tiền</th>
+                                            <th>Thời gian thực hiện</th>
+                                            <th>Trạng thái</th>  
+                                                                                                                  
+                                        </tr>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Thẻ điện thoại</td>
+                                            <td>2.000.000 đ</td>
+                                            <td>10:13 - 11/05/2022</td>                                
+                                            <td>thành công</td>   
+                                            
+                                        </tr>                                
+                                        <tr>
+                                            <td>2</td>                                
+                                            <td>Chuyển khoản</td>
+                                            <td>1.500.000 đ</td> 
+                                            <td>10:13 - 12/05/2022</td>
+                                            <td>thành công</td>                                                          
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>                                
+                                            <td>Nạp tiền</td>
+                                            <td>1.500.000 đ</td> 
+                                            <td>10:13 - 12/05/2022</td>
+                                            <td>thành công</td>                                                                                                                                                          
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--/container-->
+   
+    <%- include("./layouts/footer.ejs") %> 

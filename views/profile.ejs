@@ -1,0 +1,267 @@
+<%- include("./layouts/header.ejs") %>
+    <section style="background-color: #eee;">
+        <div class="container py-5 mt-5">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="card mb-4">
+                        <div class="card-body text-center">
+                            <img src="https://images.cults3d.com/8OWKFqd-Qk3M1E2ImZp_O2Y6x4I=/516x516/https://files.cults3d.com/uploaders/22153232/illustration-file/56a6b33b-5fb5-4ba9-8408-2ab5c826e4db/st%2Csmall%2C507x507-pad%2C600x600%2Cf8f8f8.jpg" alt="avatar" class="rounded-circle img-fluid"
+                                style="width: 150px;">
+                            <h5 class="my-3">
+                                <%=acc.fullName%>
+                            </h5>
+                            <p class="text-primary font-weight-bold text-warning mb<-4">
+                                <%= userWallet.balance.toLocaleString() %> VNĐ</p>
+                            <div class="d-flex justify-content-center mb-2">
+                                <a href="/wallet/recharge">
+                                    <button type="submit" class="btn btn-outline-primary mr-2">Nạp tiền</button>
+                                </a>
+                                <a href="/wallet/withdraw">
+                                    <button type="submit" class="btn btn-outline-primary">Rút tiền</button>
+                                </a>
+                            </div>
+                            <%if (acc.checkIDCard == 1) {%>
+                                <div class="d-flex justify-content-center mb-2">
+                                    <p class="text-primary font-weight-bold text-warning mb-4 mt-3">Chờ cập nhật
+                                    </p>
+                                </div>
+                                <% }else if (acc.check == 1) {%>
+
+                                    <div class="d-flex justify-content-center mb-2">
+                                        <p class="text-primary font-weight-bold text-danger mb-4 mt-3">Chờ xác minh tài khoản
+                                        </p>
+                                    </div>
+
+                                    <%} else {%>
+
+                                        <div class="d-flex justify-content-center mb-2">
+                                            <p class="text-primary font-weight-bold text-success mb-4 mt-3">Đã xác minh
+                                            </p>
+                                        </div>
+                                        <%}%>
+
+                        </div>
+                    </div>
+                    <div class="card mb-4 mb-lg-0">
+                        <div class="card-body p-0">
+                            <ul class="list-group list-group-flush rounded-3">
+                                <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                                    <p class="mb-0">Tên người dùng</p>
+                                    <p class="mb-0">
+                                        <%=acc.fullName%>
+                                    </p>
+                                </li>
+
+                                <li class="list-group-item d-flex justify-content-between align-items-center p-3 m-auto">
+                                    <a href="/users/changepassword">
+                                        <button type="submit" class="btn btn-secondary btn-md float-right">Đổi mật
+                                            khẩu</button>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Họ và tên</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">
+                                        <%=acc.fullName%>
+                                    </p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Email</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">
+                                        <%=acc.email%>
+                                    </p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Số điện thoại</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">
+                                        <%=acc.phoneNumber%>
+                                    </p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Ngày sinh</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">
+                                        <%=acc.dateOfbirth%>
+                                    </p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Địa chỉ</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">
+                                        <%=acc.address%>
+                                    </p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Ảnh CMND/CCCD</p>
+                                </div>
+                                <div class="col-sm-7">
+                                    <p class="text-muted mb-0">Xem ảnh tại đây</p>
+                                </div>
+                                <div class="col-sm-2">
+                                    <!--
+                                        <button type="submit" class="btn btn-danger btn-md float-right"> <a href="thaydoicmnd.html">Sửa</a></button>
+                                    -->
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                                        Sửa
+                                      </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <%if ( message == '' ){%>
+                                <div class="alert alert-success w-100 alert-dismissible fade show" role="alert">
+                                    <h5>Cập nhật thành công</h5>
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <%}%>
+
+
+                                    <div class="card mb-4 mb-md-0">
+                                        <div class="card-body">
+                                            <p class="mb-4"><span class="text-primary font-italic me-1">Thông báo</span>
+                                            </p>
+                                            <p class="mb-1" style="font-size: .77rem;">[Yêu cầu bổ sung ảnh CMND/CCCD] Mời người dùng cập nhật ảnh CMND/CCCD do ảnh không hợp lệ</p>
+                                            <p class="mt-4 mb-1" style="font-size: .77rem;">[Tài khoản chờ xác minh] Vui lòng đợi chúng tôi xác minh tài khoản, thời gian dự kiến kéo dài từ 1-3 ngày không tính các ngày cuối tuần (Thứ Bảy và Chủ Nhật)
+                                            </p>
+                                            <p class="mt-4 mb-1" style="font-size: .77rem;">[Tài khoản đã xác minh thành công] Sau khi tài khoản có trạng thái "Đã xác minh" thì người dùng có thể sử dụng tất cả các dịch vụ mà webiste chúng tôi cung cấp</p>
+                                        </div>
+                                    </div>
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+    <!--/container-->
+
+    <!--
+        -------------
+        Modal của mở khóa tài khoản
+    -->
+    <div class="container">
+        <form method="post" enctype="multipart/form-data" action="/users/profile">
+            <!-- The Modal -->
+            <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+
+                                <div class="col-md-12 col-md-12 col-sm-12 col-xs-12">
+                                    <h4>Mặt trước</h4>
+                                    <div class="ml-3 mt-4">
+                                        <img src="../public/images/uploads/<%=acc.imageFront%>" style="min-width: 0px !important; min-height: 0px !important; max-width: none !important; max-height: none !important; width: 250px; height: 164px; margin-left: -25px; margin-top: -20px;">
+                                    </div>
+                                    <div class="common-pre-dz">
+                                        <p>
+                                            Vui lòng tài ảnh
+                                        </p>
+                                        <div class="btn-group images-cropper-pro">
+                                            <!--
+                                        <label title="Upload image file" for="inputImage" class="btn btn-primary img-cropper-cp">
+                                            <input type="file" accept="image/*" name="file" id="inputImage" class="hide"> Tải ảnh lên
+                                        </label>
+                                        -->
+                                            <div class="d-flex flex-row align-items-center mb-4">
+
+                                                <div class="form-outline flex-fill mb-0">
+                                                    <label for="imageFront" class="form-label fw-bold">Hình ảnh mặt trước chứng minh nhân dân</label>
+                                                    <input class="form-control" type="file" id="imageFront" name="imageFront">
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="col-md-12 col-md-12 col-sm-12 col-xs-12">
+                                    <h4>Mặt sau</h4>
+                                    <div class="ml-3 mt-4">
+                                        <img src="../public/images/uploads/<%=acc.imageBack%>" style="min-width: 0px !important; min-height: 0px !important; max-width: none !important; max-height: none !important; width: 250px; height: 164px; margin-left: -25px; margin-top: -20px;">
+                                    </div>
+                                    <div class="common-pre-dz">
+
+                                        <p>
+                                            Vui lòng tài ảnh
+                                        </p>
+                                        <div class="btn-group images-cropper-pro">
+                                            <!--
+                                        <label title="Upload image file" for="inputImage" class="btn btn-primary img-cropper-cp">
+                                            <input type="file" accept="image/*" name="file" id="inputImage" class="hide"> Tải ảnh lên
+                                        </label>
+                                        -->
+                                            <div class="d-flex flex-row align-items-center mb-4">
+
+                                                <div class="form-outline flex-fill mb-0">
+                                                    <label for="imageBack" class="form-label fw-bold">Hình ảnh mặt sau chứng minh nhân dân</label>
+                                                    <input class="form-control" type="file" id="imageBack" name="imageBack">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+
+                            <button type="submit" class="btn btn-primary">Cập nhật</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!--
+        --------
+    -->
+    <%- include("./layouts/footer.ejs") %>

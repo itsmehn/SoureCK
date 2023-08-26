@@ -1,0 +1,190 @@
+<%- include("./layouts/header.ejs") %>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="0">
+                    <!-- Carousel indicators -->
+                    <ol class="carousel-indicators">
+                        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                        <li data-target="#myCarousel" data-slide-to="1"></li>
+                        <li data-target="#myCarousel" data-slide-to="2"></li>
+                    </ol>
+                    <!-- Wrapper for carousel items -->
+                    <div class="carousel-inner">
+                        <div class="item">
+                            <div class="row mt-4">
+                                <div class="col-sm-3">
+                                    <div class="thumb-wrapper">
+                                        <div class="img-box">
+                                            <i class="bi bi-cash-coin "></i>
+                                            <img src="../public/images/nap-tien.png" class="img-responsive" alt="">
+                                        </div>
+                                        <div class="thumb-content">
+                                            <h4>Nạp tiền</h4>
+                                            <p class="item-price">Nạp tiền vào tài khoản chỉ từ 50.000VNĐ</p>
+                                            <a href="/wallet/recharge" class="btn btn-primary">Nạp ngay</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="thumb-wrapper">
+                                        <div class="img-box">
+                                            <img src="../public/images/rut-tien.png" class="img-responsive" alt="">
+                                        </div>
+                                        <div class="thumb-content">
+                                            <h4>Rút tiền</h4>
+                                            <p class="item-price">Nên duy trì tài khoản từ 50,000VNĐ</p>
+                                            <a href="/wallet/withdraw" class="btn btn-primary">Rút ngay</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="thumb-wrapper mb-5">
+                                        <div class="img-box">
+                                            <img src="../public/images/chuyen-tien.png" class="img-responsive" alt="">
+                                        </div>
+                                        <div class="thumb-content">
+                                            <h4>Chuyển tiền</h4>
+                                            <p class="item-price">Chuyển tiền nhanh chóng tiện lợi chỉ mất 30s</p>
+                                            <a href="/wallet/transfer" class="btn btn-primary">Chuyển ngay</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="thumb-wrapper">
+                                        <div class="img-box">
+                                            <img src="../public/images/profile.png" class="img-responsive" alt="">
+                                        </div>
+                                        <div class="thumb-content">
+                                            <h4>Tài khoản</h4>
+                                            <p class="item-price">Thông tin người dùng đăng ký tài khoản E-wallet</p>
+                                            <a href="/users/profile" class="btn btn-primary">Xem ngay</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="thumb-wrapper">
+                                        <div class="img-box">
+                                            <img src="../public/images/lich-su-giao-dich.png" class="img-responsive" alt="">
+                                        </div>
+                                        <div class="thumb-content">
+                                            <h4>Lịch sử giao dịch</h4>
+                                            <p class="item-price">Lịch sử các thanh toán đã thực hiện của bạn trên E-wallet</p>
+                                            <a href="wallet/transaction" class="btn btn-primary">Xem ngay</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="thumb-wrapper">
+                                        <div class="img-box">
+                                            <img src="../public/images/phone-card.jpg" class="img-responsive" alt="">
+                                        </div>
+                                        <div class="thumb-content">
+                                            <h4>Thẻ điện thoại đã mua</h4>
+                                            <p class="item-price">Xem các thẻ điện thoại đã mua trên E-wallet</span>
+                                            </p>
+                                            <a href="#" class="btn btn-primary">Xem ngay</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="thumb-wrapper">
+                                        <div class="img-box">
+                                            <img src="../public/images/buy-phone-card.png" class="img-responsive" alt="">
+                                        </div>
+                                        <div class="thumb-content">
+                                            <h4>Mua thẻ điện thoại</h4>
+                                            <p class="item-price">Mua thẻ điện thoại tiện lợi không mất phí cùng nhiều ưu đãi</p>
+                                            <a href="/wallet/buycard" class="btn btn-primary">Mua ngay</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="thumb-wrapper">
+                                        <div class="img-box">
+                                            <img src="../public/images/dieu-khoan.jpg" class="img-responsive" alt="">
+                                        </div>
+                                        <div class="thumb-content">
+                                            <h4>Điều khoản sử dụng</h4>
+                                            <p class="item-price">Các điều khoản cùng quyền lợi của E-wallet
+                                            </p>
+                                            <a href="#" class="btn btn-primary">Xem ngay</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item mt-5">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="thumb-wrapper">
+                                        <div class="img-box">
+                                            <img src="../images/gui-tiet-keim.jpg" class="img-responsive" alt="">
+                                        </div>
+                                        <div class="thumb-content">
+                                            <h4>Gửi tiết kiệm online</h4>
+                                            <p class="item-price">Gửi tiết kiệm lãi suất đến 6%/năm không kỳ hạn
+                                            </p>
+                                            <a href="#" class="btn btn-primary">Gửi ngay</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="thumb-wrapper">
+                                        <div class="img-box">
+                                            <img src="../public/images/ticket.png" class="img-responsive" alt="">
+                                        </div>
+                                        <div class="thumb-content">
+                                            <h4>Mua vé xem phim</h4>
+                                            <p class="item-price">Mua vé xem phim nhiều ưu đãi với E-wallet
+                                            </p>
+                                            <a href="#" class="btn btn-primary">Mua ngay</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="thumb-wrapper">
+                                        <div class="img-box">
+                                            <img src="../public/images/lien-ket-tai-khoan.jpg" class="img-responsive" alt="">
+                                        </div>
+                                        <div class="thumb-content">
+                                            <h4>Liên kết tài khoản</h4>
+                                            <p class="item-price">Liên kết tài khoản nhận ngay ưu đãi của E-wallet
+                                            </p>
+
+                                            <a href="#" class="btn btn-primary">Liên kết ngay</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="thumb-wrapper">
+                                        <div class="img-box">
+                                            <img src="../public/images/vi-tri.jpg" class="img-responsive" alt="">
+                                        </div>
+                                        <div class="thumb-content">
+                                            <h4>Điểm thanh toán</h4>
+                                            <p class="item-price">Các điểm chấp nhận thanh toán - đối tác của E-wallet
+                                            </p>
+                                            <a href="#" class="btn btn-primary">Xem ngay</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Carousel controls -->
+                    <a class="carousel-control left" href="#myCarousel" data-slide="prev">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a class="carousel-control right" href="#myCarousel" data-slide="next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!--/container-->
+        <%- include("./layouts/footer.ejs") %>

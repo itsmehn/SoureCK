@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thông tin tài khoản</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+  <link rel="stylesheet" href="../public/css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.2/font/bootstrap-icons.css">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+    integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thông tin tài khoản</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+    <link rel="stylesheet" href="../public/css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.2/font/bootstrap-icons.css">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+</head>
+
+<body id="body-pd" style="background-color: #eee;">
+    <div class="container">
+        <header class="header mb-5 ml-3" id="header">
+            <div class="header_toggle">
+                <i class='bx bx-menu' id="header-toggle"></i>
+            </div>
+            <div class="">
+                <a class="text-decoration-none" href="">Đăng nhập</a>
+                <a class="text-decoration-none ml-4" href="">Đăng xuất</a>
+            </div>
+        </header>        
+    </div>
+   
+    <div class="l-navbar" id="nav-bar">
+        <nav class="nav">
+            <div>
+                <a href="../views/home-page.ejs" class="nav_logo">
+                    <i class="bi bi-wallet2 h3 nav_logo-icon"></i>
+                    <span class="nav_logo-name ml-3">E-Wallet</span>
+                </a>
+                <div class="nav_list">
+                    <a href="../views/home-page.ejs" class="nav_link active">
+                        <i class='bx bx-grid-alt nav_icon'></i>
+                        <span class="nav_name ml-3">Trang chủ</span>
+                    </a>
+                    <a href="../views/profile.ejs" class="nav_link">
+                        <i class='bx bx-user nav_icon'></i>
+                        <span class="nav_name ml-3">Tài khoản</span>
+                    </a>
+                    <a href="../views/manager-account.ejs" class="nav_link">
+                        <i class="bi bi-cash-coin nav_icon bx"></i>
+                        <span class="nav_name ml-3">Quản lý tài khoản</span>
+                    </a>
+                    <a href="../views/transfer-approvals.ejs" class="nav_link">
+                        <i class="bi bi-cash-stack nav_icon bx"></i>
+                        <span class="nav_name ml-3">Phê duyệt giao dịch</span>
+                    </a>                   
+                    <a href="#" class="nav_link">
+                        <i class='bx bx-log-out nav_icon'></i>
+                        <span class="nav_name ml-3">Đăng xuất</span>
+                    </a>
+                </div>
+            </div>    
+        </nav>
+    </div>
+
+
+  <!--/container-->
+  <script src="https://kit.fontawesome.com/2e41ebfdb4.js" crossorigin="anonymous"></script>
+  <script src="../public/js/main.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
+    crossorigin="anonymous"></script>
+
+    <section style="background-color: #eee;">
+        <div class="container py-5 mt-5">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="card mb-4">
+                        <div class="card-body text-center">
+                            <img src="https://images.cults3d.com/8OWKFqd-Qk3M1E2ImZp_O2Y6x4I=/516x516/https://files.cults3d.com/uploaders/22153232/illustration-file/56a6b33b-5fb5-4ba9-8408-2ab5c826e4db/st%2Csmall%2C507x507-pad%2C600x600%2Cf8f8f8.jpg" alt="avatar" class="rounded-circle img-fluid"
+                                style="width: 150px;">
+                            <h5 class="my-3">Đăng Khoa</h5>
+                            <p class="text-primary font-weight-bold text-warning mb-4">1.000.000 VNĐ</p>
+                           
+                            <div class="d-flex justify-content-center mb-2">
+                                <p class="text-primary font-weight-bold text-success mb-4 mt-4">Đã xác minh</p>
+                            </div>
+                            <div class="d-flex justify-content-center mb-2">
+                                <!--<button type="button" class="btn btn-outline-primary mr-2">Yêu cầu xác minh tài khoản</button>-->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card mb-4 mb-lg-0">
+                        <div class="card-body p-0">
+                            <ul class="list-group list-group-flush rounded-3">
+                                <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                                    <p class="mb-0">Tên người dùng</p>
+                                    <p class="mb-0">DangKhoaPika</p>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                                    <p class="mb-0" id="show_hide_password">Mật khẩu</p>
+                                    <p class="mb-0">******</p>
+                                </li>    
+                                <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                                   <p class="text-danger">Tài khoản đang bị khóa do đăng nhập sai nhiều lần</p>
+                                </li>                              
+                                <li class="list-group-item d-flex justify-content-between align-items-center p-3 m-auto">
+                                    <button type="button" class="btn btn-primary mr-3" data-toggle="modal" data-target="#myModal">Mở khóa</button>
+                                    <a href="./change-password.html">
+                                        <button type="submit" class="btn btn-secondary btn-md float-right">Đổi mật khẩu</button>
+                                    </a>                                    
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>                
+                <div class="col-lg-8">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Họ và tên</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">Lê Trần Đăng Khoa</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Email</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">example@example.com</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Số điện thoại</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">(097) 234-5678</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Ngày sinh</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">9/19/2001</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Địa chỉ</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">Bay Area, San Francisco, CA</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Ảnh CMND/CCCD</p>
+                                </div>
+                                <div class="col-sm-7">
+                                    <p class="text-muted mb-0">ex.img/pdf</p>
+                                </div>
+                                <div class="col-sm-2">
+                                    <button type="submit" class="btn btn-danger btn-md float-right"> <a href="thaydoicmnd.html">Sửa</a></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card mb-4 mb-md-0">
+                                <div class="card-body">
+                                    <p class="mb-4"><span>Lịch sử giao dịch</span>
+                                    </p>
+                                    <table  class="table table-bordered">
+                                        <tr>
+                                            <th>Icon</th>
+                                            <th>Loại giao dịch</th>
+                                            <th>Số tiền</th>
+                                            <th>Thời gian thực hiện</th>
+                                            <th>Trạng thái</th>  
+                                                                                                                  
+                                        </tr>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Thẻ điện thoại</td>
+                                            <td>2.000.000 đ</td>
+                                            <td>10:13 - 11/05/2022</td>                                
+                                            <td>thành công</td>   
+                                            
+                                        </tr>                                
+                                        <tr>
+                                            <td>2</td>                                
+                                            <td>Chuyển khoản</td>
+                                            <td>1.500.000 đ</td> 
+                                            <td>10:13 - 12/05/2022</td>
+                                            <td>thành công</td>                                                          
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>                                
+                                            <td>Nạp tiền</td>
+                                            <td>1.500.000 đ</td> 
+                                            <td>10:13 - 12/05/2022</td>
+                                            <td>thành công</td>                                                                                                                                                          
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--/container-->
+
+    <!--
+        -------------
+        Modal của mở khóa tài khoản
+    -->
+    <div class="container">    
+        <!-- The Modal -->
+        <div class="modal" id="myModal">
+            <div class="modal-dialog">
+                <div class="modal-content">            
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Mở khóa tài khoản</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>            
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        Bạn chắc chắn muốn mở khóa tài khoản này
+                    </div>            
+                    <!-- Modal footer -->
+                    <div class="modal-footer">                        
+                        <button type="button" class="btn btn-primary"  data-dismiss="modal">Yes</button>
+                        <button type="button" class="btn btn-secondary"  data-dismiss="modal">No</button>
+                    </div>            
+                </div>
+            </div>
+        </div>  
+    </div>
+    <!--
+        --------
+    -->
+    
+   
+    <script src="https://kit.fontawesome.com/2e41ebfdb4.js" crossorigin="anonymous"></script>
+    <script src="../public/js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
+
+</body>
+
+</html>

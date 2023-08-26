@@ -1,0 +1,127 @@
+<%- include("./layouts/header.ejs") %>
+    <!--/container-->
+    <!-- <script src="https://kit.fontawesome.com/2e41ebfdb4.js" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script> -->
+
+    <!--Quản lý tài khoản-->
+    <br><br><br>
+    <!--Chi tiết giao dịch-->
+    <div class="card mb-3 pt-3">
+        <div class="mg-b-15">
+            <div class="container mb-4 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <h4>Quản lý tài khoản</h4>
+                <div class="row">
+
+                    <div class="col-sm-6">
+                        <select name="" id="chooseDefine" class="custom-select mb-3">
+                                <option value= "0">Tất cả</option>
+                                <option value="1">Danh sách tài khoản đang chờ kích hoạt</option>
+                                <option value="2">Danh sách tài khoản đã kích hoạt</option>
+                                <option value="3">Danh sách tài khoản bị vô hiệu hóa</option>
+                                <option value="4">Danh sách tài khoản đang bị khóa vô thời hạn</option>
+                            </select>
+                    </div>
+                    <!--                            
+                        -->
+
+                    <div class="col-sm-4">
+                        <div class="add-product">
+                            <a href="#">Thêm tài khoản</a>
+                        </div>
+                    </div>
+
+
+                </div>
+                <br>
+                <!--Danh sách tài khoản đang chờ kích hoạt-->
+                <div>
+                    <table class="table table-bordered">
+                        <thead>
+
+                            <tr>
+                                <th>STT</th>
+                                <th>ID</th>
+                                <th>Tên tài khoản</th>
+                                <th>Số điện thoại</th>
+                                <th>password</th>
+                                <th>Trạng thái</th>
+                                <th>Setting</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-hongngocngu">
+                            <% accounts.forEach((e, i) => {%>
+                                <tr>
+                                    <td>
+                                        <%=(i+1)%>
+                                    </td>
+                                    <td>
+                                        <%=e._id%>
+                                    </td>
+                                    <td>
+                                        <%=e.fullName%>
+                                    </td>
+                                    <td>
+                                        <%=e.phoneNumber%>
+                                    </td>
+                                    <td>
+                                        <%=e.password%>
+                                    </td>
+                                    <%if (e.check <=1 ){%>
+                                        <td class="text-warning">đang chờ kích hoạt</td>
+
+                                        <%} else if (e.check == 2) { %>
+                                            <td class="text-success">đã kích hoạt</td>
+
+                                            <%} else if (e.check == 3) { %>
+                                                <td class="text-danger">Bị vô hiệu hóa</td>
+
+                                                <%} else { %>
+                                                    <td class="text-danger">Bị vô hiệu hóa vĩnh viên</td>
+
+                                                    <%}%>
+                                                        <td>
+                                                            <a href="/admin/account/<%= e._id %>">Xem chi tiết</a>
+
+
+                                                        </td>
+                                </tr>
+                                <%})%>
+                        </tbody>
+
+
+
+                    </table>
+                </div>
+                <!--end-->
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Yêu cầu xác minh tài khoản</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <!-- Modal body -->
+                <div class="modal-body">
+                    Yêu cầu xác minh tài khoản thành công
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script> -->
+    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script> -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
+
+    <script src="../public/js/main.js"></script>
+    <%- include("./layouts/footer.ejs") %>

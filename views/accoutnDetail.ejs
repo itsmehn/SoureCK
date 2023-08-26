@@ -1,0 +1,336 @@
+<%- include("./layouts/header.ejs") %>
+
+
+    </section>
+    <!--/container-->
+    <script src="https://kit.fontawesome.com/2e41ebfdb4.js" crossorigin="anonymous"></script>
+    <script src="../public/js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
+
+    <section style="background-color: #eee;">
+        <div class="container py-5 mt-5">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="card mb-4">
+                        <div class="card-body text-center">
+                            <img src="https://images.cults3d.com/8OWKFqd-Qk3M1E2ImZp_O2Y6x4I=/516x516/https://files.cults3d.com/uploaders/22153232/illustration-file/56a6b33b-5fb5-4ba9-8408-2ab5c826e4db/st%2Csmall%2C507x507-pad%2C600x600%2Cf8f8f8.jpg" alt="avatar" class="rounded-circle img-fluid"
+                                style="width: 150px;">
+                            <h5 class="my-3">
+                                <%= account.fullName%>
+                            </h5>
+                            <p class="text-primary font-weight-bold text-warning mb-4">1.000.000 VNĐ</p>
+
+                            <%if (account.check < 2) { %>
+                                <div class="d-flex justify-content-center mb-2">
+                                    <p class="text-primary font-weight-bold text-danger mb-4 mt-4">Chờ xác minh tài khoản</p>
+                                </div>
+                                <div class="d-flex justify-content-center mb-2">
+                                    <button type="button" class="btn btn-outline-primary mr-2" data-toggle="modal" data-target="#requestIDcard">Yêu cầu bổ xung thông tin</button>
+                                    <button type="button" class="btn btn-outline-success mr-2" data-toggle="modal" data-target="#acceptActive">Xác minh</button>
+                                    <button type="button" class="btn btn-outline-secondary mr-2" data-toggle="modal" data-target="#reject">Hủy</button>
+                                </div>
+                                <%} else if (account.check == 2) {%>
+                                    <div class="d-flex justify-content-center mb-2">
+                                        <p class="text-primary font-weight-bold text-success mb-4 mt-4">Tài khoản đã được xác minh</p>
+                                    </div>
+                                    <%}else {%>
+                                        <div class="d-flex justify-content-center mb-2">
+                                            <p class="text-primary font-weight-bold text-danger mb-4 mt-4">Đã vô hiệu hóa</p>
+                                        </div>
+                                        <div class="d-flex justify-content-center mb-2">
+
+                                            <button type="button" class="btn btn-outline-secondary mr-2" data-toggle="modal" data-target="#unlock">Mở Khóa</button>
+                                        </div>
+                                        <%}%>
+                                            <%if (account.checkIDCard == 1) { %>
+                                                <div class="d-flex justify-content-center mb-2">
+                                                    <p class="text-primary font-weight-bold text-warning mb-2 mt-2">Chờ cập nhật</p>
+                                                </div>
+
+                                                <%} %>
+                        </div>
+                    </div>
+                    <div class="card mb-4 mb-lg-0">
+                        <div class="card-body p-0">
+                            <ul class="list-group list-group-flush rounded-3">
+                                <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                                    <p class="mb-0">Tên người dùng</p>
+                                    <p class="mb-0">
+                                        <%= account.username%>
+                                    </p>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                                    <p class="mb-0" id="show_hide_password">Mật khẩu</p>
+                                    <p class="mb-0">
+                                        <%= account.password%>
+                                    </p>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center p-3 m-auto">
+                                    <a href="./change-password.html">
+                                        <button type="submit" class="btn btn-secondary btn-md float-right">Đổi mật khẩu</button>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Họ và tên</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">
+                                        <%= account.fullName%>
+                                    </p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Email</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">
+                                        <%= account.email%>
+                                    </p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Số điện thoại</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">
+                                        <%= account.phoneNumber%>
+                                    </p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Ngày sinh</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">
+                                        <%= account.dateOfbirth%>
+                                    </p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Địa chỉ</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">
+                                        <%= account.address%>
+                                    </p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Ảnh CMND/CCCD</p>
+                                </div>
+                                <div class="col-sm-7">
+                                    <p class="text-muted mb-0">Xem ảnh tại đây</p>
+                                </div>
+                                <div class="col-sm-2">
+                                    <!--
+                                        <button type="submit" class="btn btn-danger btn-md float-right"> <a href="thaydoicmnd.html">Sửa</a></button>
+                                    -->
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                                        Sửa
+                                      </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card mb-4 mb-md-0">
+                                <div class="card-body">
+                                    <p class="mb-4"><span>Lịch sử giao dịch</span>
+                                    </p>
+                                    <table class="table table-bordered">
+                                        <tr>
+                                            <th>Icon</th>
+                                            <th>Loại giao dịch</th>
+                                            <th>Số tiền</th>
+                                            <th>Thời gian thực hiện</th>
+                                            <th>Trạng thái</th>
+
+                                        </tr>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Thẻ điện thoại</td>
+                                            <td>2.000.000 đ</td>
+                                            <td>10:13 - 11/05/2022</td>
+                                            <td>thành công</td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>Chuyển khoản</td>
+                                            <td>1.500.000 đ</td>
+                                            <td>10:13 - 12/05/2022</td>
+                                            <td>thành công</td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>Nạp tiền</td>
+                                            <td>1.500.000 đ</td>
+                                            <td>10:13 - 12/05/2022</td>
+                                            <td>thành công</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+
+        <!-- The Modal -->
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+
+                            <div class="col-md-12 col-md-12 col-sm-12 col-xs-12">
+                                <h4>Mặt trước: </h4>
+                                <div class="ml-3 mt-4">
+                                    <img src="/images/uploads/<%=account.imageFront%>" style="min-width: 0px !important; min-height: 0px !important; max-width: none !important; max-height: none !important; width: 250px; height: 164px; margin-left: -25px; margin-top: -20px;">
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-12 col-md-12 col-sm-12 col-xs-12 mt-5">
+                                <h4>Mặt sau: </h4>
+                                <div class="ml-3 mt-4">
+                                    <img src="/images/uploads/<%=account.imageBack%>" style="min-width: 0px !important; min-height: 0px !important; max-width: none !important; max-height: none !important; width: 250px; height: 164px; margin-left: -25px; margin-top: -20px;">
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!--/container-->
+    <!-- Modal -->
+    <div class="modal fade" id="acceptActive" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Thông báo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+                </div>
+                <div class="modal-body">
+                    Bạn muốn xác minh cho tài khoản <b><%=account.fullName%></b>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" data-id="<%= account._id%>">Đồng ý</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="modal fade" id="requestIDcard" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Thông báo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+                </div>
+                <div class="modal-body">
+                    Yêu cầu tài khoản <b><%=account.fullName%></b> xác minh lại chứng minh thư
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" data-id="<%= account._id%>">Đồng ý</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="modal fade" id="reject" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Thông báo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+                </div>
+                <div class="modal-body">
+                    Tài khoản bất thường bạn muốn vô hiệu hóa tài khoản này?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" data-id="<%= account._id%>">Đồng ý</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="modal fade" id="unlock" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Thông báo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+                </div>
+                <div class="modal-body">
+                    Bạn muốn mở khóa cho tài khoản này?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" data-id="<%= account._id%>">Đồng ý</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <%- include("./layouts/footer.ejs") %>
+        <script src="/js/main.js"></script>

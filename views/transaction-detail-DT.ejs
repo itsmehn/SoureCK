@@ -1,0 +1,135 @@
+<%- include("./layouts/header.ejs") %> 
+    
+    <!--/container-->
+
+    <!--Lịch sử giao dịch-->
+    <br><br><br>
+    <!--Chi tiết giao dịch-->
+
+    <br>
+        <div class="card mb-3 pt-3">
+            <div class="mg-b-15" >
+                <div class="container mb-4 col-lg-12 col-md-12 col-sm-12 col-xs-12">                    
+                    <h4>Chi tiết giao dịch</h4>       
+                    <br>               
+                    <div>
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Mã giao dịch</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0"><%= buyCard.codeTrans  %> </p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Loại giao dịch</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0">
+                                            <% if(buyCard.action == 'BC') { %>
+                                                Mua thẻ
+                                            <%} %> 
+                                        </p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Thời gian</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0"><%= buyCard.timeStamps  %></p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Số tiền</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0"><%= buyCard.amount.toLocaleString()  %> VNĐ</p>
+                                    </div>
+                                </div> 
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Số lượng thẻ</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0"><%= buyCard.codeCard.length %></p>
+                                    </div>
+                                </div>                            
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Nhà mạng</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0">
+                                            <% if(buyCard.codeCard[0].substring(0,5) == '11111') { %>
+                                                Viettel
+                                            <%} else if(buyCard.codeCard[0].substring(0,5) == '22222') { %>
+                                                MobiFone
+                                            <% } else if(buyCard.codeCard[0].substring(0,5) == '33333') { %>
+                                                Vinaphone
+                                            <% }  %> 
+                                        </p>
+                                    </div>
+                                </div>                            
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Trạng thái</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0">
+                                            <%= buyCard.status  %> 
+                                        </p>
+                                    </div>
+                                </div>                                                                                                                                     
+                            </div>
+                        </div>
+                            <h4>Thẻ điện thoại</h4>
+                        <table  class="table table-bordered">
+                            <tr>
+                                <th>STT</th>
+                                <th>Nhà mạng</th>
+                                <th>Giá trị thẻ</th>
+                                <th>Mã thẻ</th>                                                                                                      
+                            </tr>
+                            <% buyCard.codeCard.forEach((e,index) => { %>
+                                <tr>
+                                    <td><%= index+=1  %></td>
+                                    <td>
+                                        <% if(e.substring(0,5) == '11111') { %>
+                                            Viettel
+                                        <%} %>
+                                    </td>
+                                    <td><%= buyCard.amount / buyCard.codeCard.length %></td>
+                                    <td><%= e  %></td>                                                                                                      
+                                </tr>
+                            <% }) %>                              
+                            
+                        </table>
+                    </div>                   
+                </div>
+            </div>           
+        </div>
+    </div>
+        <div class="footer-copyright-area">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="footer-copy-right">
+                            <p>Copyright © 2018. All rights reserved. Template by <a href="https://colorlib.com/wp/templates/">Colorlib</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%- include("./layouts/footer.ejs") %> 

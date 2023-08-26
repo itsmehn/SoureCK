@@ -1,0 +1,175 @@
+<%- include("./layouts/header.ejs") %>
+    <br><br><br>
+    <div class="card mb-3 pt-3">
+        <div class="mg-b-15">
+            <div class="container mb-4 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <h4>Chi tiết giao dịch</h4>
+                <br>
+                <div>
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Mã giao dịch</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">
+                                        <%= withdraw.codeTrans %>
+                                    </p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Loại giao dịch</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">
+                                        <% if(withdraw.action=='RT' ) { %>
+                                            Rút tiền
+                                            <% } %>
+                                    </p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Thời gian</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">
+                                        <%= withdraw.timeStamps %>
+                                    </p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Số tiền</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">
+                                        <%= withdraw.amount.toLocaleString() %> VNĐ
+                                    </p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Trạng thái</p>
+                                </div>
+                                <div class="col-sm-7">
+                                    <p class="text-muted mb-0" id='status'>
+                                        <%= withdraw.status %>
+                                    </p>
+                                </div>
+                                <div class="col-sm-2">
+                                    <!-- Button trigger modal -->
+                                    <% if (withdraw.status=='đang chờ' ) { %>
+                                        <button type="button" class="btn btn-danger" data-toggle="modal"
+                                            data-target="#approvalModal" id='btnDuyet'>
+                                            Duyệt
+                                        </button>
+                                        <%} %>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Phí giao dịch</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">
+                                        <%= withdraw.fee.toLocaleString() %>
+                                    </p>
+                                </div>
+                            </div>
+                            <hr>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer-copyright-area">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="footer-copy-right">
+                        <p>Copyright © 2018. All rights reserved. Template by <a
+                                href="https://colorlib.com/wp/templates/">Colorlib</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="approvalModal" tabindex="-1" role="dialog" aria-labelledby="approvalModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="approvalModalLabel">Phê duyệt giao dịch này?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Sau khi phê duyệt thì thông tin số dư của các tài khoản liên quan và trạng thái của các giao dịch sẽ
+                    được cập nhật tương ứng.
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-danger" data-id='<%= withdraw.codeTrans %>' data-dismiss="modal" id="reject">Không
+                        đồng ý</a>
+                    <a class="btn btn-success" data-id='<%= withdraw.codeTrans %>' data-dismiss="modal"
+                        id="acceptWithdraw">Đồng ý</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <%- include("./layouts/footer.ejs") %>
+        <script>
+            let acceptWithdraw = document.getElementById('acceptWithdraw')
+            let codeWithdraw = acceptWithdraw.getAttribute('data-id')
+            urlWithdraw = `http://localhost:3000/admin/acceptWithdraw/${codeWithdraw}`
+            acceptWithdraw.addEventListener('click', (e) => {
+                fetch(urlWithdraw, {
+                    method: 'GET'
+                })
+                    .then(respone => respone.json())
+                    .then((data) => {
+                        if (data.UserTrans.status == 'Đã duyệt') {
+                            let btn = document.getElementById('btnDuyet')
+                            btn.hidden = true
+                            document.getElementById('status').innerHTML = 'Đã duyệt'
+                        }
+
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                    })
+
+            })
+
+            let reject = document.getElementById('reject')
+            let rejectCode = reject.getAttribute('data-id')
+            urlReject = `http://localhost:3000/admin/reject/${rejectCode}`
+            reject.addEventListener('click', (e) => {
+                fetch(urlReject, {
+                    method: 'GET',
+                })
+                    .then(respone => respone.json())
+                    .then((d) => {
+                        if (d.userTrans.status == 'Hủy giao dịch') {
+                            let btn = document.getElementById('btnDuyet')
+                            btn.hidden = true
+                            document.getElementById('status').innerHTML = 'Hủy giao dịch'
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                    })
+            })
+        </script>

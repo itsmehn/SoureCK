@@ -1,0 +1,124 @@
+<%- include("./layouts/header.ejs") %> 
+    
+    <!--/container-->
+
+    <!--Lịch sử giao dịch-->
+    <br><br><br>
+    <!--Chi tiết giao dịch-->
+        
+    <br>    
+        <div class="card mb-3 pt-3">
+            <div class="mg-b-15" >
+                <div class="container mb-4 col-lg-12 col-md-12 col-sm-12 col-xs-12">                    
+                    <h4>Chi tiết giao dịch</h4>       
+                    <br>               
+                    <div>
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Mã giao dịch</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0"><%= transfer.codeTrans %></p>
+                                    </div> 
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Loại giao dịch</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0">
+                                            <% if(transfer.action == 'CT') { %>
+                                                Chuyển tiền 
+                                            <% } %> 
+                                        </p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Thời gian</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0"><%= transfer.timeStamps  %></p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Số tiền</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0"><%= transfer.amount.toLocaleString()  %></p>
+                                    </div>
+                                </div> 
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Người nhận</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0"><%= userReceiver.fullName %></p>
+                                    </div>
+                                </div>                            
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Số điện thoại người nhận</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0"><%= userReceiver.phoneNumber %></p>
+                                    </div>
+                                </div>                            
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Trạng thái</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0"><%= transfer.status %></p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Phí giao dịch</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0"><%= transfer.fee.toLocaleString() %></p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Lời nhắn chuyển tiền</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0"><%= transfer.description %></p>
+                                    </div>
+                                </div>
+                                                                                   
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+                                     
+        </div>
+        <div class="footer-copyright-area">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="footer-copy-right">
+                            <p>Copyright © 2018. All rights reserved. Template by <a href="https://colorlib.com/wp/templates/">Colorlib</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <%- include("./layouts/footer.ejs") %> 
